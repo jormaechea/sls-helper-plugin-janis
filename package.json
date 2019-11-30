@@ -1,0 +1,57 @@
+{
+  "name": "sls-helper-plugin-janis",
+  "version": "1.0.0",
+  "description": "A Serverless Helper plugin to add custom helpers for JANIS Commerce",
+  "main": "lib/plugin.js",
+  "scripts": {
+    "lint": "eslint ./lib ./tests",
+    "test": "mocha --recursive --require tests/bootstrap.js tests/unit/",
+    "test:ci": "nyc --reporter=text mocha --recursive tests/",
+    "coverage": "nyc npm test"
+  },
+  "files": [
+    "/lib"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jormaechea/sls-helper-plugin-janis.git"
+  },
+  "keywords": [
+    "serverless",
+    "serverless-framework",
+    "serverless-config-file",
+    "helper",
+    "serverless-helper",
+    "node",
+    "js",
+    "sls-helper",
+    "sls-helper-plugin",
+    "sls-helper-plugin-janis",
+    "janis",
+    "janis-commerce"
+  ],
+  "author": "Joaquin Ormaechea",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jormaechea/sls-helper-plugin-janis/issues"
+  },
+  "homepage": "https://github.com/jormaechea/sls-helper-plugin-janis#readme",
+  "devDependencies": {
+    "eslint": "^6.5.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "husky": "^3.0.8",
+    "mocha": "^6.2.1",
+    "mock-require": "^3.0.3",
+    "nyc": "^14.1.1",
+    "sinon": "^7.5.0"
+  },
+  "dependencies": {
+    "lllog": "^1.1.2",
+    "lodash.kebabcase": "^4.1.1",
+    "lodash.startcase": "^4.4.0"
+  },
+  "peerDependencies": {
+    "serverless-helper": "^1.0.0"
+  }
+}
