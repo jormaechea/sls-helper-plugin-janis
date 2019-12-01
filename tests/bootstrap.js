@@ -1,3 +1,3 @@
 'use strict';
 
-// require('lllog')('none');
+require('lllog')('none');
