@@ -77,3 +77,14 @@ Used to implement JANIS CRUD APIs.
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |
+
+### eventListener
+
+Used to implement JANIS Events listeners
+
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| entityName | string | The entity name | **Required** | |
+| eventName | string | The event name | **Required** | |
+| mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | false |
+| listenersDirName | string | Indicates the path where the event listener files are placed | | 'event-listeners' |
