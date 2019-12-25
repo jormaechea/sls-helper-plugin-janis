@@ -42,16 +42,40 @@ describe('Hooks', () => {
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
-				service: 'JanisTestingService',
+				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs10.x',
+					runtime: 'nodejs12.x',
 					memorySize: 256,
 					stage: 'local',
 					region: 'us-east-1',
-					endpointType: 'REGIONAL'
+					endpointType: 'REGIONAL',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					environment: {
+						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
+						JANIS_ENV: '${self:custom.stage}',
+						MS_PATH: 'src'
+					},
+					tags: {
+						Owner: 'Janis',
+						Microservice: '${self:custom.serviceName}',
+						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
+					},
+					iamRoleStatements: [
+						{
+							Effect: 'Allow',
+							Action: [
+								's3:PutObject'
+							],
+							Resource: [
+								'arn:aws:s3:::janis-trace-service-${self:custom.stage}/*'
+							]
+						}
+					]
 				},
 				package: {
+					individually: true,
 					include: [
 						'src/config/*'
 					]
@@ -62,11 +86,22 @@ describe('Hooks', () => {
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
+					humanReadableStage: {
+						local: 'Local',
+						beta: 'Beta',
+						qa: 'QA',
+						prod: 'Prod'
+					},
+
 					janisDomains: {
 						local: 'janis.localhost',
 						beta: 'janisdev.in',
 						qa: 'janisqa.in',
 						prod: 'janis.in'
+					},
+
+					cacheEnabled: {
+						prod: false
 					},
 
 					customDomain: {
@@ -88,9 +123,91 @@ describe('Hooks', () => {
 						host: '0.0.0.0',
 						stage: 'local',
 						prefix: 'api',
-						printOutput: true
+						printOutput: true,
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+					},
+
+					stageVariables: {
+						serviceName: '${self:custom.serviceNameInLowerCase}'
+					},
+
+					serviceApiSecret: {
+						local: '',
+						beta: '',
+						qa: '',
+						prod: ''
+					},
+
+					reducer: {
+						ignoreMissing: true
 					}
-				}
+				},
+				plugins: [
+					'serverless-domain-manager',
+					'serverless-reqvalidator-plugin',
+					'serverless-offline',
+					'serverless-api-gateway-caching',
+					'serverless-plugin-reducer',
+					'serverless-plugin-stage-variables'
+				],
+				resources: [
+					{
+						Resources: {
+
+							unauthorizedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString}'
+									},
+									ResponseType: 'UNAUTHORIZED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '401'
+								}
+							},
+
+							badRequestBodyResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_BODY',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							},
+
+							badRequestParameters: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_PARAMETERS',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							}
+
+						}
+					}
+				]
 			});
 		});
 
@@ -104,6 +221,7 @@ describe('Hooks', () => {
 				},
 				anotherProp: true,
 				package: {
+					individually: true,
 					include: [
 						'custom/path/**'
 					],
@@ -117,16 +235,40 @@ describe('Hooks', () => {
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
-				service: 'JanisTestingService',
+				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs10.x',
+					runtime: 'nodejs12.x',
 					memorySize: 256,
 					stage: 'local',
 					region: 'us-east-1',
-					endpointType: 'REGIONAL'
+					endpointType: 'REGIONAL',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					environment: {
+						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
+						JANIS_ENV: '${self:custom.stage}',
+						MS_PATH: 'src'
+					},
+					tags: {
+						Owner: 'Janis',
+						Microservice: '${self:custom.serviceName}',
+						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
+					},
+					iamRoleStatements: [
+						{
+							Effect: 'Allow',
+							Action: [
+								's3:PutObject'
+							],
+							Resource: [
+								'arn:aws:s3:::janis-trace-service-${self:custom.stage}/*'
+							]
+						}
+					]
 				},
 				package: {
+					individually: true,
 					include: [
 						'src/config/*',
 						'custom/path/**'
@@ -141,11 +283,22 @@ describe('Hooks', () => {
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
+					humanReadableStage: {
+						local: 'Local',
+						beta: 'Beta',
+						qa: 'QA',
+						prod: 'Prod'
+					},
+
 					janisDomains: {
 						local: 'janis.localhost',
 						beta: 'janisdev.in',
 						qa: 'janisqa.in',
 						prod: 'janis.in'
+					},
+
+					cacheEnabled: {
+						prod: false
 					},
 
 					customDomain: {
@@ -167,14 +320,97 @@ describe('Hooks', () => {
 						host: '0.0.0.0',
 						stage: 'local',
 						prefix: 'api',
-						printOutput: true
+						printOutput: true,
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+					},
+
+					stageVariables: {
+						serviceName: '${self:custom.serviceNameInLowerCase}'
+					},
+
+					serviceApiSecret: {
+						local: '',
+						beta: '',
+						qa: '',
+						prod: ''
+					},
+
+					reducer: {
+						ignoreMissing: true
 					},
 
 					myCustomProp: {
 						foo: 'bar'
 					}
 				},
-				anotherProp: true
+				anotherProp: true,
+
+				plugins: [
+					'serverless-domain-manager',
+					'serverless-reqvalidator-plugin',
+					'serverless-offline',
+					'serverless-api-gateway-caching',
+					'serverless-plugin-reducer',
+					'serverless-plugin-stage-variables'
+				],
+				resources: [
+					{
+						Resources: {
+
+							unauthorizedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString}'
+									},
+									ResponseType: 'UNAUTHORIZED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '401'
+								}
+							},
+
+							badRequestBodyResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_BODY',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							},
+
+							badRequestParameters: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_PARAMETERS',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							}
+
+						}
+					}
+				]
 			});
 		});
 
@@ -190,16 +426,40 @@ describe('Hooks', () => {
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
-				service: 'JanisTestingService',
+				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs10.x',
+					runtime: 'nodejs12.x',
 					memorySize: 512,
 					stage: 'local',
 					region: 'us-east-1',
-					endpointType: 'REGIONAL'
+					endpointType: 'REGIONAL',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					environment: {
+						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
+						JANIS_ENV: '${self:custom.stage}',
+						MS_PATH: 'src'
+					},
+					tags: {
+						Owner: 'Janis',
+						Microservice: '${self:custom.serviceName}',
+						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
+					},
+					iamRoleStatements: [
+						{
+							Effect: 'Allow',
+							Action: [
+								's3:PutObject'
+							],
+							Resource: [
+								'arn:aws:s3:::janis-trace-service-${self:custom.stage}/*'
+							]
+						}
+					]
 				},
 				package: {
+					individually: true,
 					include: [
 						'src/config/*'
 					]
@@ -210,11 +470,22 @@ describe('Hooks', () => {
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
+					humanReadableStage: {
+						local: 'Local',
+						beta: 'Beta',
+						qa: 'QA',
+						prod: 'Prod'
+					},
+
 					janisDomains: {
 						local: 'janis.localhost',
 						beta: 'janisdev.in',
 						qa: 'janisqa.in',
 						prod: 'janis.in'
+					},
+
+					cacheEnabled: {
+						prod: false
 					},
 
 					customDomain: {
@@ -236,9 +507,91 @@ describe('Hooks', () => {
 						host: '0.0.0.0',
 						stage: 'local',
 						prefix: 'api',
-						printOutput: true
+						printOutput: true,
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+					},
+
+					stageVariables: {
+						serviceName: '${self:custom.serviceNameInLowerCase}'
+					},
+
+					serviceApiSecret: {
+						local: '',
+						beta: '',
+						qa: '',
+						prod: ''
+					},
+
+					reducer: {
+						ignoreMissing: true
 					}
-				}
+				},
+				plugins: [
+					'serverless-domain-manager',
+					'serverless-reqvalidator-plugin',
+					'serverless-offline',
+					'serverless-api-gateway-caching',
+					'serverless-plugin-reducer',
+					'serverless-plugin-stage-variables'
+				],
+				resources: [
+					{
+						Resources: {
+
+							unauthorizedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString}'
+									},
+									ResponseType: 'UNAUTHORIZED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '401'
+								}
+							},
+
+							badRequestBodyResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_BODY',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							},
+
+							badRequestParameters: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'BAD_REQUEST_PARAMETERS',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '400'
+								}
+							}
+
+						}
+					}
+				]
 			});
 		});
 	});
