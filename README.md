@@ -76,4 +76,4 @@ Used to implement JANIS CRUD APIs.
 | cors | boolean | Set to true to enable cors | | false |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
-| authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer | |
+| authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |

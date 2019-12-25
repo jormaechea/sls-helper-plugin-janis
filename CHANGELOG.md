@@ -8,3 +8,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Runtime upgraded to nodejs.12x
 - Base hook updated to the last configurations
+- New authorizers added
