@@ -52,6 +52,6 @@
     "lodash.startcase": "^4.4.0"
   },
   "peerDependencies": {
-    "serverless-helper": "^1.0.0"
+    "sls-helper": "1.x"
   }
 }
