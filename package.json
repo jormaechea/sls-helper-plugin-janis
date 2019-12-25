@@ -28,7 +28,8 @@
     "sls-helper-plugin",
     "sls-helper-plugin-janis",
     "janis",
-    "janis-commerce"
+    "janis-commerce",
+    "janiscommerce"
   ],
   "author": "Joaquin Ormaechea",
   "license": "MIT",
