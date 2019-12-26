@@ -11,6 +11,8 @@ Used to implement a base service with minimal setup
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
 | serviceName | string | The service name | **Required** |     |
+| servicePort | number | The service port | **Required** |     |
+| apiSecrets | Object | A mapping of stages to Service API Secret | | `undefined` |
 
 ### templates
 
@@ -88,3 +90,67 @@ Used to implement JANIS Events listeners
 | eventName | string | The event name | **Required** | |
 | mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | false |
 | listenersDirName | string | Indicates the path where the event listener files are placed | | 'event-listeners' |
+
+## Examples
+
+### Basic Service with one CRUD operation set and an event listener
+
+```js
+// serverless.js
+
+'use strict';
+
+const { helper } = require('sls-helper'); // eslint-disable-line
+
+module.exports = helper({
+	hooks: [
+
+		['janis.base', {
+			serviceName: 'Catalog',
+			servicePort: 5000,
+			apiSecrets: {
+				beta: 'foo',
+				qa: 'bar',
+				prod: 'baz'
+			}
+		}],
+
+		'janis.templates',
+
+		'janis.authorizers',
+
+		'janis.cors',
+
+		['janis.apiList', {
+			entityName: 'product',
+			authorizer: 'FullAuthorizer',
+			cors: true
+		}],
+
+		['janis.apiGet', {
+			entityName: 'product',
+			authorizer: 'FullAuthorizer',
+			cors: true
+		}]
+
+		['janis.apiPost', {
+			entityName: 'product',
+			authorizer: 'FullAuthorizer',
+			cors: true
+		}],
+
+		['janis.apiPut', {
+			entityName: 'product',
+			authorizer: 'FullAuthorizer',
+			cors: true
+		}],
+
+		['janis.eventListener', {
+			entityName: 'product',
+			eventName: 'created',
+			mustHaveClient: true
+		}]
+
+	]
+}, {});
+```

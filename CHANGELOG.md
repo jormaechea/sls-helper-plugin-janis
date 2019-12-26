@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.0] - 2019-12-26
+### Added
+- `apiSecrets` configuration in base hook
+- Sample service example in README
+
+### Fixed
+- `base` documentation updated with required fields
+
 ## [1.1.0] - 2019-12-25
 ### Changed
 - Runtime upgraded to nodejs.12x
