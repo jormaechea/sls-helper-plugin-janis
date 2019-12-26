@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.2] - 2019-12-26
+### Fixed
+- Serverless offline cache invalidation regex fixed
+
 ## [1.2.1] - 2019-12-26
 ### Fixed
 - Service name in lower case is now in *kebab-case*

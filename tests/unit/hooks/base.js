@@ -124,7 +124,7 @@ describe('Hooks', () => {
 						stage: 'local',
 						prefix: 'api',
 						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
 					},
 
 					stageVariables: {
@@ -321,7 +321,7 @@ describe('Hooks', () => {
 						stage: 'local',
 						prefix: 'api',
 						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
 					},
 
 					stageVariables: {
@@ -508,7 +508,7 @@ describe('Hooks', () => {
 						stage: 'local',
 						prefix: 'api',
 						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
 					},
 
 					stageVariables: {
@@ -691,7 +691,7 @@ describe('Hooks', () => {
 						stage: 'local',
 						prefix: 'api',
 						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb|mysql)])'
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
 					},
 
 					stageVariables: {
