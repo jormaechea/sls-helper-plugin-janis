@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.1] - 2019-12-26
+### Fixed
+- Service name in lower case is now in *kebab-case*
+
 ## [1.2.0] - 2019-12-26
 ### Added
 - `apiSecrets` configuration in base hook
