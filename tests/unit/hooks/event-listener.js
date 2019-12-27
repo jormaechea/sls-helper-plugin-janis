@@ -50,7 +50,7 @@ describe('Hooks', () => {
 											integration: 'lambda',
 											path: '/listener/product-name/something-happened',
 											method: 'post',
-											authorizer: '${file(./serverless/functions/subtemplates/authorizers.yml):ServiceNoClientAuthorizer}',
+											authorizer: '${self:custom.authorizers.ServiceNoClientAuthorizer}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
@@ -85,7 +85,7 @@ describe('Hooks', () => {
 											integration: 'lambda',
 											path: '/listener/product-name/something-happened',
 											method: 'post',
-											authorizer: '${file(./serverless/functions/subtemplates/authorizers.yml):ServiceNoClientAuthorizer}',
+											authorizer: '${self:custom.authorizers.ServiceNoClientAuthorizer}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
@@ -120,7 +120,7 @@ describe('Hooks', () => {
 											integration: 'lambda',
 											path: '/listener/product-name/something-happened',
 											method: 'post',
-											authorizer: '${file(./serverless/functions/subtemplates/authorizers.yml):ServiceAuthorizer}',
+											authorizer: '${self:custom.authorizers.ServiceAuthorizer}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
