@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.2.3] - 2019-12-27
+### Fixed
+- Authorizers fixed to match the correct function name
+
 ## [1.2.2] - 2019-12-26
 ### Fixed
 - Serverless offline cache invalidation regex fixed

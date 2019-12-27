@@ -59,7 +59,7 @@ describe('Hooks', () => {
 			},
 
 			ServiceNoClientAuthorizer: {
-				arn: 'arn:aws:lambda:us-east-1:026813942644:function:JanisIdService-${self:custom.stage}-ServiceNoClientAuthorizer',
+				arn: 'arn:aws:lambda:us-east-1:026813942644:function:JanisIdService-${self:custom.stage}-ServiceAuthorizer',
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
