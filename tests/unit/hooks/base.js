@@ -140,6 +140,11 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
+					},
+
+					prune: {
+						automatic: true,
+						number: 3
 					}
 				},
 				plugins: [
@@ -148,6 +153,8 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
+					'serverless-plugin-split-stacks',
+					'serverless-plugin-prune',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -339,6 +346,11 @@ describe('Hooks', () => {
 						ignoreMissing: true
 					},
 
+					prune: {
+						automatic: true,
+						number: 3
+					},
+
 					myCustomProp: {
 						foo: 'bar'
 					}
@@ -351,6 +363,8 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
+					'serverless-plugin-split-stacks',
+					'serverless-plugin-prune',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -524,6 +538,11 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
+					},
+
+					prune: {
+						automatic: true,
+						number: 3
 					}
 				},
 				plugins: [
@@ -532,6 +551,8 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
+					'serverless-plugin-split-stacks',
+					'serverless-plugin-prune',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -707,6 +728,11 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
+					},
+
+					prune: {
+						automatic: true,
+						number: 3
 					}
 				},
 				plugins: [
@@ -715,6 +741,8 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
+					'serverless-plugin-split-stacks',
+					'serverless-plugin-prune',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [

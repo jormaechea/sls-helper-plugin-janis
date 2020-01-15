@@ -10,9 +10,20 @@ describe('Hooks', () => {
 
 		context('Config validation', () => {
 
+			it('Should throw if serviceName param is missing', () => {
+
+				assert.throws(() => eventListener({}, {
+					entityName: 'product name',
+					eventName: 'something happened'
+				}), {
+					message: /serviceName/
+				});
+			});
+
 			it('Should throw if entityName param is missing', () => {
 
 				assert.throws(() => eventListener({}, {
+					serviceName: 'my service',
 					eventName: 'something happened'
 				}), {
 					message: /entityName/
@@ -22,6 +33,7 @@ describe('Hooks', () => {
 			it('Should throw if eventName param is missing', () => {
 
 				assert.throws(() => eventListener({}, {
+					serviceName: 'my service',
 					entityName: 'product name'
 				}), {
 					message: /eventName/
@@ -34,6 +46,7 @@ describe('Hooks', () => {
 			it('Should return the service config with a default event listener (no client and default path) when passing the required params', () => {
 
 				const serviceConfig = eventListener({}, {
+					serviceName: 'my service',
 					entityName: 'product name',
 					eventName: 'something happened'
 				});
@@ -42,13 +55,13 @@ describe('Hooks', () => {
 					functions: [
 						{
 							ProductNameSomethingHappenedListener: {
-								handler: 'src/event-listeners/product-name/something-happened.handler',
-								description: 'Product Name Something Happened Listener',
+								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
+								description: 'My Service Product Name Something Happened Listener',
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/listener/product-name/something-happened',
+											path: '/listener/my-service/product-name/something-happened',
 											method: 'post',
 											authorizer: '${self:custom.authorizers.ServiceNoClientAuthorizer}',
 											request: {
@@ -68,6 +81,7 @@ describe('Hooks', () => {
 			it('Should override the listener path if listenersDirName param is passed', () => {
 
 				const serviceConfig = eventListener({}, {
+					serviceName: 'my service',
 					entityName: 'product name',
 					eventName: 'something happened',
 					listenersDirName: 'listeners'
@@ -77,13 +91,13 @@ describe('Hooks', () => {
 					functions: [
 						{
 							ProductNameSomethingHappenedListener: {
-								handler: 'src/listeners/product-name/something-happened.handler',
-								description: 'Product Name Something Happened Listener',
+								handler: 'src/listeners/my-service/product-name/something-happened.handler',
+								description: 'My Service Product Name Something Happened Listener',
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/listener/product-name/something-happened',
+											path: '/listener/my-service/product-name/something-happened',
 											method: 'post',
 											authorizer: '${self:custom.authorizers.ServiceNoClientAuthorizer}',
 											request: {
@@ -103,6 +117,7 @@ describe('Hooks', () => {
 			it('Should set the ServiceAuthorizer if mustHaveClient is passed as truthy', () => {
 
 				const serviceConfig = eventListener({}, {
+					serviceName: 'my service',
 					entityName: 'product name',
 					eventName: 'something happened',
 					mustHaveClient: true
@@ -112,13 +127,13 @@ describe('Hooks', () => {
 					functions: [
 						{
 							ProductNameSomethingHappenedListener: {
-								handler: 'src/event-listeners/product-name/something-happened.handler',
-								description: 'Product Name Something Happened Listener',
+								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
+								description: 'My Service Product Name Something Happened Listener',
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/listener/product-name/something-happened',
+											path: '/listener/my-service/product-name/something-happened',
 											method: 'post',
 											authorizer: '${self:custom.authorizers.ServiceAuthorizer}',
 											request: {
