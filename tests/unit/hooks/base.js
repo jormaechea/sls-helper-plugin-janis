@@ -8,28 +8,28 @@ describe('Hooks', () => {
 
 	describe('Base service', () => {
 
-		it('Should throw if serviceName hook config is not defined', () => {
+		it('Should throw if serviceCode hook config is not defined', () => {
 			assert.throws(() => base({}, {
 				servicePort: 3000
 			}));
 		});
 
-		it('Should throw if serviceName hook config is not a string', () => {
+		it('Should throw if serviceCode hook config is not a string', () => {
 			assert.throws(() => base({}, {
-				serviceName: ['invalid'],
+				serviceCode: ['invalid'],
 				servicePort: 3000
 			}));
 		});
 
 		it('Should throw if servicePort hook config is not defined', () => {
 			assert.throws(() => base({}, {
-				serviceName: 'Testing'
+				serviceCode: 'testing'
 			}));
 		});
 
 		it('Should throw if servicePort hook config is not a string', () => {
 			assert.throws(() => base({}, {
-				serviceName: 'Testing',
+				serviceCode: 'testing',
 				servicePort: ['invalid']
 			}));
 		});
@@ -37,7 +37,7 @@ describe('Hooks', () => {
 		it('Should return the base service configuration', () => {
 
 			const serviceConfig = base({}, {
-				serviceName: 'Testing',
+				serviceCode: 'testing',
 				servicePort: 3000
 			});
 
@@ -50,9 +50,9 @@ describe('Hooks', () => {
 					stage: 'local',
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
-					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
 					environment: {
-						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
 						JANIS_ENV: '${self:custom.stage}',
 						MS_PATH: 'src'
@@ -81,8 +81,9 @@ describe('Hooks', () => {
 					]
 				},
 				custom: {
+					serviceTitle: 'Testing',
 					serviceName: 'Testing',
-					serviceNameInLowerCase: 'testing',
+					serviceCode: 'testing',
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
@@ -105,7 +106,7 @@ describe('Hooks', () => {
 					},
 
 					customDomain: {
-						domainName: '${self:custom.serviceNameInLowerCase}.${self:custom.janisDomains.${self:custom.stage}}',
+						domainName: '${self:custom.serviceCode}.${self:custom.janisDomains.${self:custom.stage}}',
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
@@ -128,7 +129,7 @@ describe('Hooks', () => {
 					},
 
 					stageVariables: {
-						serviceName: '${self:custom.serviceNameInLowerCase}'
+						serviceName: '${self:custom.serviceCode}'
 					},
 
 					serviceApiSecret: {
@@ -237,7 +238,7 @@ describe('Hooks', () => {
 					]
 				}
 			}, {
-				serviceName: 'Testing',
+				serviceCode: 'testing',
 				servicePort: 3000
 			});
 
@@ -250,9 +251,9 @@ describe('Hooks', () => {
 					stage: 'local',
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
-					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
 					environment: {
-						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
 						JANIS_ENV: '${self:custom.stage}',
 						MS_PATH: 'src'
@@ -285,8 +286,9 @@ describe('Hooks', () => {
 					]
 				},
 				custom: {
+					serviceTitle: 'Testing',
 					serviceName: 'Testing',
-					serviceNameInLowerCase: 'testing',
+					serviceCode: 'testing',
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
@@ -309,7 +311,7 @@ describe('Hooks', () => {
 					},
 
 					customDomain: {
-						domainName: '${self:custom.serviceNameInLowerCase}.${self:custom.janisDomains.${self:custom.stage}}',
+						domainName: '${self:custom.serviceCode}.${self:custom.janisDomains.${self:custom.stage}}',
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
@@ -332,7 +334,7 @@ describe('Hooks', () => {
 					},
 
 					stageVariables: {
-						serviceName: '${self:custom.serviceNameInLowerCase}'
+						serviceName: '${self:custom.serviceCode}'
 					},
 
 					serviceApiSecret: {
@@ -435,7 +437,7 @@ describe('Hooks', () => {
 					memorySize: 512
 				}
 			}, {
-				serviceName: 'Testing',
+				serviceCode: 'testing',
 				servicePort: 3000
 			});
 
@@ -448,9 +450,9 @@ describe('Hooks', () => {
 					stage: 'local',
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
-					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
 					environment: {
-						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
 						JANIS_ENV: '${self:custom.stage}',
 						MS_PATH: 'src'
@@ -479,8 +481,9 @@ describe('Hooks', () => {
 					]
 				},
 				custom: {
+					serviceTitle: 'Testing',
 					serviceName: 'Testing',
-					serviceNameInLowerCase: 'testing',
+					serviceCode: 'testing',
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
@@ -503,7 +506,7 @@ describe('Hooks', () => {
 					},
 
 					customDomain: {
-						domainName: '${self:custom.serviceNameInLowerCase}.${self:custom.janisDomains.${self:custom.stage}}',
+						domainName: '${self:custom.serviceCode}.${self:custom.janisDomains.${self:custom.stage}}',
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
@@ -526,7 +529,7 @@ describe('Hooks', () => {
 					},
 
 					stageVariables: {
-						serviceName: '${self:custom.serviceNameInLowerCase}'
+						serviceName: '${self:custom.serviceCode}'
 					},
 
 					serviceApiSecret: {
@@ -619,7 +622,7 @@ describe('Hooks', () => {
 		it('Should set the API secrets if passed', () => {
 
 			const serviceConfig = base({}, {
-				serviceName: 'Testing',
+				serviceCode: 'testing',
 				servicePort: 3000,
 				apiSecrets: {
 					local: 'test',
@@ -638,9 +641,9 @@ describe('Hooks', () => {
 					stage: 'local',
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
-					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceName} API',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
 					environment: {
-						JANIS_SERVICE_NAME: '${self:custom.serviceNameInLowerCase}',
+						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
 						JANIS_ENV: '${self:custom.stage}',
 						MS_PATH: 'src'
@@ -669,8 +672,9 @@ describe('Hooks', () => {
 					]
 				},
 				custom: {
+					serviceTitle: 'Testing',
 					serviceName: 'Testing',
-					serviceNameInLowerCase: 'testing',
+					serviceCode: 'testing',
 					stage: '${opt:stage, self:provider.stage}',
 					region: '${opt:region, self:provider.region}',
 
@@ -693,7 +697,7 @@ describe('Hooks', () => {
 					},
 
 					customDomain: {
-						domainName: '${self:custom.serviceNameInLowerCase}.${self:custom.janisDomains.${self:custom.stage}}',
+						domainName: '${self:custom.serviceCode}.${self:custom.janisDomains.${self:custom.stage}}',
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
@@ -716,7 +720,7 @@ describe('Hooks', () => {
 					},
 
 					stageVariables: {
-						serviceName: '${self:custom.serviceNameInLowerCase}'
+						serviceName: '${self:custom.serviceCode}'
 					},
 
 					serviceApiSecret: {

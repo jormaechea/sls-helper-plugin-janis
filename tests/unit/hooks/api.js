@@ -2,25 +2,25 @@
 
 const assert = require('assert').strict;
 
-const apiBase = require('../../../lib/api/base');
+const { api } = require('../../..');
 
-describe('Internal Hooks', () => {
+describe('Hooks', () => {
 
-	describe('API Base', () => {
+	describe('API', () => {
 
 		context('Config validation', () => {
 
-			it('Should throw if entityName param is missing', () => {
+			it('Should throw if path param is missing', () => {
 
-				assert.throws(() => apiBase.buildApi({}, {}), {
-					message: /entityName/
+				assert.throws(() => api({}, {}), {
+					message: /path/
 				});
 			});
 
 			it('Should throw if method param is passed as empty', () => {
 
-				assert.throws(() => apiBase.buildApi({}, {
-					entityName: 'product-name',
+				assert.throws(() => api({}, {
+					path: '/hello-world',
 					method: ''
 				}), {
 					message: /method/
@@ -31,116 +31,29 @@ describe('Internal Hooks', () => {
 		context('Default configuration', () => {
 			it('Should return the service config with a default API config when passing the required params', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name'
+				const serviceConfig = api({}, {
+					path: '/hello-world'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
-										}
-									}
-								]
-							}
-						}
-					]
-				});
-			});
-		});
-
-		context('Path configuration', () => {
-
-			it('Should use a custom path if path param is passed', () => {
-
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
-					path: '/custom/path'
-				});
-
-				assert.deepStrictEqual(serviceConfig, {
-					functions: [
-						{
-							ProductNameGetApi: {
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
-								package: {
-									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
-									]
-								},
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/custom/path',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
-										}
-									}
-								]
-							}
-						}
-					]
-				});
-			});
-
-			it('Should add the id variable if pathHasId param is passed', () => {
-
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
-					pathHasId: true
-				});
-
-				assert.deepStrictEqual(serviceConfig, {
-					functions: [
-						{
-							ProductNameGetApi: {
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
-								package: {
-									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
-									]
-								},
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/product-name/{id}',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}',
-												parameters: {
-													paths: {
-														id: true
-													}
-												}
 											},
 											response: '${self:custom.apiResponseTemplate}',
 											responses: '${self:custom.apiOfflineResponseTemplate}'
@@ -156,23 +69,59 @@ describe('Internal Hooks', () => {
 
 		context('Request configuration', () => {
 
+			it('Should use the passed HTTP Method', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					method: 'post'
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							HelloWorldPostApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/post.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'post',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
 			it('Should parse path parameters and add them to request parameters object', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
 					path: '/custom/{id}/path/{secondId}'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							CustomPathGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/custom/path/get.js'
 									]
 								},
 								events: [
@@ -203,8 +152,8 @@ describe('Internal Hooks', () => {
 
 			it('Should parse path parameters and add them to request parameters object', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
+					path: '/hello-world',
 					queryParameters: {
 						requiredQuery: true,
 						optionalQuery: false
@@ -218,20 +167,19 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}',
@@ -262,28 +210,28 @@ describe('Internal Hooks', () => {
 
 			it('Should use the methodName param to override method for files and naming', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
-					methodName: 'custom'
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					method: 'get',
+					methodName: 'list'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameCustomApi: {
+							HelloWorldListApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Custom API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/custom.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/list.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -301,28 +249,27 @@ describe('Internal Hooks', () => {
 
 			it('Should use the handler param to override the default', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
+					path: '/hello-world',
 					handler: 'path/to/custom.handler'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'path/to/custom.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -340,37 +287,36 @@ describe('Internal Hooks', () => {
 
 			it('Should enable api cache if caching param is passed', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
+					path: '/hello-world',
 					caching: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
-											caching: {
-												enabled: '${self:custom.apiGatewayCaching.enabled}'
-											},
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											responses: '${self:custom.apiOfflineResponseTemplate}',
+											caching: {
+												enabled: '${self:custom.apiGatewayCaching.enabled}'
+											}
 										}
 									}
 								]
@@ -382,35 +328,34 @@ describe('Internal Hooks', () => {
 
 			it('Should enable cors if cors param is passed', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
+					path: '/hello-world',
 					cors: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
-											cors: '${self:custom.cors}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											responses: '${self:custom.apiOfflineResponseTemplate}',
+											cors: '${self:custom.cors}'
 										}
 									}
 								]
@@ -422,35 +367,34 @@ describe('Internal Hooks', () => {
 
 			it('Should set an authorizer if authorizer param is passed', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+				const serviceConfig = api({}, {
+					path: '/hello-world',
 					authorizer: 'FullAuthorizer'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							HelloWorldGetApi: {
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: undefined,
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/hello-world/get.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/hello-world',
 											method: 'get',
-											authorizer: '${self:custom.authorizers.FullAuthorizer}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											responses: '${self:custom.apiOfflineResponseTemplate}',
+											authorizer: '${self:custom.authorizers.FullAuthorizer}'
 										}
 									}
 								]

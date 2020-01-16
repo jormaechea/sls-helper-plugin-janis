@@ -10,7 +10,7 @@ Used to implement a base service with minimal setup
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
-| serviceName | string | The service name | **Required** |     |
+| serviceCode | string | The service name in lowercase dash separated | **Required** |     |
 | servicePort | number | The service port | **Required** |     |
 | apiSecrets | Object | A mapping of stages to Service API Secret | | `undefined` |
 
@@ -65,6 +65,22 @@ You can also customize or override every property:
 ]
 ```
 
+### api
+
+Used to implement a custom API
+
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| path | string | The API path | **Required** | |
+| method | string | The API HTTP Method | | `'get'` |
+| methodName | string | The JANIS API Method | Enum<list, get, post, put, patch, delete> | Defaults to same value of `method` option |
+| handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
+| caching | boolean | Set to true to enable cache | | `false` |
+| cors | boolean | Set to true to enable cors | | `false` |
+| queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
+| requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
+| authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |
+
 ### apiList, apiGet, apiPost and apiPut
 
 Used to implement JANIS CRUD APIs.
@@ -72,10 +88,10 @@ Used to implement JANIS CRUD APIs.
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
 | entityName | string | The entity name | **Required** | |
-| handler | string | The lambda handler path and function | | src/lambda/RestApi/index.handler |
+| handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |
-| caching | boolean | Set to true to enable cache | | false |
-| cors | boolean | Set to true to enable cors | | false |
+| caching | boolean | Set to true to enable cache | | `false` |
+| cors | boolean | Set to true to enable cors | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |
@@ -88,8 +104,8 @@ Used to implement JANIS Events listeners
 |--------|------|-------------|------------|---------------|
 | entityName | string | The entity name | **Required** | |
 | eventName | string | The event name | **Required** | |
-| mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | false |
-| listenersDirName | string | Indicates the path where the event listener files are placed | | 'event-listeners' |
+| mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | `false` |
+| listenersDirName | string | Indicates the path where the event listener files are placed | | `'event-listeners'` |
 
 ## Examples
 
@@ -106,7 +122,7 @@ module.exports = helper({
 	hooks: [
 
 		['janis.base', {
-			serviceName: 'Catalog',
+			serviceCode: 'my-service',
 			servicePort: 5000,
 			apiSecrets: {
 				beta: 'foo',
@@ -120,6 +136,12 @@ module.exports = helper({
 		'janis.authorizers',
 
 		'janis.cors',
+
+		['janis.api', {
+			path: '/hello-world',
+			authorizer: 'NoClientAuthorizer',
+			cors: true
+		}],
 
 		['janis.apiList', {
 			entityName: 'product',
