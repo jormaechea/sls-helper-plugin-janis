@@ -21,6 +21,13 @@ describe('Hooks', () => {
 			}));
 		});
 
+		it('Should throw if serviceCode hook config is not in dash-case', () => {
+			assert.throws(() => base({}, {
+				serviceCode: 'SomeInvalidCode',
+				servicePort: 3000
+			}));
+		});
+
 		it('Should throw if servicePort hook config is not defined', () => {
 			assert.throws(() => base({}, {
 				serviceCode: 'testing'
