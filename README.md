@@ -102,6 +102,7 @@ Used to implement JANIS Events listeners
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
+| serviceName | string | The service name | **Required** | |
 | entityName | string | The entity name | **Required** | |
 | eventName | string | The event name | **Required** | |
 | mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | `false` |
@@ -168,6 +169,7 @@ module.exports = helper({
 		}],
 
 		['janis.eventListener', {
+			serviceName: 'catalog',
 			entityName: 'product',
 			eventName: 'created',
 			mustHaveClient: true
