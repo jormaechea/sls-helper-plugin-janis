@@ -36,8 +36,8 @@ You can also customize or override every property:
 | Option | Type | Description | Default value |
 |--------|------|-------------|---------------|
 | replace | boolean | Indicates whether it should replace the CORS properties or merge then with the default | false |
-| origins | array<string> | An array of allowed origins | [See below](#cors-default-origins) |
-| headers | array<string> | An array of allowed headers | [See below](#cors-default-headers) |
+| origins | array\<string\> | An array of allowed origins | [See below](#cors-default-origins) |
+| headers | array\<string\> | An array of allowed headers | [See below](#cors-default-headers) |
 | allowCredentials | boolean | Indicates whether the credentials header should be set | `true` |
 | maxAge | number | The time in seconds thar CORS headers should be cached | 600 |
 
@@ -73,7 +73,7 @@ Used to implement a custom API
 |--------|------|-------------|------------|---------------|
 | path | string | The API path | **Required** | |
 | method | string | The API HTTP Method | | `'get'` |
-| methodName | string | The JANIS API Method | Enum<list, get, post, put, patch, delete> | Defaults to same value of `method` option |
+| methodName | string | The JANIS API Method | Enum\<list, get, post, put, patch, delete\> | Defaults to same value of `method` option |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | caching | boolean | Set to true to enable cache | | `false` |
 | cors | boolean | Set to true to enable cors | | `false` |

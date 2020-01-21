@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.0] - 2020-01-16
+### Added
+- `janis.api` hook added to implement custom APIs
+
+### Changed
+- Option `serviceName` changed to `serviceCode` in `janis.base` hook **BREAKING CHANGE**
+- Added service name to naming, file path and API path in `janis.eventListener` hook
+
 ## [1.2.4] - 2019-12-27
 ### Fixed
 - Authorizers in event listeners are now correctly configured
