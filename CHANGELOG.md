@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.3] - 2020-01-22
+### Fixed
+- `eventListener` hook function name now includes the service name
+
 ## [1.3.2] - 2020-01-22
 ### Fixed
 - `base` hook prune plugin typo fix

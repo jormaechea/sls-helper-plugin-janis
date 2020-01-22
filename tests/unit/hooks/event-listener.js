@@ -54,7 +54,7 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameSomethingHappenedListener: {
+							MyServiceProductNameSomethingHappenedListener: {
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
@@ -90,7 +90,7 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameSomethingHappenedListener: {
+							MyServiceProductNameSomethingHappenedListener: {
 								handler: 'src/listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
@@ -126,7 +126,7 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameSomethingHappenedListener: {
+							MyServiceProductNameSomethingHappenedListener: {
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
