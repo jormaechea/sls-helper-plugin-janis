@@ -162,7 +162,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
 					'serverless-plugin-split-stacks',
-					'serverless-plugin-prune',
+					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -373,7 +373,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
 					'serverless-plugin-split-stacks',
-					'serverless-plugin-prune',
+					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -562,7 +562,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
 					'serverless-plugin-split-stacks',
-					'serverless-plugin-prune',
+					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
@@ -753,7 +753,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
 					'serverless-plugin-split-stacks',
-					'serverless-plugin-prune',
+					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables'
 				],
 				resources: [
