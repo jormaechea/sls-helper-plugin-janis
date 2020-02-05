@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.3.4] - 2020-02-05
+### Fixed
+- `authorizers` now have the name property to avoid collisions
+
 ## [1.3.3] - 2020-01-22
 ### Fixed
 - `eventListener` hook function name now includes the service name
