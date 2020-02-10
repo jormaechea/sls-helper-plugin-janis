@@ -161,9 +161,10 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-plugin-split-stacks',
 					'serverless-prune-plugin',
-					'serverless-plugin-stage-variables'
+					'serverless-plugin-stage-variables',
+					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
+					'serverless-plugin-split-stacks'
 				],
 				resources: [
 					{
@@ -372,9 +373,10 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-plugin-split-stacks',
 					'serverless-prune-plugin',
-					'serverless-plugin-stage-variables'
+					'serverless-plugin-stage-variables',
+					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
+					'serverless-plugin-split-stacks'
 				],
 				resources: [
 					{
@@ -561,9 +563,10 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-plugin-split-stacks',
 					'serverless-prune-plugin',
-					'serverless-plugin-stage-variables'
+					'serverless-plugin-stage-variables',
+					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
+					'serverless-plugin-split-stacks'
 				],
 				resources: [
 					{
@@ -752,9 +755,10 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-plugin-split-stacks',
 					'serverless-prune-plugin',
-					'serverless-plugin-stage-variables'
+					'serverless-plugin-stage-variables',
+					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
+					'serverless-plugin-split-stacks'
 				],
 				resources: [
 					{

@@ -10,8 +10,8 @@ Used to implement a base service with minimal setup
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
-| serviceCode | string | The service name in lowercase dash separated | **Required** |     |
-| servicePort | number | The service port | **Required** |     |
+| serviceCode | string | The service name in lowercase dash separated | **Required** | |
+| servicePort | number | The service port | **Required** | |
 | apiSecrets | Object | A mapping of stages to Service API Secret | | `undefined` |
 
 ### templates
@@ -24,7 +24,9 @@ _No options_
 
 Used to implement APIs authorizers as custom props
 
-_No options_
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| accountId | string | Indicates the AWS account ID where the authorizers are deployed | **Required** | |
 
 ### cors
 
