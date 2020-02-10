@@ -136,7 +136,9 @@ module.exports = helper({
 
 		'janis.templates',
 
-		'janis.authorizers',
+		['janis.authorizers', {
+			accountId: '012345678910'
+		}],
 
 		'janis.cors',
 
