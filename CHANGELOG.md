@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.0.0] - 2020-02-10
+### Added
+- `authorizers` now have require the Account ID as a configuration option
+- Added the `@janiscommerce/serverless-plugin-remove-authorizer-permissions` serverless plugin to allow cross-account deployments
+
 ## [1.3.4] - 2020-02-05
 ### Fixed
 - `authorizers` now have the name property to avoid collisions
