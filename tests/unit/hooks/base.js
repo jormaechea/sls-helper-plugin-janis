@@ -219,6 +219,23 @@ describe('Hooks', () => {
 									},
 									StatusCode: '400'
 								}
+							},
+
+							accessDeniedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'ACCESS_DENIED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '403'
+								}
 							}
 
 						}
@@ -431,6 +448,23 @@ describe('Hooks', () => {
 									},
 									StatusCode: '400'
 								}
+							},
+
+							accessDeniedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'ACCESS_DENIED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '403'
+								}
 							}
 
 						}
@@ -620,6 +654,23 @@ describe('Hooks', () => {
 										Ref: 'ApiGatewayRestApi'
 									},
 									StatusCode: '400'
+								}
+							},
+
+							accessDeniedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'ACCESS_DENIED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '403'
 								}
 							}
 
@@ -812,6 +863,23 @@ describe('Hooks', () => {
 										Ref: 'ApiGatewayRestApi'
 									},
 									StatusCode: '400'
+								}
+							},
+
+							accessDeniedResponse: {
+								Type: 'AWS::ApiGateway::GatewayResponse',
+								Properties: {
+									ResponseParameters: {
+										'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									},
+									ResponseTemplates: {
+										'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									},
+									ResponseType: 'ACCESS_DENIED',
+									RestApiId: {
+										Ref: 'ApiGatewayRestApi'
+									},
+									StatusCode: '403'
 								}
 							}
 
