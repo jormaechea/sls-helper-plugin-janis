@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.1.0] - 2020-02-14
+### Added
+- Access denied API Gateway response resource added with CORS headers
+
 ## [2.0.0] - 2020-02-10
 ### Added
 - `authorizers` now have require the Account ID as a configuration option
