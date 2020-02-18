@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.2.0] - 2020-02-18
+### Added
+- Custom authorizer support added in event listeners
+- Custom authorizers can now be defined in `custom.authorizers` object in initial config and they will be remain untouched
+
+### Fixed
+- Authorizers now use the correct ARN
+
 ## [2.1.0] - 2020-02-14
 ### Added
 - Access denied API Gateway response resource added with CORS headers
