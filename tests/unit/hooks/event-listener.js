@@ -150,6 +150,41 @@ describe('Hooks', () => {
 				});
 			});
 
+			it('Should set a custom authorizer if authorizer prop is passed', () => {
+
+				const serviceConfig = eventListener({}, {
+					serviceName: 'my service',
+					entityName: 'product name',
+					eventName: 'something happened',
+					authorizer: 'MyCustomAuthorizer'
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							MyServiceProductNameSomethingHappenedListener: {
+								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
+								description: 'My Service Product Name Something Happened Listener',
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/listener/my-service/product-name/something-happened',
+											method: 'post',
+											authorizer: '${self:custom.authorizers.MyCustomAuthorizer}',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
 		});
 	});
 
