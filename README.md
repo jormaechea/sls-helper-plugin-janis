@@ -81,7 +81,7 @@ Used to implement a custom API
 | cors | boolean | Set to true to enable cors | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
-| authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |
+| authorizer | string | The name of the authorizer | | |
 
 ### apiList, apiGet, apiPost and apiPut
 
@@ -96,7 +96,7 @@ Used to implement JANIS CRUD APIs.
 | cors | boolean | Set to true to enable cors | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
-| authorizer | string | The name of the authorizer | Valid authorizers: FullAuthorizer, NoClientAuthorizer, LoggedAuthorizer, ApiKeyAuthorizer, UserAuthorizer, DevUserAuthorizer, ServiceAuthorizer, ServiceNoClientAuthorizer, ClientAuthorizer | |
+| authorizer | string | The name of the authorizer | | |
 
 ### eventListener
 
@@ -109,6 +109,7 @@ Used to implement JANIS Events listeners
 | eventName | string | The event name | **Required** | |
 | mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | `false` |
 | listenersDirName | string | Indicates the path where the event listener files are placed | | `'event-listeners'` |
+| authorizer | string | The name of the authorizer | | If not set, it defaults to `ServiceAuthorizer` or `ServiceNoClientAuthorizer` based on the value of `mustHaveClient` |
 
 ## Examples
 
