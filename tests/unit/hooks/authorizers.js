@@ -13,7 +13,7 @@ describe('Hooks', () => {
 		const expectedAuthorizers = {
 			FullAuthorizer: {
 				name: 'FullAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-FullAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-client,method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -21,7 +21,7 @@ describe('Hooks', () => {
 
 			NoClientAuthorizer: {
 				name: 'NoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-NoClientAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-NoClientAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -29,7 +29,7 @@ describe('Hooks', () => {
 
 			LoggedAuthorizer: {
 				name: 'LoggedAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-LoggedAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-LoggedAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -37,7 +37,7 @@ describe('Hooks', () => {
 
 			ApiKeyAuthorizer: {
 				name: 'ApiKeyAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-ApiKeyAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ApiKeyAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -45,7 +45,7 @@ describe('Hooks', () => {
 
 			UserAuthorizer: {
 				name: 'UserAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-UserAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-UserAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -53,7 +53,7 @@ describe('Hooks', () => {
 
 			DevUserAuthorizer: {
 				name: 'DevUserAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-DevUserAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-DevUserAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -61,7 +61,7 @@ describe('Hooks', () => {
 
 			ServiceAuthorizer: {
 				name: 'ServiceAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-ServiceAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-client,method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -69,7 +69,7 @@ describe('Hooks', () => {
 
 			ServiceNoClientAuthorizer: {
 				name: 'ServiceNoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-ServiceAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
 				type: 'request'
@@ -77,7 +77,7 @@ describe('Hooks', () => {
 
 			ClientAuthorizer: {
 				name: 'ClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisIdService-\${self:custom.stage}-ClientAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ClientAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-client',
 				type: 'request'
