@@ -100,6 +100,26 @@ describe('Hooks', () => {
 			});
 		});
 
+		it('Should return the authorizers service configuration mantaining previous authorizers', () => {
+
+			const serviceConfig = authorizers({
+				custom: {
+					authorizers: {
+						MyCustomAuthorizer: {}
+					}
+				}
+			}, { accountId });
+
+			assert.deepStrictEqual(serviceConfig, {
+				custom: {
+					authorizers: {
+						MyCustomAuthorizer: {},
+						...expectedAuthorizers
+					}
+				}
+			});
+		});
+
 		it('Should not override other configurations', () => {
 
 			const serviceConfig = authorizers({
