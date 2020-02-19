@@ -500,7 +500,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should set the package if package param is passed', () => {
+			it('Should append the package includes if package.include param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
 					entityName: 'product name',
