@@ -82,6 +82,9 @@ Used to implement a custom API
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
+| timeout | number | The function timeout in seconds | | |
+| functionRawProps | object | Custom properties to set in the function configuration | | |
+| eventRawProps | object | Custom properties to set in the event configuration | | |
 
 ### apiList, apiGet, apiPost and apiPut
 
@@ -97,6 +100,9 @@ Used to implement JANIS CRUD APIs.
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
+| timeout | number | The function timeout in seconds | | |
+| functionRawProps | object | Custom properties to set in the function configuration | | |
+| eventRawProps | object | Custom properties to set in the event configuration | | |
 
 ### eventListener
 
