@@ -459,6 +459,93 @@ describe('Internal Hooks', () => {
 					]
 				});
 			});
+
+			it('Should set the timeout if timeout param is passed', () => {
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					timeout: 10
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							ProductNameGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								timeout: 10,
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set raw props in the function end event configuration if they are passed', () => {
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					functionRawProps: {
+						foo: 'bar',
+						description: 'Override it'
+					},
+					eventRawProps: {
+						someProp: 'custom'
+					}
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							ProductNameGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Override it',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								foo: 'bar',
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}',
+											someProp: 'custom'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
 		});
 	});
 

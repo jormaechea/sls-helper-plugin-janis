@@ -403,6 +403,91 @@ describe('Hooks', () => {
 					]
 				});
 			});
+
+			it('Should set the timeout if timeout param is passed', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					timeout: 10
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							HelloWorldGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/get.js'
+									]
+								},
+								timeout: 10,
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set raw props in the function end event configuration if they are passed', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					functionRawProps: {
+						foo: 'bar',
+						description: 'Override it'
+					},
+					eventRawProps: {
+						someProp: 'custom'
+					}
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							HelloWorldGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Override it',
+								package: {
+									include: [
+										'src/api/hello-world/get.js'
+									]
+								},
+								foo: 'bar',
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}',
+											someProp: 'custom'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
 		});
 	});
 
