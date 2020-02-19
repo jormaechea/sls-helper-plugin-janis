@@ -443,6 +443,45 @@ describe('Hooks', () => {
 				});
 			});
 
+			it('Should append the package includes if package.include param is passed', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					package: { include: ['src/models/helloWorld.js'] }
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							HelloWorldGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/get.js',
+										'src/models/helloWorld.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
 			it('Should set raw props in the function end event configuration if they are passed', () => {
 
 				const serviceConfig = api({}, {

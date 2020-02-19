@@ -83,6 +83,7 @@ Used to implement a custom API
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
+| package.include | array[string] | The List of paths of files to include | | |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
@@ -101,6 +102,7 @@ Used to implement JANIS CRUD APIs.
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
+| package.include | array[string] | The List of paths of files to include | | |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
