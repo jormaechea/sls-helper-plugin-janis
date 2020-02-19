@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.3.0] - 2020-02-19
+### Added
+- `timeout` support for all API hooks
+- `functionRawProps` support for all API hooks
+- `eventRawProps` support for all API hooks
+
 ## [2.2.0] - 2020-02-18
 ### Added
 - Custom authorizer support added in event listeners
