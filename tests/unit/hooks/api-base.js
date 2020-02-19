@@ -500,6 +500,46 @@ describe('Internal Hooks', () => {
 				});
 			});
 
+			it('Should set the package if package param is passed', () => {
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					package: { include: ['src/controllers/product.js'] }
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							ProductNameGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js',
+										'src/controllers/product.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
 			it('Should set raw props in the function end event configuration if they are passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
