@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.4.1] - 2020-02-20
+### Fixed
+- API hook now normalizes the path to avoid bad function naming
+
 ## [2.4.0] - 2020-02-19
 ### Added
 - `package.include` support for all API hooks
