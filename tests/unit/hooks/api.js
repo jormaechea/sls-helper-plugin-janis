@@ -65,6 +65,43 @@ describe('Hooks', () => {
 					]
 				});
 			});
+
+			it('Should return the service config with a default API config and normalized path when passing the required params', () => {
+
+				const serviceConfig = api({}, {
+					path: 'hello-world/'
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							HelloWorldGetApi: {
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/get.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
 		});
 
 		context('Request configuration', () => {
