@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.5.0] - 2020-02-21
+### Added
+- API Gateway response `AUTHORIZER_CONFIGURATION_ERROR`
+
+### Fixed
+- API Gateway responses are not overriden any more
+
 ## [2.4.1] - 2020-02-20
 ### Fixed
 - API hook now normalizes the path to avoid bad function naming
