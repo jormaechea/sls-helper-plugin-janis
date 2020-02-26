@@ -118,6 +118,7 @@ Used to implement JANIS Events listeners
 | mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | `false` |
 | listenersDirName | string | Indicates the path where the event listener files are placed | | `'event-listeners'` |
 | authorizer | string | The name of the authorizer | | If not set, it defaults to `ServiceAuthorizer` or `ServiceNoClientAuthorizer` based on the value of `mustHaveClient` |
+| package.include | array[string] | The List of paths of files to include |
 
 ## Examples
 
