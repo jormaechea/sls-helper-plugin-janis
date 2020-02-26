@@ -150,7 +150,7 @@ describe('Hooks', () => {
 				});
 			});
 
-			it('Should add the package includes if package.include param is passed', () => {
+			it('Should add the package include if package.include param is passed', () => {
 
 				const serviceConfig = eventListener({}, {
 					serviceName: 'my service',
