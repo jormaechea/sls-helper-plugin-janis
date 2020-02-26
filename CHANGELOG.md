@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.6.0] - 2020-02-26
+### Added
+- `package.include` support for event listeners
+- Lambda log groups now have a default retention of 14 days
+
 ## [2.5.0] - 2020-02-21
 ### Added
 - API Gateway response `AUTHORIZER_CONFIGURATION_ERROR`
