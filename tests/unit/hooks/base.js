@@ -58,6 +58,7 @@ describe('Hooks', () => {
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
+					logRetentionInDays: 14,
 					environment: {
 						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
@@ -262,6 +263,9 @@ describe('Hooks', () => {
 		it('Should not override the original configuration', () => {
 
 			const serviceConfig = base({
+				provider: {
+					logRetentionInDays: 30
+				},
 				custom: {
 					myCustomProp: {
 						foo: 'bar'
@@ -292,6 +296,7 @@ describe('Hooks', () => {
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
+					logRetentionInDays: 30,
 					environment: {
 						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
@@ -524,6 +529,7 @@ describe('Hooks', () => {
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
+					logRetentionInDays: 14,
 					environment: {
 						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
@@ -748,6 +754,7 @@ describe('Hooks', () => {
 					region: 'us-east-1',
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
+					logRetentionInDays: 14,
 					environment: {
 						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
