@@ -81,6 +81,14 @@ describe('Hooks', () => {
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-client',
 				type: 'request'
+			},
+
+			ImportExportAuthorizer: {
+				name: 'ImportExportAuthorizer',
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportExportAuthorizer`,
+				resultTtlInSeconds: 300,
+				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret,method.request.header.janis-entity',
+				type: 'request'
 			}
 		};
 
