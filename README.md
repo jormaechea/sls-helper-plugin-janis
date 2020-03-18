@@ -61,6 +61,7 @@ You can also customize or override every property:
 	'janis-api-key',
 	'janis-api-secret',
 	'janis-client',
+	'janis-entity',
 	'x-api-key',
 	'x-janis-page',
 	'x-janis-page-size'
