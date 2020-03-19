@@ -38,7 +38,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -80,7 +81,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -119,7 +121,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -166,7 +169,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -218,7 +222,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -270,7 +275,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameCustomApi: {
+							'APICustom-ProductName': {
+								name: 'APICustom-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Custom API',
 								package: {
@@ -309,7 +315,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'path/to/custom.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -348,7 +355,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -390,7 +398,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -430,7 +439,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -470,7 +480,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -510,7 +521,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -556,7 +568,8 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							ProductNameGetApi: {
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
 								package: {

@@ -54,7 +54,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							MyServiceProductNameSomethingHappenedListener: {
+							'EL-MyServiceProductNameSomethingHappened': {
+								name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
@@ -90,7 +91,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							MyServiceProductNameSomethingHappenedListener: {
+							'EL-MyServiceProductNameSomethingHappened': {
+								name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
 								handler: 'src/listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
@@ -126,7 +128,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							MyServiceProductNameSomethingHappenedListener: {
+							'EL-MyServiceProductNameSomethingHappened': {
+								name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [
@@ -163,7 +166,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							MyServiceProductNameSomethingHappenedListener: {
+							'EL-MyServiceProductNameSomethingHappened': {
+								name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								package: { include: ['src/models/new-model.js'] },
@@ -200,7 +204,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							MyServiceProductNameSomethingHappenedListener: {
+							'EL-MyServiceProductNameSomethingHappened': {
+								name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
 								handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 								description: 'My Service Product Name Something Happened Listener',
 								events: [

@@ -4,14 +4,13 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const apiBase = require('../../../lib/api/base');
-const { apiList } = require('../../..');
+const { apiPut } = require('../../..');
 
 describe('Hooks', () => {
 
-	describe('API List', () => {
+	describe('API Put', () => {
 
 		context('Parameter passing to base api', () => {
-
 			beforeEach(() => {
 				sinon.stub(apiBase, 'buildApi');
 			});
@@ -26,13 +25,12 @@ describe('Hooks', () => {
 					provider: {}
 				};
 
-				apiList({ ...initialConfig });
+				apiPut({ ...initialConfig });
 
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
-					method: 'get',
-					methodName: 'list',
-					pathHasId: false
+					method: 'put',
+					pathHasId: true
 				});
 			});
 		});
@@ -44,20 +42,20 @@ describe('Hooks', () => {
 					provider: {}
 				};
 
-				const result = apiList({ ...initialConfig }, {
+				const result = apiPut({ ...initialConfig }, {
 					entityName: 'product name'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APIList-ProductName': {
-							name: 'APIList-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'APIUpdate-ProductName': {
+							name: 'APIUpdate-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name List API',
+							description: 'Product Name Put API',
 							package: {
 								include: [
-									'src/api/product-name/list.js',
+									'src/api/product-name/put.js',
 									'src/models/product-name.js'
 								]
 							},
@@ -65,10 +63,15 @@ describe('Hooks', () => {
 								{
 									http: {
 										integration: 'lambda',
-										path: '/product-name',
-										method: 'get',
+										path: '/product-name/{id}',
+										method: 'put',
 										request: {
-											template: '${self:custom.apiRequestTemplate}'
+											template: '${self:custom.apiRequestTemplate}',
+											parameters: {
+												paths: {
+													id: true
+												}
+											}
 										},
 										response: '${self:custom.apiResponseTemplate}',
 										responses: '${self:custom.apiOfflineResponseTemplate}'

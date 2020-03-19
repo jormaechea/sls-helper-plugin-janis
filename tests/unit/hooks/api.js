@@ -38,7 +38,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -75,7 +76,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -116,7 +118,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldPostApi: {
+							'API-PostHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-PostHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -153,7 +156,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							CustomPathGetApi: {
+							'API-GetCustomIdVarPathSecondIdVar': {
+								name: 'API-${self:custom.serviceName}-GetCustomIdVarPathSecondIdVar-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -204,7 +208,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -256,7 +261,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldListApi: {
+							'API-ListHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-ListHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -294,7 +300,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'path/to/custom.handler',
 								description: undefined,
 								package: {
@@ -332,7 +339,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -373,7 +381,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -412,7 +421,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -451,7 +461,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -490,7 +501,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -535,7 +547,8 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							HelloWorldGetApi: {
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
 								package: {

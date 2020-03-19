@@ -4,11 +4,11 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const apiBase = require('../../../lib/api/base');
-const { apiList } = require('../../..');
+const { apiPost } = require('../../..');
 
 describe('Hooks', () => {
 
-	describe('API List', () => {
+	describe('API Post', () => {
 
 		context('Parameter passing to base api', () => {
 
@@ -26,12 +26,11 @@ describe('Hooks', () => {
 					provider: {}
 				};
 
-				apiList({ ...initialConfig });
+				apiPost({ ...initialConfig });
 
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
-					method: 'get',
-					methodName: 'list',
+					method: 'post',
 					pathHasId: false
 				});
 			});
@@ -44,20 +43,20 @@ describe('Hooks', () => {
 					provider: {}
 				};
 
-				const result = apiList({ ...initialConfig }, {
+				const result = apiPost({ ...initialConfig }, {
 					entityName: 'product name'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APIList-ProductName': {
-							name: 'APIList-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'APICreate-ProductName': {
+							name: 'APICreate-${self:custom.serviceName}-ProductName-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name List API',
+							description: 'Product Name Post API',
 							package: {
 								include: [
-									'src/api/product-name/list.js',
+									'src/api/product-name/post.js',
 									'src/models/product-name.js'
 								]
 							},
@@ -66,7 +65,7 @@ describe('Hooks', () => {
 									http: {
 										integration: 'lambda',
 										path: '/product-name',
-										method: 'get',
+										method: 'post',
 										request: {
 											template: '${self:custom.apiRequestTemplate}'
 										},
