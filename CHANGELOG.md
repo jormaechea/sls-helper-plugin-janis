@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.9.0] - 2020-03-18
+### Changed
+- NAMING: Lambda functions naming changed to prevent function names to be too long
+
 ## [2.8.0] - 2020-03-18
 ### Added
 - Header `janis-entity` is now allowed in CORS configuration
