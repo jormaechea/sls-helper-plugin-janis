@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.9.2] - 2020-03-26
+### Fixed
+- Escaped error response message to avoid breaking JSON structure
+
 ## [2.9.1] - 2020-03-26
 ### Fixed
 - Response template now cleans up superstruct errors
