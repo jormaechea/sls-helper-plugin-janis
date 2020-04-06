@@ -163,7 +163,7 @@ describe('Hooks', () => {
 						ServiceExecutionRole: {
 							Type: 'AWS::IAM::Role',
 							Properties: {
-								RoleName: 'Janis${self:custom.serviceName}Service-lambdaRole',
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
 								Path: '/janis-service/',
 								AssumeRolePolicyDocument: {
 									Version: '2012-10-17',
@@ -465,7 +465,7 @@ describe('Hooks', () => {
 						ServiceExecutionRole: {
 							Type: 'AWS::IAM::Role',
 							Properties: {
-								RoleName: 'Janis${self:custom.serviceName}Service-lambdaRole',
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
 								Path: '/janis-service/',
 								AssumeRolePolicyDocument: {
 									Version: '2012-10-17',
@@ -742,7 +742,7 @@ describe('Hooks', () => {
 						ServiceExecutionRole: {
 							Type: 'AWS::IAM::Role',
 							Properties: {
-								RoleName: 'Janis${self:custom.serviceName}Service-lambdaRole',
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
 								Path: '/janis-service/',
 								AssumeRolePolicyDocument: {
 									Version: '2012-10-17',
@@ -1021,7 +1021,7 @@ describe('Hooks', () => {
 						ServiceExecutionRole: {
 							Type: 'AWS::IAM::Role',
 							Properties: {
-								RoleName: 'Janis${self:custom.serviceName}Service-lambdaRole',
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
 								Path: '/janis-service/',
 								AssumeRolePolicyDocument: {
 									Version: '2012-10-17',
@@ -1311,7 +1311,7 @@ describe('Hooks', () => {
 						ServiceExecutionRole: {
 							Type: 'AWS::IAM::Role',
 							Properties: {
-								RoleName: 'Janis${self:custom.serviceName}Service-lambdaRole',
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
 								Path: '/janis-service/',
 								AssumeRolePolicyDocument: {
 									Version: '2012-10-17',
