@@ -53,6 +53,6 @@
     "lodash.startcase": "^4.4.0"
   },
   "peerDependencies": {
-    "sls-helper": "1.x"
+    "sls-helper": ">= 1.9.0"
   }
 }
