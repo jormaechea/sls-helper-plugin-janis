@@ -79,7 +79,7 @@ Used to implement a custom API
 | methodName | string | The JANIS API Method | Enum\<list, get, post, put, patch, delete\> | Defaults to same value of `method` option |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | caching | boolean | Set to true to enable cache | | `false` |
-| cors | boolean | Set to true to enable cors | | `false` |
+| cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
@@ -98,7 +98,7 @@ Used to implement JANIS CRUD APIs.
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |
 | caching | boolean | Set to true to enable cache | | `false` |
-| cors | boolean | Set to true to enable cors | | `false` |
+| cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
@@ -182,6 +182,15 @@ module.exports = helper({
 			entityName: 'product',
 			authorizer: 'FullAuthorizer',
 			cors: true
+		}],
+
+		['janis.apiList', {
+			entityName: 'otherEntity',
+			authorizer: 'FullAuthorizer',
+			cors: {
+				origins: ['*'], // Open to every origin
+				allowCredentials: false
+			}
 		}],
 
 		['janis.eventListener', {

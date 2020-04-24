@@ -42,7 +42,6 @@ describe('Hooks', () => {
 					headers: [...defaultHeaders],
 					allowCredentials: true,
 					maxAge: 600
-
 				}
 			},
 			baz: true

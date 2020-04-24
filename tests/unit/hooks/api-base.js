@@ -388,7 +388,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should enable cors if cors param is passed', () => {
+			it('Should enable default cors if cors param is passed as true', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
 					entityName: 'product name',
@@ -415,6 +415,65 @@ describe('Internal Hooks', () => {
 											path: '/product-name',
 											method: 'get',
 											cors: '${self:custom.cors}',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should enable customized cors if cors param is passed as an object', () => {
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					cors: {
+						replace: true,
+						origins: ['*'],
+						allowCredentials: false
+					}
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											cors: {
+												origins: ['*'],
+												headers: [
+													'content-type',
+													'janis-api-key',
+													'janis-api-secret',
+													'janis-client',
+													'janis-entity',
+													'x-api-key',
+													'x-janis-page',
+													'x-janis-page-size'
+												],
+												allowCredentials: false,
+												maxAge: 600
+											},
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
