@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - APIs now can configure custom CORS properties
 
+### Changed
+- Functions are no longer versioned not pruned by default
+
 ## [2.11.0] - 2020-04-21
 ### Added
 - `timeout` support for Event Listeners hooks

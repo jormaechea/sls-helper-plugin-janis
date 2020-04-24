@@ -70,7 +70,8 @@ describe('Hooks', () => {
 						Owner: 'Janis',
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
-					}
+					},
+					versionFunctions: false
 				},
 				package: {
 					individually: true,
@@ -139,11 +140,6 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
-					},
-
-					prune: {
-						automatic: true,
-						number: 3
 					}
 				},
 				plugins: [
@@ -152,7 +148,6 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -362,7 +357,8 @@ describe('Hooks', () => {
 						Owner: 'Janis',
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
-					}
+					},
+					versionFunctions: false
 				},
 				package: {
 					individually: true,
@@ -437,11 +433,6 @@ describe('Hooks', () => {
 						ignoreMissing: true
 					},
 
-					prune: {
-						automatic: true,
-						number: 3
-					},
-
 					myCustomProp: {
 						foo: 'bar'
 					}
@@ -454,7 +445,6 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -649,7 +639,8 @@ describe('Hooks', () => {
 						Owner: 'Janis',
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
-					}
+					},
+					versionFunctions: false
 				},
 				package: {
 					individually: true,
@@ -718,11 +709,6 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
-					},
-
-					prune: {
-						automatic: true,
-						number: 3
 					}
 				},
 				plugins: [
@@ -731,7 +717,6 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -928,7 +913,8 @@ describe('Hooks', () => {
 						Owner: 'Janis',
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
-					}
+					},
+					versionFunctions: false
 				},
 				package: {
 					individually: true,
@@ -997,11 +983,6 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
-					},
-
-					prune: {
-						automatic: true,
-						number: 3
 					}
 				},
 				plugins: [
@@ -1010,7 +991,6 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -1218,7 +1198,8 @@ describe('Hooks', () => {
 						Owner: 'Janis',
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
-					}
+					},
+					versionFunctions: false
 				},
 				package: {
 					individually: true,
@@ -1287,11 +1268,6 @@ describe('Hooks', () => {
 
 					reducer: {
 						ignoreMissing: true
-					},
-
-					prune: {
-						automatic: true,
-						number: 3
 					}
 				},
 				plugins: [
@@ -1300,7 +1276,6 @@ describe('Hooks', () => {
 					'serverless-offline',
 					'serverless-api-gateway-caching',
 					'serverless-plugin-reducer',
-					'serverless-prune-plugin',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
