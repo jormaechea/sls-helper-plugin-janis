@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.13.1] - 2020-06-23
+### Fixed
+- Response template fix
+
 ## [2.13.0] - 2020-06-23
 ### Added
 - Response template now handles `messageVariables` in response body
