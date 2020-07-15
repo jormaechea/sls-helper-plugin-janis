@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.13.3] - 2020-07-15
+### Fixed
+- Response template fix for error messages with single quotes
+
 ## [2.13.2] - 2020-06-26
 ### Fixed
 - Response template fix for local environment
