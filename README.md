@@ -14,6 +14,16 @@ Used to implement a base service with minimal setup
 | servicePort | number | The service port | **Required** | |
 | apiSecrets | Object | A mapping of stages to Service API Secret | | `undefined` |
 
+Some properties of the initial configuration have a new special meaning:
+
+#### package.include and package.includeOnly
+#### package.exclude and package.excludeOnly
+#### package.plugins and package.pluginsOnly
+
+This properties (if present in the inital service configuration) have the following behaviour:
+- `package.include`, `package.exclude` and `plugins` will be appended to the hooks defaults
+- `package.includeOnly`, `package.excludeOnly` and `pluginsOnly` will replace entirely the hooks defaults
+
 ### templates
 
 Used to implement Lambda APIs requests and response templates as custom props
