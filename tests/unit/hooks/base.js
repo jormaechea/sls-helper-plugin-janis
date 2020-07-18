@@ -74,9 +74,30 @@ describe('Hooks', () => {
 					versionFunctions: false
 				},
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'src/config/*'
+					],
+					exclude: [
+						'.nyc_output/**',
+						'view-schemas/**',
+						'view-schemas-built/**',
+						'tests/**',
+						'hooks/**',
+						'events/**',
+						'permissions/**',
+						'schemas/src/**',
+						'serverless/**',
+						'src/environments/**',
+						'*',
+						'.*',
+						'node_modules/aws-sdk/**',
+						'node_modules/sinon/**',
+						'node_modules/serverless/**',
+						'node_modules/@serverless/**',
+						'node_modules/@babele/**',
+						'node_modules/eslint-plugin-import/**',
+						'node_modules/@sinonjs/**'
 					]
 				},
 				custom: {
@@ -144,10 +165,8 @@ describe('Hooks', () => {
 				},
 				plugins: [
 					'serverless-domain-manager',
-					'serverless-reqvalidator-plugin',
 					'serverless-offline',
 					'serverless-api-gateway-caching',
-					'serverless-plugin-reducer',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -322,14 +341,17 @@ describe('Hooks', () => {
 				},
 				anotherProp: true,
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'custom/path/**'
 					],
 					exclude: [
 						'something'
 					]
-				}
+				},
+				plugins: [
+					'some-custom-plugin'
+				]
 			}, {
 				serviceCode: 'testing',
 				servicePort: 3000
@@ -361,12 +383,31 @@ describe('Hooks', () => {
 					versionFunctions: false
 				},
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'src/config/*',
 						'custom/path/**'
 					],
 					exclude: [
+						'.nyc_output/**',
+						'view-schemas/**',
+						'view-schemas-built/**',
+						'tests/**',
+						'hooks/**',
+						'events/**',
+						'permissions/**',
+						'schemas/src/**',
+						'serverless/**',
+						'src/environments/**',
+						'*',
+						'.*',
+						'node_modules/aws-sdk/**',
+						'node_modules/sinon/**',
+						'node_modules/serverless/**',
+						'node_modules/@serverless/**',
+						'node_modules/@babele/**',
+						'node_modules/eslint-plugin-import/**',
+						'node_modules/@sinonjs/**',
 						'something'
 					]
 				},
@@ -441,13 +482,12 @@ describe('Hooks', () => {
 
 				plugins: [
 					'serverless-domain-manager',
-					'serverless-reqvalidator-plugin',
 					'serverless-offline',
 					'serverless-api-gateway-caching',
-					'serverless-plugin-reducer',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks',
+					'some-custom-plugin'
 				],
 				resources: {
 					Resources: {
@@ -643,9 +683,30 @@ describe('Hooks', () => {
 					versionFunctions: false
 				},
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'src/config/*'
+					],
+					exclude: [
+						'.nyc_output/**',
+						'view-schemas/**',
+						'view-schemas-built/**',
+						'tests/**',
+						'hooks/**',
+						'events/**',
+						'permissions/**',
+						'schemas/src/**',
+						'serverless/**',
+						'src/environments/**',
+						'*',
+						'.*',
+						'node_modules/aws-sdk/**',
+						'node_modules/sinon/**',
+						'node_modules/serverless/**',
+						'node_modules/@serverless/**',
+						'node_modules/@babele/**',
+						'node_modules/eslint-plugin-import/**',
+						'node_modules/@sinonjs/**'
 					]
 				},
 				custom: {
@@ -713,10 +774,8 @@ describe('Hooks', () => {
 				},
 				plugins: [
 					'serverless-domain-manager',
-					'serverless-reqvalidator-plugin',
 					'serverless-offline',
 					'serverless-api-gateway-caching',
-					'serverless-plugin-reducer',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -917,9 +976,30 @@ describe('Hooks', () => {
 					versionFunctions: false
 				},
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'src/config/*'
+					],
+					exclude: [
+						'.nyc_output/**',
+						'view-schemas/**',
+						'view-schemas-built/**',
+						'tests/**',
+						'hooks/**',
+						'events/**',
+						'permissions/**',
+						'schemas/src/**',
+						'serverless/**',
+						'src/environments/**',
+						'*',
+						'.*',
+						'node_modules/aws-sdk/**',
+						'node_modules/sinon/**',
+						'node_modules/serverless/**',
+						'node_modules/@serverless/**',
+						'node_modules/@babele/**',
+						'node_modules/eslint-plugin-import/**',
+						'node_modules/@sinonjs/**'
 					]
 				},
 				custom: {
@@ -987,10 +1067,8 @@ describe('Hooks', () => {
 				},
 				plugins: [
 					'serverless-domain-manager',
-					'serverless-reqvalidator-plugin',
 					'serverless-offline',
 					'serverless-api-gateway-caching',
-					'serverless-plugin-reducer',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -1202,9 +1280,30 @@ describe('Hooks', () => {
 					versionFunctions: false
 				},
 				package: {
-					individually: true,
+					individually: false,
 					include: [
 						'src/config/*'
+					],
+					exclude: [
+						'.nyc_output/**',
+						'view-schemas/**',
+						'view-schemas-built/**',
+						'tests/**',
+						'hooks/**',
+						'events/**',
+						'permissions/**',
+						'schemas/src/**',
+						'serverless/**',
+						'src/environments/**',
+						'*',
+						'.*',
+						'node_modules/aws-sdk/**',
+						'node_modules/sinon/**',
+						'node_modules/serverless/**',
+						'node_modules/@serverless/**',
+						'node_modules/@babele/**',
+						'node_modules/eslint-plugin-import/**',
+						'node_modules/@sinonjs/**'
 					]
 				},
 				custom: {
@@ -1272,10 +1371,8 @@ describe('Hooks', () => {
 				},
 				plugins: [
 					'serverless-domain-manager',
-					'serverless-reqvalidator-plugin',
 					'serverless-offline',
 					'serverless-api-gateway-caching',
-					'serverless-plugin-reducer',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
 					'serverless-plugin-split-stacks'
@@ -1303,6 +1400,297 @@ describe('Hooks', () => {
 									]
 								},
 								ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'],
+								Policies: [
+									{
+										PolicyName: 'janis-${self:custom.serviceCode}-logs-policy',
+										PolicyDocument: {
+											Version: '2012-10-17',
+											Statement: [
+												{
+													Effect: 'Allow',
+													Action: [
+														'logs:CreateLogGroup',
+														'logs:CreateLogStream',
+														'logs:PutLogEvents'
+													],
+													Resource: [
+														{
+															'Fn::Join': [
+																':',
+																[
+																	'arn:aws:logs',
+																	{ Ref: 'AWS::Region' },
+																	{ Ref: 'AWS::AccountId' },
+																	'log-group:/aws/lambda/*:*'
+																]
+															]
+														},
+														{
+															'Fn::Join': [
+																':',
+																[
+																	'arn:aws:logs',
+																	{ Ref: 'AWS::Region' },
+																	{ Ref: 'AWS::AccountId' },
+																	'log-group:/aws/lambda/*:*:*'
+																]
+															]
+														}
+													]
+												}
+											]
+										}
+									}
+								]
+							}
+						},
+
+						UnauthorizedResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString}'
+								},
+								ResponseType: 'UNAUTHORIZED',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '401'
+							}
+						},
+
+						BadRequestBodyResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+								},
+								ResponseType: 'BAD_REQUEST_BODY',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '400'
+							}
+						},
+
+						BadRequestParameters: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+								},
+								ResponseType: 'BAD_REQUEST_PARAMETERS',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '400'
+							}
+						},
+
+						AccessDeniedResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+								},
+								ResponseType: 'ACCESS_DENIED',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '403'
+							}
+						},
+
+						AuthorizerConfigurationErrorResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+								},
+								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						}
+
+					}
+				}
+			});
+		});
+
+		it('Should override the original configuration for xxxOnly configurations', () => {
+
+			const serviceConfig = base({
+				provider: {
+					logRetentionInDays: 30
+				},
+				custom: {
+					myCustomProp: {
+						foo: 'bar'
+					}
+				},
+				anotherProp: true,
+				package: {
+					includeOnly: [
+						'custom/path/**'
+					],
+					excludeOnly: [
+						'something'
+					]
+				},
+				pluginsOnly: [
+					'my-unique-plugin'
+				]
+			}, {
+				serviceCode: 'testing',
+				servicePort: 3000
+			});
+
+			assert.deepStrictEqual(serviceConfig, {
+				service: 'Janis${self:custom.serviceName}Service',
+				provider: {
+					name: 'aws',
+					runtime: 'nodejs12.x',
+					memorySize: 256,
+					stage: 'local',
+					region: 'us-east-1',
+					role: 'ServiceExecutionRole',
+					endpointType: 'REGIONAL',
+					apiName: 'JANIS ${self:custom.humanReadableStage.${self:custom.stage}} ${self:custom.serviceTitle} API',
+					logRetentionInDays: 30,
+					environment: {
+						JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+						JANIS_SERVICE_SECRET: '${self:custom.serviceApiSecret.${self:custom.stage}}',
+						JANIS_ENV: '${self:custom.stage}',
+						MS_PATH: 'src'
+					},
+					tags: {
+						Owner: 'Janis',
+						Microservice: '${self:custom.serviceName}',
+						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
+					},
+					versionFunctions: false
+				},
+				package: {
+					individually: false,
+					include: [
+						'custom/path/**'
+					],
+					exclude: [
+						'something'
+					]
+				},
+				custom: {
+					serviceTitle: 'Testing',
+					serviceName: 'Testing',
+					serviceCode: 'testing',
+					stage: '${opt:stage, self:provider.stage}',
+					region: '${opt:region, self:provider.region}',
+
+					humanReadableStage: {
+						local: 'Local',
+						beta: 'Beta',
+						qa: 'QA',
+						prod: 'Prod'
+					},
+
+					janisDomains: {
+						local: 'janis.localhost',
+						beta: 'janisdev.in',
+						qa: 'janisqa.in',
+						prod: 'janis.in'
+					},
+
+					cacheEnabled: {
+						prod: false
+					},
+
+					customDomain: {
+						domainName: '${self:custom.serviceCode}.${self:custom.janisDomains.${self:custom.stage}}',
+						basePath: 'api',
+						stage: '${self:custom.stage}',
+						createRoute53Record: true,
+						endpointType: 'regional'
+					},
+
+					apiGatewayCaching: {
+						enabled: '${self:custom.cacheEnabled.${self:custom.stage}, \'false\'}',
+						clusterSize: '0.5',
+						ttlInSeconds: 600 // 10 minutos
+					},
+
+					'serverless-offline': {
+						port: 3000,
+						host: '0.0.0.0',
+						stage: 'local',
+						prefix: 'api',
+						printOutput: true,
+						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+					},
+
+					stageVariables: {
+						serviceName: '${self:custom.serviceCode}'
+					},
+
+					serviceApiSecret: {
+						local: '',
+						beta: '',
+						qa: '',
+						prod: ''
+					},
+
+					reducer: {
+						ignoreMissing: true
+					},
+
+					myCustomProp: {
+						foo: 'bar'
+					}
+				},
+				anotherProp: true,
+
+				plugins: [
+					'my-unique-plugin'
+				],
+				resources: {
+					Resources: {
+
+						ServiceExecutionRole: {
+							Type: 'AWS::IAM::Role',
+							Properties: {
+								RoleName: 'Janis${self:custom.serviceName}Service-${self:custom.stage}-lambdaRole',
+								Path: '/janis-service/',
+								AssumeRolePolicyDocument: {
+									Version: '2012-10-17',
+									Statement: [
+										{
+											Effect: 'Allow',
+											Principal: {
+												Service: [
+													'lambda.amazonaws.com'
+												]
+											},
+											Action: 'sts:AssumeRole'
+										}
+									]
+								},
 								Policies: [
 									{
 										PolicyName: 'janis-${self:custom.serviceCode}-logs-policy',
