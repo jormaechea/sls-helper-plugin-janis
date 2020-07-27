@@ -5,13 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [3.0.0] - 2020-07-27
 ### Added
 - Added `include` and `includeOnly` properties to base helper to customize packaging
 - Added `excludeOnly` properties to base helper to customize packaging
 - Added `plugins` and `pluginsOnly` properties to base helper to customize plugins
 
 ### Changed
-- Now functions are not packaged individually any more
+- Now functions are not packaged individually any more. **BREAKING CHANGE**
 
 ### Removed
 - Unused default plugins `serverless-reqvalidator-plugin` and `serverless-plugin-reducer`
