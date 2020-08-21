@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.1.0] - 2020-08-21
+### Added
+- Added `dbConfig` hook to implement AWS Secrets
+
 ## [3.0.0] - 2020-07-27
 ### Added
 - Added `include` and `includeOnly` properties to base helper to customize packaging
