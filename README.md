@@ -132,6 +132,20 @@ Used to implement JANIS Events listeners
 | package.include | array[string] | The List of paths of files to include |
 | timeout | number | The function timeout in seconds | | |
 
+### dbConfig
+
+_(since 3.1.0)_
+
+Used to implement JANIS Database config as secret with an auto-generated password
+
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| secret | string \| object | The secret content as an object or a JSON stringified object | **Required** | |
+| secretName | string | The secret name | | `'janis/${self:custom.serviceCode}/${self:custom.stage}/db-config'` |
+| description | string | The secret description | | `'Database config secret for janis ${self:custom.serviceCode} ${self:custom.stage}'` |
+| passwordKey | string | The property name where the password will be generated | | `'password'` |
+| passwordLength | number | The generated password length | | `40` |
+
 ## Examples
 
 ### Basic Service with one CRUD operation set and an event listener
