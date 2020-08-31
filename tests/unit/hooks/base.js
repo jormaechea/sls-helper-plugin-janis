@@ -322,6 +322,23 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
 
 					}
@@ -641,7 +658,25 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
+
 
 					}
 				}
@@ -933,7 +968,25 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
+
 
 					}
 				}
@@ -1227,7 +1280,25 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
+
 
 					}
 				}
@@ -1533,7 +1604,25 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
+
 
 					}
 				}
@@ -1824,7 +1913,25 @@ describe('Hooks', () => {
 								},
 								StatusCode: '500'
 							}
+						},
+
+						IntegrationTimeoutResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":"Timeout"}'
+								},
+								ResponseType: 'INTEGRATION_TIMEOUT',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '504'
+							}
 						}
+
 
 					}
 				}
