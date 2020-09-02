@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Gateway response configuration for integration timeout.
+- Request template for `application/x-www-form-urlencoded` removed (needs serverless@1.81.0 or greater)
 
 ## [3.1.0] - 2020-08-21
 ### Added
