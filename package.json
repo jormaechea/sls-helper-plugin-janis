@@ -1,6 +1,6 @@
 {
   "name": "sls-helper-plugin-janis",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A Serverless Helper plugin to add custom helpers for JANIS Commerce",
   "main": "lib/plugin.js",
   "scripts": {
