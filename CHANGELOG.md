@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.1] - 2020-09-03
+### Changed
+- Improved request template to be smaller (removed unused props)
+- Improved response templates to be fewer. Now status code is being overriden with a single template. 500 and 504 templates remain separated due to lambda errors handling
+
 ## [3.2.0] - 2020-09-02
 ### Added
 - Gateway response configuration for integration timeout.
