@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.2.2] - 2020-09-04
+### Fixed
+- Request template ignore other authorizer props to prevent breaking due to JWT claims
+
 ## [3.2.1] - 2020-09-03
 ### Changed
 - Improved request template to be smaller (removed unused props)
