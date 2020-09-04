@@ -16,6 +16,7 @@ describe('Hooks', () => {
 		};
 
 		const defaultHeaders = [
+			'authorization',
 			'content-type',
 			'janis-api-key',
 			'janis-api-secret',

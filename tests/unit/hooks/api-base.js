@@ -462,6 +462,7 @@ describe('Internal Hooks', () => {
 											cors: {
 												origins: ['*'],
 												headers: [
+													'authorization',
 													'content-type',
 													'janis-api-key',
 													'janis-api-secret',
