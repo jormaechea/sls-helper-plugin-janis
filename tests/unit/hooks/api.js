@@ -108,6 +108,70 @@ describe('Hooks', () => {
 
 		context('Request configuration', () => {
 
+			it('Should throw if passed request templates are not an object', () => {
+
+				assert.throws(() => api({}, {
+					path: '/hello-world',
+					requestTemplates: 'not an object'
+				}));
+
+				assert.throws(() => api({}, {
+					path: '/hello-world',
+					requestTemplates: [{
+						'application/x-www-form-urlencoded': null,
+						'application/json': 'custom template',
+						'x-janis-template/json': 'super custom template'
+					}]
+				}));
+			});
+
+			it('Should override and add the passed request templates', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					requestTemplates: {
+						'application/x-www-form-urlencoded': null,
+						'application/json': 'custom template',
+						'x-janis-template/json': 'super custom template'
+					}
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							'API-GetHelloDashworld': {
+								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/get.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/hello-world',
+											method: 'get',
+											request: {
+												template: {
+													'application/x-www-form-urlencoded': null,
+													'application/json': 'custom template',
+													'x-janis-template/json': 'super custom template'
+												}
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
 			it('Should use the passed HTTP Method', () => {
 
 				const serviceConfig = api({}, {

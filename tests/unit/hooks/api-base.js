@@ -159,6 +159,72 @@ describe('Internal Hooks', () => {
 
 		context('Request configuration', () => {
 
+			it('Should throw if passed request templates are not an object', () => {
+
+				assert.throws(() => apiBase.buildApi({}, {
+					entityName: 'product name',
+					requestTemplates: 'not an object'
+				}));
+
+				assert.throws(() => apiBase.buildApi({}, {
+					entityName: 'product name',
+					requestTemplates: [{
+						'application/x-www-form-urlencoded': null,
+						'application/json': 'custom template',
+						'x-janis-template/json': 'super custom template'
+					}]
+				}));
+
+			});
+
+			it('Should override and add the passed request templates', () => {
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					requestTemplates: {
+						'application/x-www-form-urlencoded': null,
+						'application/json': 'custom template',
+						'x-janis-template/json': 'super custom template'
+					}
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: {
+													'application/x-www-form-urlencoded': null,
+													'application/json': 'custom template',
+													'x-janis-template/json': 'super custom template'
+												}
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
 			it('Should parse path parameters and add them to request parameters object', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {

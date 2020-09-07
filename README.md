@@ -91,6 +91,7 @@ Used to implement a custom API
 | caching | boolean | Set to true to enable cache | | `false` |
 | cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
+| requestTemplates | object | A key value to map content types to request mapping headers. By default only `application/json` is enabled ([Docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway#request-templates)) | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
@@ -110,6 +111,7 @@ Used to implement JANIS CRUD APIs.
 | caching | boolean | Set to true to enable cache | | `false` |
 | cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
+| requestTemplates | object | A key value to map content types to request mapping headers. By default only `application/json` is enabled ([Docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway#request-templates)) | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
