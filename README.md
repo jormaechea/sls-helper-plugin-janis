@@ -67,6 +67,7 @@ You can also customize or override every property:
 #### CORS Default headers:
 ```
 [
+	'authorization',
 	'content-type',
 	'janis-api-key',
 	'janis-api-secret',
