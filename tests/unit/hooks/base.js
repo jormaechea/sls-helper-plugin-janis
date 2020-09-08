@@ -96,7 +96,7 @@ describe('Hooks', () => {
 						'node_modules/sinon/**',
 						'node_modules/serverless/**',
 						'node_modules/@serverless/**',
-						'node_modules/@babele/**',
+						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**'
 					]
@@ -424,7 +424,7 @@ describe('Hooks', () => {
 						'node_modules/sinon/**',
 						'node_modules/serverless/**',
 						'node_modules/@serverless/**',
-						'node_modules/@babele/**',
+						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
 						'something'
@@ -742,7 +742,7 @@ describe('Hooks', () => {
 						'node_modules/sinon/**',
 						'node_modules/serverless/**',
 						'node_modules/@serverless/**',
-						'node_modules/@babele/**',
+						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**'
 					]
@@ -1054,7 +1054,7 @@ describe('Hooks', () => {
 						'node_modules/sinon/**',
 						'node_modules/serverless/**',
 						'node_modules/@serverless/**',
-						'node_modules/@babele/**',
+						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**'
 					]
@@ -1377,7 +1377,7 @@ describe('Hooks', () => {
 						'node_modules/sinon/**',
 						'node_modules/serverless/**',
 						'node_modules/@serverless/**',
-						'node_modules/@babele/**',
+						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**'
 					]
