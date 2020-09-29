@@ -30,7 +30,7 @@ describe('Hooks', () => {
 		const defaultOrigins = [
 			'https://${self:custom.janisDomains.${self:custom.stage}}',
 			'https://app.${self:custom.janisDomains.${self:custom.stage}}',
-			'http://localhost:3001',
+			'https://*.app.${self:custom.janisDomains.${self:custom.stage}}',
 			'http://janis.localhost:3001',
 			'http://app.janis.localhost:3001'
 		];
