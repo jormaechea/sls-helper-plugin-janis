@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [3.4.1] - 2020-10-21
+### Fixed
+- CORS APP wildcard for local env
+
 ## [3.4.0] - 2020-09-29
 ### Added
 - CORS default config now supports APP wildcard
