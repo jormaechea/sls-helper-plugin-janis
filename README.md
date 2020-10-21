@@ -2,6 +2,18 @@
 
 A plugin for JANIS Commerce to use with the [Serverless Helper Framework](http://npmjs.com/package/sls-helper).
 
+<a href="https://www.npmjs.com/package/sls-helper-plugin-janis">
+	<img src="https://badge.fury.io/js/sls-helper-plugin-janis.svg" alt="npm version" />
+</a>
+
+<a href="https://github.com/jormaechea/sls-helper-plugin-janis/actions?query=workflow%3A%22Build+Status%22">
+	<img src="https://github.com/jormaechea/sls-helper-plugin-janis/workflows/Build%20Status/badge.svg" alt="Build status" />
+</a>
+
+<a href="https://github.com/jormaechea/sls-helper-plugin-janis/actions?query=workflow%3A%22Coverage+Status%22">
+	<img src="https://github.com/jormaechea/sls-helper-plugin-janis/workflows/Coverage%20Status/badge.svg" alt="Coverage Status" />
+</a>
+
 ## Helpers
 
 ### base
