@@ -32,7 +32,8 @@ describe('Hooks', () => {
 			'https://app.${self:custom.janisDomains.${self:custom.stage}}',
 			'https://*.app.${self:custom.janisDomains.${self:custom.stage}}',
 			'http://janis.localhost:3001',
-			'http://app.janis.localhost:3001'
+			'http://app.janis.localhost:3001',
+			'http://*.app.janis.localhost:3001'
 		];
 
 		const configWithDefaultCors = {
