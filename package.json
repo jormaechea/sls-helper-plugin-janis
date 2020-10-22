@@ -1,7 +1,7 @@
 {
   "name": "sls-helper-plugin-janis",
   "version": "3.4.1",
-  "description": "A Serverless Helper plugin to add custom helpers for JANIS Commerce",
+  "description": "A Serverless Helper plugin to add custom helpers for Janis Commerce",
   "main": "lib/plugin.js",
   "scripts": {
     "lint": "eslint ./lib ./tests",
@@ -50,7 +50,6 @@
   },
   "dependencies": {
     "lllog": "^1.1.2",
-    "lodash.kebabcase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
     "semver": "^7.3.2"
   },

@@ -8,24 +8,32 @@ describe('Hooks', () => {
 
 	describe('Base service', () => {
 
+		const validServicePort = 3000;
+
 		it('Should throw if serviceCode hook config is not defined', () => {
 			assert.throws(() => base({}, {
-				servicePort: 3000
+				servicePort: validServicePort
 			}));
 		});
 
 		it('Should throw if serviceCode hook config is not a string', () => {
 			assert.throws(() => base({}, {
 				serviceCode: ['invalid'],
-				servicePort: 3000
+				servicePort: validServicePort
 			}));
 		});
 
 		it('Should throw if serviceCode hook config is not in dash-case', () => {
-			assert.throws(() => base({}, {
-				serviceCode: 'SomeInvalidCode',
-				servicePort: 3000
-			}));
+
+			[
+				'SomeInvalidCode',
+				'Some Invalid Code'
+			].forEach(serviceCode => {
+				assert.throws(() => base({}, {
+					serviceCode,
+					servicePort: validServicePort
+				}));
+			});
 		});
 
 		it('Should throw if servicePort hook config is not defined', () => {
@@ -41,11 +49,28 @@ describe('Hooks', () => {
 			}));
 		});
 
+		it('Should not throw if a valid serviceCode and servicePort is received', () => {
+
+			[
+				'valid-code',
+				'123',
+				'123-valid-code',
+				'valid-123-code',
+				'123-valid-code-456',
+				'valid-code-special-chars-àá'
+			].forEach(serviceCode => {
+				assert.doesNotThrow(() => base({}, {
+					serviceCode,
+					servicePort: validServicePort
+				}));
+			});
+		});
+
 		it('Should return the base service configuration', () => {
 
 			const serviceConfig = base({}, {
 				serviceCode: 'testing',
-				servicePort: 3000
+				servicePort: validServicePort
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
@@ -372,7 +397,7 @@ describe('Hooks', () => {
 				]
 			}, {
 				serviceCode: 'testing',
-				servicePort: 3000
+				servicePort: validServicePort
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
@@ -676,8 +701,6 @@ describe('Hooks', () => {
 								StatusCode: '504'
 							}
 						}
-
-
 					}
 				}
 			});
@@ -691,7 +714,7 @@ describe('Hooks', () => {
 				}
 			}, {
 				serviceCode: 'testing',
-				servicePort: 3000
+				servicePort: validServicePort
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
@@ -986,8 +1009,6 @@ describe('Hooks', () => {
 								StatusCode: '504'
 							}
 						}
-
-
 					}
 				}
 			});
@@ -997,7 +1018,7 @@ describe('Hooks', () => {
 
 			const serviceConfig = base({}, {
 				serviceCode: 'testing',
-				servicePort: 3000,
+				servicePort: validServicePort,
 				apiSecrets: {
 					local: 'test',
 					beta: '4f06f114-a4e8-44dd-a9a3-6436323509b7',
@@ -1298,8 +1319,6 @@ describe('Hooks', () => {
 								StatusCode: '504'
 							}
 						}
-
-
 					}
 				}
 			});
@@ -1319,7 +1338,7 @@ describe('Hooks', () => {
 				}
 			}, {
 				serviceCode: 'testing',
-				servicePort: 3000
+				servicePort: validServicePort
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
@@ -1622,8 +1641,6 @@ describe('Hooks', () => {
 								StatusCode: '504'
 							}
 						}
-
-
 					}
 				}
 			});
@@ -1654,7 +1671,7 @@ describe('Hooks', () => {
 				]
 			}, {
 				serviceCode: 'testing',
-				servicePort: 3000
+				servicePort: validServicePort
 			});
 
 			assert.deepStrictEqual(serviceConfig, {
@@ -1931,8 +1948,6 @@ describe('Hooks', () => {
 								StatusCode: '504'
 							}
 						}
-
-
 					}
 				}
 			});
