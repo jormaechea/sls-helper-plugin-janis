@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.0.0] - 2020-10-27
+### Changed
+- CORS default config now supports any origin **BREAKING CHANGE**
+
 ## [3.4.2] - 2020-10-22
 ### Fixed
 - Fixed kebabcase for base, api and event-listenr hooks
