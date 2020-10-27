@@ -60,21 +60,10 @@ You can also customize or override every property:
 | Option | Type | Description | Default value |
 |--------|------|-------------|---------------|
 | replace | boolean | Indicates whether it should replace the CORS properties or merge then with the default | false |
-| origins | array\<string\> | An array of allowed origins | [See below](#cors-default-origins) |
+| origins | array\<string\> | An array of allowed origins | ['*'] |
 | headers | array\<string\> | An array of allowed headers | [See below](#cors-default-headers) |
 | allowCredentials | boolean | Indicates whether the credentials header should be set | `true` |
 | maxAge | number | The time in seconds thar CORS headers should be cached | 600 |
-
-#### CORS Default origins:
-```
-[
-	'https://${self:custom.janisDomains.${self:custom.stage}}',
-	'https://app.${self:custom.janisDomains.${self:custom.stage}}',
-	'http://localhost:3001',
-	'http://janis.localhost:3001',
-	'http://app.janis.localhost:3001'
-]
-```
 
 #### CORS Default headers:
 ```
