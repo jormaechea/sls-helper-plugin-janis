@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.1.0] - 2020-12-09
+### Changed
+- API Gateway custom domain configured to use TLS 1.2
+
 ## [4.0.0] - 2020-10-27
 ### Changed
 - CORS default config now supports any origin **BREAKING CHANGE**
