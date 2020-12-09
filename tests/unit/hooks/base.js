@@ -156,7 +156,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
@@ -485,7 +486,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
@@ -800,7 +802,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
@@ -1110,7 +1113,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
@@ -1431,7 +1435,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
@@ -1738,7 +1743,8 @@ describe('Hooks', () => {
 						basePath: 'api',
 						stage: '${self:custom.stage}',
 						createRoute53Record: true,
-						endpointType: 'regional'
+						endpointType: 'regional',
+						securityPolicy: 'tls_1_2'
 					},
 
 					apiGatewayCaching: {
