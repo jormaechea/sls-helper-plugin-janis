@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Authorizers `ImportAuthorizer` and `ExportAuthorizer`
+- Header `janis-service` is now allowed in CORS configuration
+
+### Deprecated
+- Authorizer `ImportExportAuthorizer` replaced with `ImportAuthorizer` or `ExportAuthorizer`
+
 ## [4.1.0] - 2020-12-09
 ### Changed
 - API Gateway custom domain configured to use TLS 1.2
@@ -16,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [3.4.2] - 2020-10-22
 ### Fixed
-- Fixed kebabcase for base, api and event-listenr hooks
+- Fixed kebabcase for base, api and event-listener hooks
 
 ## [3.4.1] - 2020-10-21
 ### Fixed
@@ -53,7 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.2.1] - 2020-09-03
 ### Changed
 - Improved request template to be smaller (removed unused props)
-- Improved response templates to be fewer. Now status code is being overriden with a single template. 500 and 504 templates remain separated due to lambda errors handling
+- Improved response templates to be fewer. Now status code is being overridden with a single template. 500 and 504 templates remain separated due to lambda errors handling
 
 ## [3.2.0] - 2020-09-02
 ### Added
@@ -144,7 +151,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - API Gateway response `AUTHORIZER_CONFIGURATION_ERROR`
 
 ### Fixed
-- API Gateway responses are not overriden any more
+- API Gateway responses are not overridden any more
 
 ## [2.4.1] - 2020-02-20
 ### Fixed
