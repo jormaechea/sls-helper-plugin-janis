@@ -533,6 +533,7 @@ describe('Internal Hooks', () => {
 													'janis-api-key',
 													'janis-api-secret',
 													'janis-client',
+													'janis-service',
 													'janis-entity',
 													'x-api-key',
 													'x-janis-page',

@@ -89,6 +89,22 @@ describe('Hooks', () => {
 				resultTtlInSeconds: 300,
 				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret,method.request.header.janis-entity',
 				type: 'request'
+			},
+
+			ImportAuthorizer: {
+				name: 'ImportAuthorizer',
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportAuthorizer`,
+				resultTtlInSeconds: 300,
+				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret,method.request.header.janis-service,method.request.header.janis-entity', // eslint-disable-line max-len
+				type: 'request'
+			},
+
+			ExportAuthorizer: {
+				name: 'ExportAuthorizer',
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ExportAuthorizer`,
+				resultTtlInSeconds: 300,
+				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret,method.request.header.janis-entity',
+				type: 'request'
 			}
 		};
 
@@ -108,7 +124,7 @@ describe('Hooks', () => {
 			});
 		});
 
-		it('Should return the authorizers service configuration mantaining previous authorizers', () => {
+		it('Should return the authorizers service configuration maintaining previous authorizers', () => {
 
 			const serviceConfig = authorizers({
 				custom: {
