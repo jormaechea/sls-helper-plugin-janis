@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.2.0] - 2020-12-10
 ### Added
 - Authorizers `ImportAuthorizer` and `ExportAuthorizer`
 - Header `janis-service` is now allowed in CORS configuration
