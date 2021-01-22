@@ -2,6 +2,18 @@
 
 A plugin for JANIS Commerce to use with the [Serverless Helper Framework](http://npmjs.com/package/sls-helper).
 
+<a href="https://www.npmjs.com/package/sls-helper-plugin-janis">
+	<img src="https://badge.fury.io/js/sls-helper-plugin-janis.svg" alt="npm version" />
+</a>
+
+<a href="https://github.com/jormaechea/sls-helper-plugin-janis/actions?query=workflow%3A%22Build+Status%22">
+	<img src="https://github.com/jormaechea/sls-helper-plugin-janis/workflows/Build%20Status/badge.svg" alt="Build status" />
+</a>
+
+<a href="https://github.com/jormaechea/sls-helper-plugin-janis/actions?query=workflow%3A%22Coverage+Status%22">
+	<img src="https://github.com/jormaechea/sls-helper-plugin-janis/workflows/Coverage%20Status/badge.svg" alt="Coverage Status" />
+</a>
+
 ## Helpers
 
 ### base
@@ -20,7 +32,7 @@ Some properties of the initial configuration have a new special meaning:
 #### package.exclude and package.excludeOnly
 #### package.plugins and package.pluginsOnly
 
-This properties (if present in the inital service configuration) have the following behaviour:
+This properties (if present in the initial service configuration) have the following behavior:
 - `package.include`, `package.exclude` and `plugins` will be appended to the hooks defaults
 - `package.includeOnly`, `package.excludeOnly` and `pluginsOnly` will replace entirely the hooks defaults
 
@@ -48,21 +60,10 @@ You can also customize or override every property:
 | Option | Type | Description | Default value |
 |--------|------|-------------|---------------|
 | replace | boolean | Indicates whether it should replace the CORS properties or merge then with the default | false |
-| origins | array\<string\> | An array of allowed origins | [See below](#cors-default-origins) |
+| origins | array\<string\> | An array of allowed origins | ['*'] |
 | headers | array\<string\> | An array of allowed headers | [See below](#cors-default-headers) |
 | allowCredentials | boolean | Indicates whether the credentials header should be set | `true` |
 | maxAge | number | The time in seconds thar CORS headers should be cached | 600 |
-
-#### CORS Default origins:
-```
-[
-	'https://${self:custom.janisDomains.${self:custom.stage}}',
-	'https://app.${self:custom.janisDomains.${self:custom.stage}}',
-	'http://localhost:3001',
-	'http://janis.localhost:3001',
-	'http://app.janis.localhost:3001'
-]
-```
 
 #### CORS Default headers:
 ```
@@ -72,6 +73,7 @@ You can also customize or override every property:
 	'janis-api-key',
 	'janis-api-secret',
 	'janis-client',
+	'janis-service',
 	'janis-entity',
 	'x-api-key',
 	'x-janis-page',
@@ -89,8 +91,8 @@ Used to implement a custom API
 | method | string | The API HTTP Method | | `'get'` |
 | methodName | string | The JANIS API Method | Enum\<list, get, post, put, patch, delete\> | Defaults to same value of `method` option |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
-| caching | boolean | Set to true to enable cache | | `false` |
-| cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
+| caching | boolean | Set to `true` to enable cache | | `false` |
+| cors | boolean|object | Set to `true` to enable services default **CORS**, or configure as an object as explained in **CORS** to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestTemplates | object | A key value to map content types to request mapping headers. By default only `application/json` is enabled ([Docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway#request-templates)) | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |
@@ -109,8 +111,8 @@ Used to implement JANIS CRUD APIs.
 | entityName | string | The entity name | **Required** | |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |
-| caching | boolean | Set to true to enable cache | | `false` |
-| cors | boolean|object | Set to true to enable services default CORS, or configure as an object as explained in CORS to customize the API CORS | | `false` |
+| caching | boolean | Set to `true` to enable cache | | `false` |
+| cors | boolean|object | Set to `true` to enable services default **CORS**, or configure as an object as explained in **CORS** to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
 | requestTemplates | object | A key value to map content types to request mapping headers. By default only `application/json` is enabled ([Docs](https://www.serverless.com/framework/docs/providers/aws/events/apigateway#request-templates)) | | |
 | requestHeaders | object | A key value to map headers to a boolean indicating if it's required or not | | |

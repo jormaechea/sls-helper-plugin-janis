@@ -21,19 +21,14 @@ describe('Hooks', () => {
 			'janis-api-key',
 			'janis-api-secret',
 			'janis-client',
+			'janis-service',
 			'janis-entity',
 			'x-api-key',
 			'x-janis-page',
 			'x-janis-page-size'
 		];
 
-		const defaultOrigins = [
-			'https://${self:custom.janisDomains.${self:custom.stage}}',
-			'https://app.${self:custom.janisDomains.${self:custom.stage}}',
-			'https://*.app.${self:custom.janisDomains.${self:custom.stage}}',
-			'http://janis.localhost:3001',
-			'http://app.janis.localhost:3001'
-		];
+		const defaultOrigins = ['*'];
 
 		const configWithDefaultCors = {
 			custom: {

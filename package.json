@@ -1,12 +1,12 @@
 {
   "name": "sls-helper-plugin-janis",
-  "version": "3.4.0",
-  "description": "A Serverless Helper plugin to add custom helpers for JANIS Commerce",
+  "version": "4.2.1",
+  "description": "A Serverless Helper plugin to add custom helpers for Janis Commerce",
   "main": "lib/plugin.js",
   "scripts": {
     "lint": "eslint ./lib ./tests",
     "test": "mocha --recursive --require tests/bootstrap.js tests/unit/",
-    "test:ci": "nyc --reporter=text mocha --recursive tests/",
+    "test:ci": "nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive --require tests/bootstrap.js tests/unit/",
     "coverage": "nyc npm test"
   },
   "files": [
@@ -38,20 +38,19 @@
   },
   "homepage": "https://github.com/jormaechea/sls-helper-plugin-janis#readme",
   "devDependencies": {
-    "eslint": "^6.5.1",
+    "eslint": "^7.15.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2",
-    "husky": "^3.0.8",
-    "mocha": "^6.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.5",
+    "mocha": "^8.2.1",
     "mock-require": "^3.0.3",
-    "nyc": "^14.1.1",
+    "nyc": "^15.1.0",
     "serverless": "^1.81.1",
-    "sinon": "^7.5.0"
+    "sinon": "^9.2.1"
   },
   "dependencies": {
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",
-    "lodash.kebabcase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
     "semver": "^7.3.2"
   },
