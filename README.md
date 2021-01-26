@@ -151,6 +151,17 @@ Used to implement JANIS Database config as secret with an auto-generated passwor
 | passwordKey | string | The property name where the password will be generated | | `'password'` |
 | passwordLength | number | The generated password length | | `40` |
 
+### stateMachine
+
+_(since 4.3.0)_
+
+Used to implement AWS State Machines
+
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| name | string | The name of the state machine | **Required** | |
+| definition | object | The definition of the state machine. See more [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-state-machine-structure.html)| **Required**  | |
+
 ## Examples
 
 ### Basic Service with one CRUD operation set and an event listener
@@ -227,6 +238,21 @@ module.exports = helper({
 			entityName: 'product',
 			eventName: 'created',
 			mustHaveClient: true
+		}],
+
+		['janis.stateMachine', {
+			name: 'StateMachineName',
+			definition: {
+				Comment: 'State Machine Comment',
+				StartAt: 'WaitForCall',
+				States: {
+					WaitForCall: {
+						Type: 'Wait',
+						SecondsPath: '$.body.wait',
+						Next: 'Finish'
+					}
+				}
+			}
 		}]
 
 	]
