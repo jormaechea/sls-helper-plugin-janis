@@ -159,8 +159,8 @@ Used to implement AWS State Machines
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
-| name | string \| object | The name of the state machine | **Required** | |
-| definition | object | The definition of the state machine | **Required**  | |
+| name | string | The name of the state machine | **Required** | |
+| definition | object | The definition of the state machine. See more [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-state-machine-structure.html)| **Required**  | |
 
 ## Examples
 
