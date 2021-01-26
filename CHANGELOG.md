@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.3.0] - 2021-01-26
+### Added
+- Added `stateMachine` hook
+
 ## [4.2.1] - 2021-01-11
 ### Fixed
 - Fixed response template to include custom errors properly
