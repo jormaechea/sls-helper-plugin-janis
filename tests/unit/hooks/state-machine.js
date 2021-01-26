@@ -67,13 +67,13 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							[`SM-${pascalCase(hooksParams.name)}`]: hooksParams
+							'SM-MachineName': hooksParams
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: `SM-\${self:custom.serviceName}-${camelCase(hooksParams.name)}-\${self:custom.stage}`,
+								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -82,7 +82,7 @@ describe('Hooks', () => {
 											'${self:custom.region}',
 											{ Ref: 'AWS::AccountId' },
 											'stateMachine',
-											`\${self:custom.machines.${camelCase(hooksParams.name)}.name}`
+											'${self:custom.machines.MachineName.name}'
 										]
 									]
 								}
@@ -106,13 +106,13 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							[`SM-${pascalCase(hooksParams.name)}`]: hooksParams
+							'SM-MachineName': hooksParams
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: `SM-\${self:custom.serviceName}-${camelCase(hooksParams.name)}-\${self:custom.stage}`,
+								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -121,7 +121,7 @@ describe('Hooks', () => {
 											'${self:custom.region}',
 											{ Ref: 'AWS::AccountId' },
 											'stateMachine',
-											`\${self:custom.machines.${camelCase(hooksParams.name)}.name}`
+											'${self:custom.machines.MachineName.name}'
 										]
 									]
 								}
@@ -151,7 +151,7 @@ describe('Hooks', () => {
 					custom: {
 						machines: {
 							MachineName: {
-								name: `SM-\${self:custom.serviceName}-${camelCase(hooksParams.name)}-\${self:custom.stage}`,
+								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -160,7 +160,7 @@ describe('Hooks', () => {
 											'${self:custom.region}',
 											{ Ref: 'AWS::AccountId' },
 											'stateMachine',
-											`\${self:custom.machines.${camelCase(hooksParams.name)}.name}`
+											'${self:custom.machines.MachineName.name}'
 										]
 									]
 								}
@@ -255,7 +255,7 @@ describe('Hooks', () => {
 											'${self:custom.region}',
 											{ Ref: 'AWS::AccountId' },
 											'stateMachine',
-											`\${self:custom.machines.${camelCase(hooksParams.name)}.name}`
+											'${self:custom.machines.MachineName.name}'
 										]
 									]
 								}
