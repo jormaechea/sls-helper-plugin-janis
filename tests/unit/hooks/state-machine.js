@@ -53,7 +53,7 @@ describe('Hooks', () => {
 
 		context('State Machine generation', () => {
 
-			it('Should return the service config without plugins, stepFunctions and the machines when passing the required params', () => {
+			it('Should return the service config with the plugin, stepFunctions and the machines when passing the required params', () => {
 
 				const hooksParams = {
 					name: 'MachineName',
@@ -256,6 +256,65 @@ describe('Hooks', () => {
 											{ Ref: 'AWS::AccountId' },
 											'stateMachine',
 											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
+			it('Should not repeat the step-functions plugin on consecutive calls', () => {
+
+				const hooksParams1 = {
+					name: 'MachineName',
+					definition
+				};
+				const hooksParams2 = {
+					name: 'OtherMachineName',
+					definition
+				};
+				const serviceConfig = stateMachine(stateMachine({}, hooksParams1), hooksParams2);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							'SM-MachineName': hooksParams1,
+							'SM-OtherMachineName': hooksParams2
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							},
+							OtherMachineName: {
+								name: 'SM-${self:custom.serviceName}-otherMachineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.OtherMachineName.name}'
 										]
 									]
 								}
