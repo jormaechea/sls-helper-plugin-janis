@@ -59,6 +59,9 @@ describe('Hooks', () => {
 					name: 'MachineName',
 					definition
 				};
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
 				const serviceConfig = stateMachine({}, hooksParams);
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -67,13 +70,16 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							'SM-MachineName': hooksParams
+							MachineName: {
+								...hooksParams,
+								name: machineName
+							}
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -98,6 +104,9 @@ describe('Hooks', () => {
 					name: 'Machine Name',
 					definition
 				};
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
 				const serviceConfig = stateMachine({}, hooksParams);
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -106,13 +115,16 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							'SM-MachineName': hooksParams
+							MachineName: {
+								...hooksParams,
+								name: machineName
+							}
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -137,6 +149,9 @@ describe('Hooks', () => {
 					name: 'MachineName',
 					definition
 				};
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
 				const serviceConfig = stateMachine(serviceBase, hooksParams);
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -145,13 +160,16 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							[`SM-${pascalCase(hooksParams.name)}`]: hooksParams
+							[pascalCase(hooksParams.name)]: {
+								...hooksParams,
+								name: machineName
+							}
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -176,6 +194,9 @@ describe('Hooks', () => {
 					name: 'MachineName',
 					definition
 				};
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
 				const serviceConfig = stateMachine({
 					...serviceBase,
 					plugins: [
@@ -184,7 +205,7 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							'SM-PreviousMachineName': {
+							PreviousMachineName: {
 								name: 'previousMachineName',
 								definition: { foo: 'bar' }
 							}
@@ -194,7 +215,7 @@ describe('Hooks', () => {
 						someCustomStuff: 'foo',
 						machines: {
 							PreviousMachine: {
-								name: 'SM-${self:custom.serviceName}-previousMachine-${self:custom.stage}',
+								name: '${self:custom.serviceName}-previousMachine-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -220,18 +241,21 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							'SM-PreviousMachineName': {
+							PreviousMachineName: {
 								name: 'previousMachineName',
 								definition: { foo: 'bar' }
 							},
-							[`SM-${pascalCase(hooksParams.name)}`]: hooksParams
+							[pascalCase(hooksParams.name)]: {
+								...hooksParams,
+								name: machineName
+							}
 						}
 					},
 					custom: {
 						someCustomStuff: 'foo',
 						machines: {
 							PreviousMachine: {
-								name: 'SM-${self:custom.serviceName}-previousMachine-${self:custom.stage}',
+								name: '${self:custom.serviceName}-previousMachine-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -246,7 +270,7 @@ describe('Hooks', () => {
 								}
 							},
 							MachineName: {
-								name: `SM-\${self:custom.serviceName}-${camelCase(hooksParams.name)}-\${self:custom.stage}`,
+								name: `\${self:custom.serviceName}-${camelCase(hooksParams.name)}-\${self:custom.stage}`,
 								arn: {
 									'Fn::Join': [
 										':',
@@ -275,6 +299,10 @@ describe('Hooks', () => {
 					name: 'OtherMachineName',
 					definition
 				};
+
+				const machineName1 = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+				const machineName2 = '${self:custom.serviceName}-otherMachineName-${self:custom.stage}';
+
 				const serviceConfig = stateMachine(stateMachine({}, hooksParams1), hooksParams2);
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -283,14 +311,20 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							'SM-MachineName': hooksParams1,
-							'SM-OtherMachineName': hooksParams2
+							MachineName: {
+								...hooksParams1,
+								name: machineName1
+							},
+							OtherMachineName: {
+								...hooksParams2,
+								name: machineName2
+							}
 						}
 					},
 					custom: {
 						machines: {
 							MachineName: {
-								name: 'SM-${self:custom.serviceName}-machineName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
@@ -305,7 +339,7 @@ describe('Hooks', () => {
 								}
 							},
 							OtherMachineName: {
-								name: 'SM-${self:custom.serviceName}-otherMachineName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-otherMachineName-${self:custom.stage}',
 								arn: {
 									'Fn::Join': [
 										':',
