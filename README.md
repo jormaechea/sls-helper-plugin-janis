@@ -162,6 +162,15 @@ Used to implement AWS State Machines
 | name | string | The name of the state machine | **Required** | |
 | definition | object | The definition of the state machine. See more [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-state-machine-structure.html)| **Required**  | |
 
+It will automatically include the `serverless-step-functions` plugin.
+
+It also defines 2 properties in the `custom` namespace:
+
+- `custom.machines.MachineName.arn`: The State Machine ARN
+- `custom.machines.MachineName.name`: The State Machine Name
+
+**Important:** The `MachineName` in the `custom.machines` path will always be converted to [PascalCase](http://wiki.c2.com/?PascalCase)
+
 ## Examples
 
 ### Basic Service with one CRUD operation set and an event listener
