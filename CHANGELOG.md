@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [4.3.1] - 2021-01-27
+### Fixed
+- State functions naming
+- State functions documentation
+
 ## [4.3.0] - 2021-01-26
 ### Added
 - Added `stateMachine` hook
