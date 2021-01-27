@@ -166,10 +166,20 @@ It will automatically include the `serverless-step-functions` plugin.
 
 It also defines 2 properties in the `custom` namespace:
 
-- `custom.machines.MachineName.arn`: The State Machine ARN
-- `custom.machines.MachineName.name`: The State Machine Name
+- `custom.machines.{MachineName}.arn`: The State Machine ARN
+- `custom.machines.{MachineName}.name`: The State Machine Name
 
-**Important:** The `MachineName` in the `custom.machines` path will always be converted to [PascalCase](http://wiki.c2.com/?PascalCase)
+**Important:** The `{MachineName}` in the `custom.machines` path will replaced be the `name` property converted to [PascalCase](http://wiki.c2.com/?PascalCase).
+For example, if the following hook is  configured
+
+```js
+['janis.stateMachine', {
+	name: 'my-super-machine',
+	definition: myDefinition
+}]
+```
+
+The following custom props will be set: `custom.machines.MySuperMachine.arn` and `custom.machines.MySuperMachine.name`
 
 ## Examples
 
