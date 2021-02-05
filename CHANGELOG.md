@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.0] - 2021-02-05
+### Changed
+- Default runtime is now nodejs 14
+- Default memory size is now 1GB
+
 ## [4.3.1] - 2021-01-27
 ### Fixed
 - State functions naming
