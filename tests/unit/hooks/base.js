@@ -77,8 +77,8 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
-					memorySize: 256,
+					runtime: 'nodejs14.x',
+					memorySize: 1024,
 					stage: 'local',
 					region: 'us-east-1',
 					role: 'ServiceExecutionRole',
@@ -405,8 +405,8 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
-					memorySize: 256,
+					runtime: 'nodejs14.x',
+					memorySize: 1024,
 					stage: 'local',
 					region: 'us-east-1',
 					role: 'ServiceExecutionRole',
@@ -723,7 +723,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
+					runtime: 'nodejs14.x',
 					memorySize: 512,
 					stage: 'local',
 					region: 'us-east-1',
@@ -1034,8 +1034,8 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
-					memorySize: 256,
+					runtime: 'nodejs14.x',
+					memorySize: 1024,
 					stage: 'local',
 					region: 'us-east-1',
 					role: 'ServiceExecutionRole',
@@ -1349,8 +1349,8 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
-					memorySize: 256,
+					runtime: 'nodejs14.x',
+					memorySize: 1024,
 					stage: 'local',
 					region: 'us-east-1',
 					role: 'ServiceExecutionRole',
@@ -1683,8 +1683,8 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs12.x',
-					memorySize: 256,
+					runtime: 'nodejs14.x',
+					memorySize: 1024,
 					stage: 'local',
 					region: 'us-east-1',
 					role: 'ServiceExecutionRole',
