@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.0.1] - 2021-03-05
+### Fixed
+- Stage an region are now properly set in provider object
+
 ## [5.0.0] - 2021-02-05
 ### Changed
 - Default runtime is now nodejs 14
