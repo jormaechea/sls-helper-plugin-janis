@@ -198,7 +198,7 @@ describe('Hooks', () => {
 					serviceName: 'my service',
 					entityName: 'product name',
 					eventName: 'something happened',
-					authorizer: 'MyCustomAuthorizer'
+					authorizer: 'FullAuthorizer'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -214,7 +214,7 @@ describe('Hooks', () => {
 											integration: 'lambda',
 											path: '/listener/my-service/product-name/something-happened',
 											method: 'post',
-											authorizer: '${self:custom.authorizers.MyCustomAuthorizer}',
+											authorizer: '${self:custom.authorizers.FullAuthorizer}',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
@@ -227,6 +227,16 @@ describe('Hooks', () => {
 						}
 					]
 				});
+			});
+
+			it('Should throw an error if invalid authorizer is passed', () => {
+
+				assert.throws(() => eventListener({}, {
+					serviceName: 'my service',
+					entityName: 'product name',
+					eventName: 'something happened',
+					authorizer: 'InvalidAuthorizer'
+				}));
 			});
 
 			it('Should add the timeout if timeout param is passed', () => {

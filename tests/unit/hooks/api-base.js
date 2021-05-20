@@ -597,6 +597,13 @@ describe('Internal Hooks', () => {
 				});
 			});
 
+			it('Should throw an error in an invalid authorizer is passed', () => {
+				assert.throws(() => apiBase.buildApi({}, {
+					entityName: 'product name',
+					authorizer: 'InvalidAuthorizer'
+				}));
+			});
+
 			it('Should set the timeout if timeout param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
