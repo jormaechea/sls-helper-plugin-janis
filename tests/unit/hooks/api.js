@@ -314,6 +314,14 @@ describe('Hooks', () => {
 
 		context('Extra configuration', () => {
 
+			const previousServiceConfig = {
+				custom: {
+					authorizers: {
+						FullAuthorizer: {}
+					}
+				}
+			};
+
 			it('Should use the methodName param to override method for files and naming', () => {
 
 				const serviceConfig = api({}, {
@@ -477,12 +485,13 @@ describe('Hooks', () => {
 
 			it('Should set an authorizer if authorizer param is passed', () => {
 
-				const serviceConfig = api({}, {
+				const serviceConfig = api(previousServiceConfig, {
 					path: '/hello-world',
 					authorizer: 'FullAuthorizer'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
+					...previousServiceConfig,
 					functions: [
 						{
 							'API-GetHelloDashworld': {
@@ -513,6 +522,13 @@ describe('Hooks', () => {
 						}
 					]
 				});
+			});
+
+			it('Should throw an error in an invalid authorizer is passed', () => {
+				assert.throws(() => api(previousServiceConfig, {
+					path: '/hello-world',
+					authorizer: 'InvalidAuthorizer'
+				}));
 			});
 
 			it('Should set the timeout if timeout param is passed', () => {

@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- Authorizers validation to prevent an invalid authorizer
+
 ## [5.0.1] - 2021-03-05
 ### Fixed
 - Stage an region are now properly set in provider object

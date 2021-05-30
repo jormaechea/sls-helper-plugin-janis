@@ -331,6 +331,14 @@ describe('Internal Hooks', () => {
 
 		context('Extra configuration', () => {
 
+			const previousServiceConfig = {
+				custom: {
+					authorizers: {
+						FullAuthorizer: {}
+					}
+				}
+			};
+
 			it('Should use the methodName param to override method for files and naming', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
@@ -558,12 +566,13 @@ describe('Internal Hooks', () => {
 
 			it('Should set an authorizer if authorizer param is passed', () => {
 
-				const serviceConfig = apiBase.buildApi({}, {
+				const serviceConfig = apiBase.buildApi(previousServiceConfig, {
 					entityName: 'product name',
 					authorizer: 'FullAuthorizer'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
+					...previousServiceConfig,
 					functions: [
 						{
 							'APIGet-ProductName': {
@@ -595,6 +604,13 @@ describe('Internal Hooks', () => {
 						}
 					]
 				});
+			});
+
+			it('Should throw an error in an invalid authorizer is passed', () => {
+				assert.throws(() => apiBase.buildApi(previousServiceConfig, {
+					entityName: 'product name',
+					authorizer: 'InvalidAuthorizer'
+				}));
 			});
 
 			it('Should set the timeout if timeout param is passed', () => {
