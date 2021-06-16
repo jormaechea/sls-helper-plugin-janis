@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 
 ### Added
-- New authorizer `AdminAuthorizer`
+- New authorizers `AdminAuthorizer` and `AdminNoClientAuthorizer`
 
 ## [5.1.0] - 2021-05-29
 ### Added
