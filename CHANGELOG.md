@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- New authorizer `AdminAuthorizer`
+
 ## [5.1.0] - 2021-05-29
 ### Added
 - Authorizers validation to prevent an invalid authorizer

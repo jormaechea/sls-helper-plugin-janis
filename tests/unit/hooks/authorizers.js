@@ -59,6 +59,14 @@ describe('Hooks', () => {
 				type: 'request'
 			},
 
+			AdminAuthorizer: {
+				name: 'AdminAuthorizer',
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
+				resultTtlInSeconds: 300,
+				identitySource: 'method.request.header.janis-api-key,method.request.header.janis-api-secret',
+				type: 'request'
+			},
+
 			ServiceAuthorizer: {
 				name: 'ServiceAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,

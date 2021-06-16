@@ -24,6 +24,10 @@
 		"janis-api-key",
 		"janis-api-secret"
 	],
+	"AdminAuthorizer": [
+		"janis-api-key",
+		"janis-api-secret"
+	],
 	"ServiceAuthorizer": [
 		"janis-client",
 		"janis-api-key",
