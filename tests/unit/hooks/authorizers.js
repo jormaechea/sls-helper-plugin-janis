@@ -27,7 +27,7 @@ describe('Hooks', () => {
 
 			NoClientAuthorizer: {
 				name: 'NoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-NoClientAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
@@ -75,7 +75,7 @@ describe('Hooks', () => {
 
 			AdminNoClientAuthorizer: {
 				name: 'AdminNoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminNoClientAuthorizer`,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
 				resultTtlInSeconds: 300,
 				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
