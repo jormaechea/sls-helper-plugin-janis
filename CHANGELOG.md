@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.2.1] - 2021-06-28
 ### Changed
 - `AdminNoClientAuthorizer` now uses `AdminAuthorizer` lambda function
 - `NoClientAuthorizer` now uses `FullAuthorizer` lambda function
