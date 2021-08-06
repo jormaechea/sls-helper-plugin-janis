@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.3.0] - 2021-08-06
+### Added
+- `x-janis-authorizer-error-type` header for GatewayResponses
+- `AUTHORIZER_FAILURE` error type handling
+- `detail` property to show the custom `errorMessage` from the authorizer context
+
 ## [5.2.1] - 2021-06-28
 ### Changed
 - `AdminNoClientAuthorizer` now uses `AdminAuthorizer` lambda function
