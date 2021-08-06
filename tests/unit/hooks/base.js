@@ -269,7 +269,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -286,10 +287,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -303,10 +305,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -320,10 +323,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -337,12 +341,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -354,7 +377,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
@@ -606,7 +630,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -623,10 +648,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -640,10 +666,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -657,10 +684,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -674,12 +702,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -691,7 +738,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
@@ -915,7 +963,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -932,10 +981,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -949,10 +999,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -966,10 +1017,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -983,12 +1035,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -1000,7 +1071,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
@@ -1226,7 +1298,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -1243,10 +1316,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -1260,10 +1334,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -1277,10 +1352,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -1294,12 +1370,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -1311,7 +1406,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
@@ -1549,7 +1645,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -1566,10 +1663,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -1583,10 +1681,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -1600,10 +1699,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -1617,12 +1717,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -1634,7 +1753,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
@@ -1857,7 +1977,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":$context.error.messageString}'
@@ -1874,10 +1995,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_BODY',
 								RestApiId: {
@@ -1891,10 +2013,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'BAD_REQUEST_PARAMETERS',
 								RestApiId: {
@@ -1908,10 +2031,11 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'ACCESS_DENIED',
 								RestApiId: {
@@ -1925,12 +2049,31 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
-									'application/json': '{"message":$context.error.messageString,"validationError":"$context.error.validationErrorString"}'
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
 								},
 								ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
+								RestApiId: {
+									Ref: 'ApiGatewayRestApi'
+								},
+								StatusCode: '500'
+							}
+						},
+
+						AuthorizerFailureResponse: {
+							Type: 'AWS::ApiGateway::GatewayResponse',
+							Properties: {
+								ResponseParameters: {
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
+								},
+								ResponseTemplates: {
+									'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage"}'
+								},
+								ResponseType: 'AUTHORIZER_FAILURE',
 								RestApiId: {
 									Ref: 'ApiGatewayRestApi'
 								},
@@ -1942,7 +2085,8 @@ describe('Hooks', () => {
 							Type: 'AWS::ApiGateway::GatewayResponse',
 							Properties: {
 								ResponseParameters: {
-									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+									'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin',
+									'gatewayresponse.header.x-janis-authorizer-error-type': '"$context.error.responseType"'
 								},
 								ResponseTemplates: {
 									'application/json': '{"message":"Timeout"}'
