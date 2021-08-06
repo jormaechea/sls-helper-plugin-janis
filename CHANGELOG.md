@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.3.1] - 2021-08-07
+### Fixed
+- `x-janis-authorizer-error-type` header for GatewayResponses moved to `authorizerErrorType` response body property
+
 ## [5.3.0] - 2021-08-06
 ### Added
 - `x-janis-authorizer-error-type` header for GatewayResponses
