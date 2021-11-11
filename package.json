@@ -7,7 +7,8 @@
     "lint": "eslint ./lib ./tests",
     "test": "mocha --recursive --require tests/bootstrap.js tests/unit/",
     "test:ci": "nyc --reporter=lcov --reporter=text-summary mocha --exit --recursive --require tests/bootstrap.js tests/unit/",
-    "coverage": "nyc npm test"
+    "coverage": "nyc npm test",
+    "prepare": "husky install"
   },
   "files": [
     "/lib"
@@ -38,21 +39,21 @@
   },
   "homepage": "https://github.com/jormaechea/sls-helper-plugin-janis#readme",
   "devDependencies": {
-    "eslint": "^7.15.0",
+    "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.22.1",
-    "husky": "^4.3.5",
-    "mocha": "^8.2.1",
+    "eslint-plugin-import": "^2.25.3",
+    "husky": "^7.0.4",
+    "mocha": "^9.1.3",
     "mock-require": "^3.0.3",
     "nyc": "^15.1.0",
-    "serverless": "^1.81.1",
-    "sinon": "^9.2.1"
+    "serverless": "^2.66.1",
+    "sinon": "^12.0.1"
   },
   "dependencies": {
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.startcase": "^4.4.0",
-    "semver": "^7.3.2"
+    "semver": "^7.3.5"
   },
   "peerDependencies": {
     "sls-helper": ">= 1.9.0",
