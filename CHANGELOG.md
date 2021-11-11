@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [5.4.0] - 2021-11-11
 ### Added
 - Added `rawBody` property to request template
+- Dropped support for node 10.x
 
 ## [5.3.2] - 2021-11-08
 ### Changed
