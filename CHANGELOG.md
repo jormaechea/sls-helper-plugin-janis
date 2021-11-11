@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.4.0] - 2021-11-11
+### Added
+- Added `rawBody` property to request template
+
 ## [5.3.2] - 2021-11-08
 ### Changed
 - Added more paths to default excludes in order to reduce function bundle sizes
