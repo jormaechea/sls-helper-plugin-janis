@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.4.1] - 2021-11-11
+### Fixed
+- Fixed `rawBody` property generation in request template
+
 ## [5.4.0] - 2021-11-11
 ### Added
 - Added `rawBody` property to request template
