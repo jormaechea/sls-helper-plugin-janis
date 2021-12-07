@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.4.3] - 2021-12-07
+### Changed
+- Added `/view-schemas-built-local` to function default excludes
+
+### Fixed
+- Fixed `rawBody` single quote escaping
+
 ## [5.4.2] - 2021-11-11
 ### Fixed
 - Fixed `rawBody` property generation in local envs
