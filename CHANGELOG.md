@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.4.4] - 2021-12-07
+### Fixed
+- Fixed `rawBody` line break escaping
+
 ## [5.4.3] - 2021-12-07
 ### Changed
 - Added `/view-schemas-built-local` to function default excludes
