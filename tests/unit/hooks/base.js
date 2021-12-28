@@ -123,7 +123,7 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
-						'node_modules/.cache',
+						'node_modules/.cache/**',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
@@ -139,7 +139,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
-						'node_modules/faker/dist'
+						'node_modules/faker/dist/**'
 					]
 				},
 				custom: {
@@ -483,7 +483,7 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
-						'node_modules/.cache',
+						'node_modules/.cache/**',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
@@ -499,7 +499,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
-						'node_modules/faker/dist',
+						'node_modules/faker/dist/**',
 						'something'
 					]
 				},
@@ -831,7 +831,7 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
-						'node_modules/.cache',
+						'node_modules/.cache/**',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
@@ -847,7 +847,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
-						'node_modules/faker/dist'
+						'node_modules/faker/dist/**'
 					]
 				},
 				custom: {
@@ -1173,7 +1173,7 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
-						'node_modules/.cache',
+						'node_modules/.cache/**',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
@@ -1189,7 +1189,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
-						'node_modules/faker/dist'
+						'node_modules/faker/dist/**'
 					]
 				},
 				custom: {
@@ -1526,7 +1526,7 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
-						'node_modules/.cache',
+						'node_modules/.cache/**',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
@@ -1542,7 +1542,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
-						'node_modules/faker/dist'
+						'node_modules/faker/dist/**'
 					]
 				},
 				custom: {
