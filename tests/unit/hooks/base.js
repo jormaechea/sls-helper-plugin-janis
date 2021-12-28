@@ -123,10 +123,12 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
+						'node_modules/.cache',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
 						'node_modules/**/*.js.map',
+						'node_modules/**/*.d.ts',
 						'node_modules/ajv/dist/**',
 						'node_modules/**/ajv/dist/**',
 						'node_modules/aws-sdk/**',
@@ -136,7 +138,8 @@ describe('Hooks', () => {
 						'node_modules/@serverless/**',
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
-						'node_modules/@sinonjs/**'
+						'node_modules/@sinonjs/**',
+						'node_modules/faker/dist'
 					]
 				},
 				custom: {
@@ -480,10 +483,12 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
+						'node_modules/.cache',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
 						'node_modules/**/*.js.map',
+						'node_modules/**/*.d.ts',
 						'node_modules/ajv/dist/**',
 						'node_modules/**/ajv/dist/**',
 						'node_modules/aws-sdk/**',
@@ -494,6 +499,7 @@ describe('Hooks', () => {
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
 						'node_modules/@sinonjs/**',
+						'node_modules/faker/dist',
 						'something'
 					]
 				},
@@ -825,10 +831,12 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
+						'node_modules/.cache',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
 						'node_modules/**/*.js.map',
+						'node_modules/**/*.d.ts',
 						'node_modules/ajv/dist/**',
 						'node_modules/**/ajv/dist/**',
 						'node_modules/aws-sdk/**',
@@ -838,7 +846,8 @@ describe('Hooks', () => {
 						'node_modules/@serverless/**',
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
-						'node_modules/@sinonjs/**'
+						'node_modules/@sinonjs/**',
+						'node_modules/faker/dist'
 					]
 				},
 				custom: {
@@ -1164,10 +1173,12 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
+						'node_modules/.cache',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
 						'node_modules/**/*.js.map',
+						'node_modules/**/*.d.ts',
 						'node_modules/ajv/dist/**',
 						'node_modules/**/ajv/dist/**',
 						'node_modules/aws-sdk/**',
@@ -1177,7 +1188,8 @@ describe('Hooks', () => {
 						'node_modules/@serverless/**',
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
-						'node_modules/@sinonjs/**'
+						'node_modules/@sinonjs/**',
+						'node_modules/faker/dist'
 					]
 				},
 				custom: {
@@ -1514,10 +1526,12 @@ describe('Hooks', () => {
 						'src/environments/**',
 						'*',
 						'.*',
+						'node_modules/.cache',
 						'node_modules/**/README.md',
 						'node_modules/**/CHANGELOG.md',
 						'node_modules/**/LICENSE',
 						'node_modules/**/*.js.map',
+						'node_modules/**/*.d.ts',
 						'node_modules/ajv/dist/**',
 						'node_modules/**/ajv/dist/**',
 						'node_modules/aws-sdk/**',
@@ -1527,7 +1541,8 @@ describe('Hooks', () => {
 						'node_modules/@serverless/**',
 						'node_modules/@babel/**',
 						'node_modules/eslint-plugin-import/**',
-						'node_modules/@sinonjs/**'
+						'node_modules/@sinonjs/**',
+						'node_modules/faker/dist'
 					]
 				},
 				custom: {
