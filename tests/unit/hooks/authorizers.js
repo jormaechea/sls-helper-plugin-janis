@@ -102,7 +102,7 @@ describe('Hooks', () => {
 				name: 'ClientAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ClientAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: headerClient,
+				identitySource: `${headerClient},${headerEntity},${headerEntityId}`,
 				type: 'request'
 			},
 
