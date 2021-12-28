@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.4.6] - 2021-12-28
+### Fixed
+- New default includes are now properly configured
+
 ## [5.4.5] - 2021-12-28
 ### Changed
 - Added more default includes to reduce bundle size
