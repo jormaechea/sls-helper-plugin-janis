@@ -23,6 +23,7 @@ describe('Hooks', () => {
 			'janis-client',
 			'janis-service',
 			'janis-entity',
+			'janis-entity-id',
 			'x-api-key',
 			'x-janis-page',
 			'x-janis-page-size'

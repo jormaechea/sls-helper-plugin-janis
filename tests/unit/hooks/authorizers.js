@@ -15,14 +15,13 @@ describe('Hooks', () => {
 		const headerApiSecret = 'method.request.header.janis-api-secret';
 		const headerService = 'method.request.header.janis-service';
 		const headerEntity = 'method.request.header.janis-entity';
-		const headerEntityId = 'method.request.header.janis-entity-id';
 
 		const expectedAuthorizers = {
 			FullAuthorizer: {
 				name: 'FullAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -30,7 +29,7 @@ describe('Hooks', () => {
 				name: 'NoClientAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -38,7 +37,7 @@ describe('Hooks', () => {
 				name: 'LoggedAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-LoggedAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -46,7 +45,7 @@ describe('Hooks', () => {
 				name: 'ApiKeyAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ApiKeyAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -54,7 +53,7 @@ describe('Hooks', () => {
 				name: 'UserAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-UserAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -62,7 +61,7 @@ describe('Hooks', () => {
 				name: 'DevUserAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-DevUserAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -70,7 +69,7 @@ describe('Hooks', () => {
 				name: 'AdminAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -78,7 +77,7 @@ describe('Hooks', () => {
 				name: 'AdminNoClientAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -86,7 +85,7 @@ describe('Hooks', () => {
 				name: 'ServiceAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -94,7 +93,7 @@ describe('Hooks', () => {
 				name: 'ServiceNoClientAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret}`,
 				type: 'request'
 			},
 
@@ -102,7 +101,7 @@ describe('Hooks', () => {
 				name: 'ClientAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ClientAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerEntity},${headerEntityId}`,
+				identitySource: headerClient,
 				type: 'request'
 			},
 
@@ -110,7 +109,7 @@ describe('Hooks', () => {
 				name: 'ImportExportAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportExportAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity}`,
 				type: 'request'
 			},
 
@@ -118,7 +117,7 @@ describe('Hooks', () => {
 				name: 'ImportAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId},${headerService}`,
+				identitySource: `${headerApiKey},${headerApiSecret},${headerService},${headerEntity}`,
 				type: 'request'
 			},
 
@@ -126,7 +125,7 @@ describe('Hooks', () => {
 				name: 'ExportAuthorizer',
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ExportAuthorizer`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity},${headerEntityId}`,
+				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity}`,
 				type: 'request'
 			}
 		};
