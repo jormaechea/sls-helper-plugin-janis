@@ -69,7 +69,7 @@ describe('Hooks', () => {
 					eventName: 'something happened'
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						events: [
@@ -100,7 +100,7 @@ describe('Hooks', () => {
 					listenersDirName: 'listeners'
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						events: [
@@ -131,7 +131,7 @@ describe('Hooks', () => {
 					mustHaveClient: true
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						events: [
@@ -163,7 +163,7 @@ describe('Hooks', () => {
 					package: { include: ['src/models/new-model.js'] }
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						package: { include: ['src/models/new-model.js'] },
@@ -195,7 +195,7 @@ describe('Hooks', () => {
 					authorizer: 'FullAuthorizer'
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						events: [
@@ -237,7 +237,7 @@ describe('Hooks', () => {
 					timeout: 20
 				}, {
 					'EL-MyServiceProductNameSomethingHappened': {
-						name: 'EL-${self:custom.serviceName}-MyServiceProductNameSomethingHappened-${self:custom.stage}',
+						name: '${self:custom.serviceName}-${self:custom.stage}-EL-MyServiceProductNameSomethingHappened',
 						handler: 'src/event-listeners/my-service/product-name/something-happened.handler',
 						description: 'My Service Product Name Something Happened Listener',
 						timeout: 20,

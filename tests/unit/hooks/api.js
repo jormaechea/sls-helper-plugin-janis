@@ -12,14 +12,25 @@ describe('Hooks', () => {
 
 			it('Should throw if path param is missing', () => {
 
-				assert.throws(() => api({}, {}), {
+				assert.throws(() => api({}, {
+					name: 'MyApi'
+				}), {
 					message: /path/
+				});
+			});
+			it('Should throw if name param is missing', () => {
+
+				assert.throws(() => api({}, {
+					path: '/hello-world'
+				}), {
+					message: /name/
 				});
 			});
 
 			it('Should throw if method param is passed as empty', () => {
 
 				assert.throws(() => api({}, {
+					name: 'MyApi',
 					path: '/hello-world',
 					method: ''
 				}), {
@@ -32,6 +43,7 @@ describe('Hooks', () => {
 			it('Should return the service config with a default API config when passing the required params', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world'
 				});
 
@@ -39,7 +51,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -70,6 +82,7 @@ describe('Hooks', () => {
 			it('Should return the service config with a default API config and normalized path when passing the required params', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: 'hello-world/'
 				});
 
@@ -77,7 +90,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -111,6 +124,7 @@ describe('Hooks', () => {
 			it('Should throw if passed request templates are not an object', () => {
 
 				assert.throws(() => api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					requestTemplates: 'not an object'
 				}));
@@ -128,6 +142,7 @@ describe('Hooks', () => {
 			it('Should override and add the passed request templates', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					requestTemplates: {
 						'application/x-www-form-urlencoded': null,
@@ -140,7 +155,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -175,6 +190,7 @@ describe('Hooks', () => {
 			it('Should use the passed HTTP Method', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					method: 'post'
 				});
@@ -183,7 +199,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-PostHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-PostHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -214,6 +230,7 @@ describe('Hooks', () => {
 			it('Should parse path parameters and add them to request parameters object', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/custom/{id}/path/{secondId}'
 				});
 
@@ -221,7 +238,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetCustomIdVarPathSecondIdVar': {
-								name: 'API-${self:custom.serviceName}-GetCustomIdVarPathSecondIdVar-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -258,6 +275,7 @@ describe('Hooks', () => {
 			it('Should parse path parameters and add them to request parameters object', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					queryParameters: {
 						requiredQuery: true,
@@ -273,7 +291,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -325,6 +343,7 @@ describe('Hooks', () => {
 			it('Should use the methodName param to override method for files and naming', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					method: 'get',
 					methodName: 'list'
@@ -334,7 +353,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-ListHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-ListHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -365,6 +384,7 @@ describe('Hooks', () => {
 			it('Should use the handler param to override the default', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					handler: 'path/to/custom.handler'
 				});
@@ -373,7 +393,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'path/to/custom.handler',
 								description: undefined,
 								package: {
@@ -404,6 +424,7 @@ describe('Hooks', () => {
 			it('Should enable api cache if caching param is passed', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					caching: true
 				});
@@ -412,7 +433,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -446,6 +467,7 @@ describe('Hooks', () => {
 			it('Should enable cors if cors param is passed', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					cors: true
 				});
@@ -454,7 +476,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -486,6 +508,7 @@ describe('Hooks', () => {
 			it('Should set an authorizer if authorizer param is passed', () => {
 
 				const serviceConfig = api(previousServiceConfig, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					authorizer: 'FullAuthorizer'
 				});
@@ -495,7 +518,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -526,6 +549,7 @@ describe('Hooks', () => {
 
 			it('Should throw an error in an invalid authorizer is passed', () => {
 				assert.throws(() => api(previousServiceConfig, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					authorizer: 'InvalidAuthorizer'
 				}));
@@ -534,6 +558,7 @@ describe('Hooks', () => {
 			it('Should set the timeout if timeout param is passed', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					timeout: 10
 				});
@@ -542,7 +567,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -574,6 +599,7 @@ describe('Hooks', () => {
 			it('Should append the package includes if package.include param is passed', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					package: { include: ['src/models/helloWorld.js'] }
 				});
@@ -582,7 +608,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
 								package: {
@@ -614,6 +640,7 @@ describe('Hooks', () => {
 			it('Should set raw props in the function end event configuration if they are passed', () => {
 
 				const serviceConfig = api({}, {
+					name: 'HelloWorld',
 					path: '/hello-world',
 					functionRawProps: {
 						foo: 'bar',
@@ -628,7 +655,7 @@ describe('Hooks', () => {
 					functions: [
 						{
 							'API-GetHelloDashworld': {
-								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-HelloWorld',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
 								package: {

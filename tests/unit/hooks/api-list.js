@@ -32,7 +32,8 @@ describe('Hooks', () => {
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
 					method: 'get',
 					methodName: 'list',
-					pathHasId: false
+					pathHasId: false,
+					hookName: 'janis.apiList'
 				});
 			});
 		});
@@ -52,7 +53,7 @@ describe('Hooks', () => {
 					provider: {},
 					functions: [{
 						'APIList-ProductName': {
-							name: 'APIList-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							name: '${self:custom.serviceName}-${self:custom.stage}-ListProductName',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Name List API',
 							package: {

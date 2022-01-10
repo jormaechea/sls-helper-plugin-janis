@@ -30,7 +30,8 @@ describe('Hooks', () => {
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
 					method: 'get',
-					pathHasId: true
+					pathHasId: true,
+					hookName: 'janis.apiGet'
 				});
 			});
 		});
@@ -50,7 +51,7 @@ describe('Hooks', () => {
 					provider: {},
 					functions: [{
 						'APIGet-ProductName': {
-							name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Name Get API',
 							package: {

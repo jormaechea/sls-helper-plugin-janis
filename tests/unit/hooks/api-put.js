@@ -30,7 +30,8 @@ describe('Hooks', () => {
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
 					method: 'put',
-					pathHasId: true
+					pathHasId: true,
+					hookName: 'janis.apiPut'
 				});
 			});
 		});
@@ -50,7 +51,7 @@ describe('Hooks', () => {
 					provider: {},
 					functions: [{
 						'APIUpdate-ProductName': {
-							name: 'APIUpdate-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							name: '${self:custom.serviceName}-${self:custom.stage}-UpdateProductName',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Name Put API',
 							package: {

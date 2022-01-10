@@ -39,7 +39,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -82,7 +82,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -122,7 +122,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -192,7 +192,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -236,7 +236,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -289,7 +289,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -350,7 +350,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APICustom-ProductName': {
-								name: 'APICustom-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-CustomProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Custom API',
 								package: {
@@ -390,7 +390,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'path/to/custom.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -430,7 +430,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -473,7 +473,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -518,7 +518,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -576,7 +576,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -624,7 +624,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -665,7 +665,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Name Get API',
 								package: {
@@ -712,7 +712,7 @@ describe('Internal Hooks', () => {
 					functions: [
 						{
 							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								name: '${self:custom.serviceName}-${self:custom.stage}-GetProductName',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
 								package: {
