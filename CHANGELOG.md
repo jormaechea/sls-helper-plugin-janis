@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.5.0] - 2022-01-19
+### Added
+- Added `janis-entity-id` to default CORS allowed headers
+
 ## [5.4.6] - 2021-12-28
 ### Fixed
 - New default includes are now properly configured
