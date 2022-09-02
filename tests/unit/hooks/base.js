@@ -98,7 +98,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
@@ -470,7 +496,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
@@ -832,7 +884,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
@@ -1187,7 +1265,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
@@ -1553,7 +1657,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
@@ -1924,7 +2054,33 @@ describe('Hooks', () => {
 						Microservice: '${self:custom.serviceName}',
 						Stack: '${self:custom.humanReadableStage.${self:custom.stage}}'
 					},
-					versionFunctions: false
+					versionFunctions: false,
+					apiGateway: {
+						disableDefaultEndpoint: true
+					},
+					logs: {
+						restApi: {
+							accessLogging: true,
+							executionLogging: false,
+							level: 'INFO',
+							fullExecutionData: false,
+							format: JSON.stringify({
+								date: '$context.requestTime',
+								reqId: '$context.requestId',
+								integReqId: '$context.integration.requestId',
+								ip: '$context.identity.sourceIp',
+								ua: '$context.identity.userAgent',
+								clientCode: '$context.authorizer.clientCode',
+								principalId: '$context.authorizer.principalId',
+								reqMethod: '$context.httpMethod',
+								path: '$context.resourcePath',
+								realPath: '$context.path',
+								status: '$context.status',
+								authTime: '$context.authorizer.latency',
+								resTime: '$context.responseLatency'
+							})
+						}
+					}
 				},
 				package: {
 					individually: false,
