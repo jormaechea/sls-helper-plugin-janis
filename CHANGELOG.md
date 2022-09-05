@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.6.0] - 2022-09-05
+### Added
+- Api Gateway access logs configuration
+
+### Changed
+- Disabled API Gateway default endpoint by default
+
 ## [5.5.1] - 2022-01-28
 ### Added
 - Added more default includes to reduce bundle size
