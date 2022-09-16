@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.7.1] - 2022-09-16
+### Fixed
+- Fixed offline response CORS expose headers
+
 ## [5.7.0] - 2022-09-16
 ### Added
 - CORS config to allow exposing fixed filters header
