@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.8.0] - 2022-11-10
+### Added
+- Support for Trace Layer with env vars
+
 ## [5.7.2] - 2022-09-19
 ### Fixed
 - Fixed offline response CORS expose headers
