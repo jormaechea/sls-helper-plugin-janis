@@ -30,7 +30,8 @@ describe('Hooks', () => {
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
 					method: 'get',
-					pathHasId: true
+					pathHasId: true,
+					skipTraceLayer: true
 				});
 			});
 		});

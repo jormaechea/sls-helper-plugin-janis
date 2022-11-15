@@ -1,8 +1,10 @@
 'use strict';
 
 const assert = require('assert').strict;
+const sinon = require('sinon');
 
 const apiBase = require('../../../lib/api/base');
+const { getTraceLayerArn } = require('../../../lib/utils/trace-layer');
 
 describe('Internal Hooks', () => {
 
@@ -735,6 +737,176 @@ describe('Internal Hooks', () => {
 											response: '${self:custom.apiResponseTemplate}',
 											responses: '${self:custom.apiOfflineResponseTemplate}',
 											someProp: 'custom'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set the provider layers without the trace layer if skipTraceLayer is true', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product name',
+					skipTraceLayer: true
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [
+									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+								],
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set the layers as an empty array if skipTraceLayer is true and it was the only layer', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn()
+						]
+					}
+				}, {
+					entityName: 'product name',
+					skipTraceLayer: true
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn()
+						]
+					},
+					functions: [
+						{
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [],
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set the layers as an empty array if skipTraceLayer is true and there were no layers set', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product name',
+					skipTraceLayer: true
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							'APIGet-ProductName': {
+								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [],
+								description: 'Product Name Get API',
+								package: {
+									include: [
+										'src/api/product-name/get.js',
+										'src/models/product-name.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-name',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}',
+											responses: '${self:custom.apiOfflineResponseTemplate}'
 										}
 									}
 								]

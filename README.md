@@ -36,6 +36,14 @@ This properties (if present in the initial service configuration) have the follo
 - `package.include`, `package.exclude` and `plugins` will be appended to the hooks defaults
 - `package.includeOnly`, `package.excludeOnly` and `pluginsOnly` will replace entirely the hooks defaults
 
+#### Trace Lambda Layer
+
+If the env vars `TRACE_ACCOUNT_ID` and `JANIS_TRACE_EXTENSION_VERSION` are set, the Trace Lambda Layer will be set for every function by default.
+
+> `apiGet` and `apiList` are the only functions that have this behaviour changed by default.
+
+To disable the layer, see the `skipTraceLayer` property in other helpers.
+
 ### templates
 
 Used to implement Lambda APIs requests and response templates as custom props
@@ -99,6 +107,7 @@ Used to implement a custom API
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
 | package.include | array[string] | The List of paths of files to include | | |
+| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
@@ -119,6 +128,7 @@ Used to implement JANIS CRUD APIs.
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
 | package.include | array[string] | The List of paths of files to include | | |
+| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` for `post` and `put` APIs, `true` for `get` and `list` APIs |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
