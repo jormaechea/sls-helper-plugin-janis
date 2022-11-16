@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.9.0] - 2022-11-16
+### Added
+- Added support for the `skipTraceLayer` in APIs and set it as default in read APIs
+- Docs for Trace Lambda Layer
+
+### Fixed
+- Dependencies updated to fix vulnerabilities
+
 ## [5.8.0] - 2022-11-10
 ### Added
 - Support for Trace Layer with env vars
