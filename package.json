@@ -46,7 +46,7 @@
     "mocha": "^10.1.0",
     "mock-require": "^3.0.3",
     "nyc": "^15.1.0",
-    "serverless": "^2.72.3",
+    "serverless": "^3.25.0",
     "sinon": "^14.0.2"
   },
   "dependencies": {
