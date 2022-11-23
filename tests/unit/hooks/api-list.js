@@ -46,27 +46,27 @@ describe('Hooks', () => {
 				};
 
 				const result = apiList({ ...initialConfig }, {
-					entityName: 'product name'
+					entityName: 'product attribute'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APIList-ProductName': {
-							name: 'APIList-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'API-List-ProductAttribute': {
+							name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name List API',
+							description: 'Product Attribute List API',
 							package: {
 								include: [
-									'src/api/product-name/list.js',
-									'src/models/product-name.js'
+									'src/api/product-attribute/list.js',
+									'src/models/product-attribute.js'
 								]
 							},
 							events: [
 								{
 									http: {
 										integration: 'lambda',
-										path: '/product-name',
+										path: '/product-attribute',
 										method: 'get',
 										request: {
 											template: '${self:custom.apiRequestTemplate}'

@@ -43,27 +43,75 @@ describe('Hooks', () => {
 				};
 
 				const result = apiPut({ ...initialConfig }, {
-					entityName: 'product name'
+					entityName: 'product attribute'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APIUpdate-ProductName': {
-							name: 'APIUpdate-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'API-Update-ProductAttribute': {
+							name: 'API-${self:custom.serviceName}-Update-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name Put API',
+							description: 'Product Attribute Put API',
 							package: {
 								include: [
-									'src/api/product-name/put.js',
-									'src/models/product-name.js'
+									'src/api/product-attribute/put.js',
+									'src/models/product-attribute.js'
 								]
 							},
 							events: [
 								{
 									http: {
 										integration: 'lambda',
-										path: '/product-name/{id}',
+										path: '/product-attribute/{id}',
+										method: 'put',
+										request: {
+											template: '${self:custom.apiRequestTemplate}',
+											parameters: {
+												paths: {
+													id: true
+												}
+											}
+										},
+										response: '${self:custom.apiResponseTemplate}',
+										responses: '${self:custom.apiOfflineResponseTemplate}'
+									}
+								}
+							]
+						}
+					}]
+				});
+			});
+
+			it('Should set a custom function name when functionName was received', () => {
+
+				const initialConfig = {
+					provider: {}
+				};
+
+				const result = apiPut({ ...initialConfig }, {
+					entityName: 'product attribute',
+					functionName: 'UpdateProductAttribute'
+				});
+
+				assert.deepStrictEqual(result, {
+					provider: {},
+					functions: [{
+						'API-UpdateProductAttribute': {
+							name: 'API-${self:custom.serviceName}-UpdateProductAttribute-${self:custom.stage}',
+							handler: 'src/lambda/RestApi/index.handler',
+							description: 'Product Attribute Put API',
+							package: {
+								include: [
+									'src/api/product-attribute/put.js',
+									'src/models/product-attribute.js'
+								]
+							},
+							events: [
+								{
+									http: {
+										integration: 'lambda',
+										path: '/product-attribute/{id}',
 										method: 'put',
 										request: {
 											template: '${self:custom.apiRequestTemplate}',

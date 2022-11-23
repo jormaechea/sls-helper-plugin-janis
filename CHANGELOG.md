@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- APIs hooks can received `functionName` to use as function name
+
+### Changed
+- Standard for API CRUD function names
+
 ## [5.9.0] - 2022-11-16
 ### Added
 - Added support for the `skipTraceLayer` in APIs and set it as default in read APIs
