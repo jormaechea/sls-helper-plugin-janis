@@ -22,7 +22,7 @@ describe('Internal Hooks', () => {
 			it('Should throw if method param is passed as empty', () => {
 
 				assert.throws(() => apiBase.buildApi({}, {
-					entityName: 'product-name',
+					entityName: 'product-attribute',
 					method: ''
 				}), {
 					message: /method/
@@ -34,27 +34,27 @@ describe('Internal Hooks', () => {
 			it('Should return the service config with a default API config when passing the required params', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name'
+					entityName: 'product attribute'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -76,21 +76,21 @@ describe('Internal Hooks', () => {
 			it('Should use a custom path if path param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					path: '/custom/path'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
@@ -116,28 +116,28 @@ describe('Internal Hooks', () => {
 			it('Should add the id variable if pathHasId param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					pathHasId: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name/{id}',
+											path: '/product-attribute/{id}',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}',
@@ -164,12 +164,12 @@ describe('Internal Hooks', () => {
 			it('Should throw if passed request templates are not an object', () => {
 
 				assert.throws(() => apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					requestTemplates: 'not an object'
 				}));
 
 				assert.throws(() => apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					requestTemplates: [{
 						'application/x-www-form-urlencoded': null,
 						'application/json': 'custom template',
@@ -182,7 +182,7 @@ describe('Internal Hooks', () => {
 			it('Should override and add the passed request templates', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					requestTemplates: {
 						'application/x-www-form-urlencoded': null,
 						'application/json': 'custom template',
@@ -193,21 +193,21 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: {
@@ -230,21 +230,21 @@ describe('Internal Hooks', () => {
 			it('Should parse path parameters and add them to request parameters object', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					path: '/custom/{id}/path/{secondId}'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
@@ -276,7 +276,7 @@ describe('Internal Hooks', () => {
 			it('Should parse path parameters and add them to request parameters object', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					queryParameters: {
 						requiredQuery: true,
 						optionalQuery: false
@@ -290,21 +290,21 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}',
@@ -344,28 +344,28 @@ describe('Internal Hooks', () => {
 			it('Should use the methodName param to override method for files and naming', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					methodName: 'custom'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APICustom-ProductName': {
-								name: 'APICustom-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Custom-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Custom-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Custom API',
+								description: 'Product Attribute Custom API',
 								package: {
 									include: [
-										'src/api/product-name/custom.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/custom.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -384,28 +384,28 @@ describe('Internal Hooks', () => {
 			it('Should use the handler param to override the default', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					handler: 'path/to/custom.handler'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'path/to/custom.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -424,28 +424,28 @@ describe('Internal Hooks', () => {
 			it('Should enable api cache if caching param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					caching: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											caching: {
 												enabled: '${self:custom.apiGatewayCaching.enabled}'
@@ -467,28 +467,28 @@ describe('Internal Hooks', () => {
 			it('Should enable default cors if cors param is passed as true', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					cors: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											cors: '${self:custom.cors}',
 											request: {
@@ -508,7 +508,7 @@ describe('Internal Hooks', () => {
 			it('Should enable customized cors if cors param is passed as an object', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					cors: {
 						replace: true,
 						origins: ['*'],
@@ -519,21 +519,21 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											cors: {
 												origins: ['*'],
@@ -570,7 +570,7 @@ describe('Internal Hooks', () => {
 			it('Should set an authorizer if authorizer param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi(previousServiceConfig, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					authorizer: 'FullAuthorizer'
 				});
 
@@ -578,21 +578,21 @@ describe('Internal Hooks', () => {
 					...previousServiceConfig,
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											authorizer: '${self:custom.authorizers.FullAuthorizer}',
 											request: {
@@ -611,7 +611,7 @@ describe('Internal Hooks', () => {
 
 			it('Should throw an error in an invalid authorizer is passed', () => {
 				assert.throws(() => apiBase.buildApi(previousServiceConfig, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					authorizer: 'InvalidAuthorizer'
 				}));
 			});
@@ -619,21 +619,21 @@ describe('Internal Hooks', () => {
 			it('Should set the timeout if timeout param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					timeout: 10
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								timeout: 10,
@@ -641,7 +641,7 @@ describe('Internal Hooks', () => {
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -660,21 +660,21 @@ describe('Internal Hooks', () => {
 			it('Should append the package includes if package.include param is passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					package: { include: ['src/controllers/product.js'] }
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js',
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js',
 										'src/controllers/product.js'
 									]
 								},
@@ -682,7 +682,7 @@ describe('Internal Hooks', () => {
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -701,7 +701,7 @@ describe('Internal Hooks', () => {
 			it('Should set raw props in the function end event configuration if they are passed', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					functionRawProps: {
 						foo: 'bar',
 						description: 'Override it'
@@ -714,14 +714,14 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								foo: 'bar',
@@ -729,7 +729,7 @@ describe('Internal Hooks', () => {
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -763,7 +763,7 @@ describe('Internal Hooks', () => {
 						]
 					}
 				}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					skipTraceLayer: true
 				});
 
@@ -776,24 +776,24 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 								],
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -825,7 +825,7 @@ describe('Internal Hooks', () => {
 						]
 					}
 				}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					skipTraceLayer: true
 				});
 
@@ -837,22 +837,22 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [],
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
@@ -878,29 +878,29 @@ describe('Internal Hooks', () => {
 					});
 
 				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product name',
+					entityName: 'product attribute',
 					skipTraceLayer: true
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'APIGet-ProductName': {
-								name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [],
-								description: 'Product Name Get API',
+								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-name/get.js',
-										'src/models/product-name.js'
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
 									]
 								},
 								events: [
 									{
 										http: {
 											integration: 'lambda',
-											path: '/product-name',
+											path: '/product-attribute',
 											method: 'get',
 											request: {
 												template: '${self:custom.apiRequestTemplate}'

@@ -95,6 +95,7 @@ Used to implement a custom API
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
+| functionName | string | The name of the lambda function. Will be used in `API-{serviceName}-{functionName}-{stage}`. Since _5.6.0_ | | |
 | path | string | The API path | **Required** | |
 | method | string | The API HTTP Method | | `'get'` |
 | methodName | string | The JANIS API Method | Enum\<list, get, post, put, patch, delete\> | Defaults to same value of `method` option |
@@ -117,6 +118,7 @@ Used to implement JANIS CRUD APIs.
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
+| functionName | string | The name of the lambda function. Will be used in `API-{serviceName}-{functionName}-{stage}`. Since _5.6.0_ | | |
 | entityName | string | The entity name | **Required** | |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |

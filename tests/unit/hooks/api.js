@@ -29,6 +29,20 @@ describe('Hooks', () => {
 		});
 
 		context('Default configuration', () => {
+
+			const defaultHttpEvent = {
+				http: {
+					integration: 'lambda',
+					path: '/hello-world',
+					method: 'get',
+					request: {
+						template: '${self:custom.apiRequestTemplate}'
+					},
+					response: '${self:custom.apiResponseTemplate}',
+					responses: '${self:custom.apiOfflineResponseTemplate}'
+				}
+			};
+
 			it('Should return the service config with a default API config when passing the required params', () => {
 
 				const serviceConfig = api({}, {
@@ -47,20 +61,33 @@ describe('Hooks', () => {
 										'src/api/hello-world/get.js'
 									]
 								},
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/hello-world',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
-										}
-									}
-								]
+								events: [defaultHttpEvent]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should return the service config and API config with custom function name when functionName parameter received', () => {
+
+				const serviceConfig = api({}, {
+					path: '/hello-world',
+					functionName: 'HelloWorld'
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					functions: [
+						{
+							'API-HelloWorld': {
+								name: 'API-${self:custom.serviceName}-HelloWorld-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								description: undefined,
+								package: {
+									include: [
+										'src/api/hello-world/get.js'
+									]
+								},
+								events: [defaultHttpEvent]
 							}
 						}
 					]
@@ -85,20 +112,7 @@ describe('Hooks', () => {
 										'src/api/hello-world/get.js'
 									]
 								},
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/hello-world',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
-										}
-									}
-								]
+								events: [defaultHttpEvent]
 							}
 						}
 					]
