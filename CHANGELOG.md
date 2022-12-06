@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.11.0] - 2022-12-06
+### Added
+- API Gateway response compression enabled starting at 1KB response size
+
 ## [5.10.0] - 2022-11-23
 ### Added
 - APIs hooks can received `functionName` to use as function name
