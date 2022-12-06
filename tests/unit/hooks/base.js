@@ -101,7 +101,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -499,7 +500,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -887,7 +889,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -1268,7 +1271,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -1660,7 +1664,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -2057,7 +2062,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
@@ -2395,7 +2401,8 @@ describe('Hooks', () => {
 					},
 					versionFunctions: false,
 					apiGateway: {
-						disableDefaultEndpoint: true
+						disableDefaultEndpoint: true,
+						minimumCompressionSize: 1024
 					},
 					logs: {
 						restApi: {
