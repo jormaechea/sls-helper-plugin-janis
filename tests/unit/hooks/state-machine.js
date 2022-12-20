@@ -28,6 +28,29 @@ describe('Hooks', () => {
 		}
 	};
 
+	const stateTrackingCall = {
+		Type: 'Task',
+		Resources: 'arn:aws:states:::lambda',
+		Next: 'EndCall'
+	};
+
+	const hookWithTaskGenerator = parameters => {
+
+		return {
+			name: 'MachineName',
+			definition: {
+				...definition,
+				States: {
+					...definition.States,
+					TrackingCall: {
+						...stateTrackingCall,
+						...parameters && { Parameters: parameters }
+					}
+				}
+			}
+		};
+	};
+
 	describe('State Machine', () => {
 
 		context('Config validation', () => {
@@ -55,10 +78,13 @@ describe('Hooks', () => {
 
 			it('Should return the service config with the plugin, stepFunctions and the machines when passing the required params', () => {
 
-				const hooksParams = {
-					name: 'MachineName',
-					definition
-				};
+				const hooksParams = hookWithTaskGenerator();
+
+				const hookParamsParsed = hookWithTaskGenerator({
+					'session.$': '$.session',
+					'body.$': '$.body',
+					'stateMachine.$': '$$.StateMachine'
+				});
 
 				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
 
@@ -71,7 +97,7 @@ describe('Hooks', () => {
 					stepFunctions: {
 						stateMachines: {
 							MachineName: {
-								...hooksParams,
+								...hookParamsParsed,
 								name: machineName
 							}
 						}
@@ -100,10 +126,20 @@ describe('Hooks', () => {
 
 			it('Should return the service config and the state machine with name in camelCase', () => {
 
-				const hooksParams = {
-					name: 'Machine Name',
-					definition
-				};
+				const hooksParams = hookWithTaskGenerator({
+					Payload: {
+						'session.$': '$.session',
+						'body.$': '$.body'
+					}
+				});
+
+				const hookParamsParsed = hookWithTaskGenerator({
+					Payload: {
+						'session.$': '$.session',
+						'body.$': '$.body',
+						'stateMachine.$': '$$.StateMachine'
+					}
+				});
 
 				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
 
@@ -116,7 +152,7 @@ describe('Hooks', () => {
 					stepFunctions: {
 						stateMachines: {
 							MachineName: {
-								...hooksParams,
+								...hookParamsParsed,
 								name: machineName
 							}
 						}
@@ -145,10 +181,16 @@ describe('Hooks', () => {
 
 			it('Should return the service config with plugins, stepFunctions and the machines when passing the required params', () => {
 
-				const hooksParams = {
-					name: 'MachineName',
-					definition
-				};
+				const hooksParams = hookWithTaskGenerator({
+					'session.$': '$.session',
+					'body.$': '$.body'
+				});
+
+				const hookParamsParsed = hookWithTaskGenerator({
+					'session.$': '$.session',
+					'body.$': '$.body',
+					'stateMachine.$': '$$.StateMachine'
+				});
 
 				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
 
@@ -161,7 +203,7 @@ describe('Hooks', () => {
 					stepFunctions: {
 						stateMachines: {
 							[pascalCase(hooksParams.name)]: {
-								...hooksParams,
+								...hookParamsParsed,
 								name: machineName
 							}
 						}
