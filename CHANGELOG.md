@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.12.0] - 2022-12-21
+### Added
+- Access logs now contain API Gateway and integration errors
+
 ## [5.11.0] - 2022-12-06
 ### Added
 - API Gateway response compression enabled starting at 1KB response size
