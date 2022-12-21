@@ -123,7 +123,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -522,7 +524,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -911,7 +915,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -1293,7 +1299,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -1686,7 +1694,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -2084,7 +2094,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					}
@@ -2423,7 +2435,9 @@ describe('Hooks', () => {
 								realPath: '$context.path',
 								status: '$context.status',
 								authTime: '$context.authorizer.latency',
-								resTime: '$context.responseLatency'
+								resTime: '$context.responseLatency',
+								gwError: '$context.error.message',
+								integError: '$context.integration.error'
 							})
 						}
 					},
