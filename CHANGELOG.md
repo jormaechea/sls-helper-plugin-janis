@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.0] - 2022-12-26
+### Added
+- Step function hook now sets Task `Parameters` to include `session`, `body` and `stepFunction` data, so Lmabdas con detect if they are being run inside a step function
+
 ## [5.12.0] - 2022-12-21
 ### Added
 - Access logs now contain API Gateway and integration errors
