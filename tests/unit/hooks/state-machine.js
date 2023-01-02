@@ -649,6 +649,183 @@ describe('Hooks', () => {
 					});
 				});
 
+				it('Should return the service config with the complete parameters when the task is in a Map type state with the deprecated property', () => {
+
+					const hooksParams = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Map',
+								Iterator: {
+									ProcessorConfig: {
+										Mode: 'DISTRIBUTED',
+										ExecutionType: 'EXPRESS'
+									},
+									StartAt: 'TrackingCall',
+									States: {
+										TrackingCall: {
+											Type: 'Task',
+											End: true
+										}
+									}
+								},
+								Next: 'TrackingCall'
+							}
+						})
+					};
+
+					const hooksParamsResult = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Map',
+								Iterator: {
+									ProcessorConfig: {
+										Mode: 'DISTRIBUTED',
+										ExecutionType: 'EXPRESS'
+									},
+									StartAt: 'TrackingCall',
+									States: {
+										TrackingCall: {
+											Type: 'Task',
+											Parameters: {
+												'session.$': '$.session',
+												'body.$': '$.body',
+												'stateMachine.$': '$$.StateMachine'
+											},
+											End: true
+										}
+									}
+								},
+								Next: 'TrackingCall'
+							}
+						})
+					};
+
+					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+					const serviceConfig = stateMachine({}, hooksParams);
+
+					assert.deepStrictEqual(serviceConfig, {
+						plugins: [
+							'serverless-step-functions'
+						],
+						stepFunctions: {
+							stateMachines: {
+								MachineName: {
+									...hooksParamsResult,
+									name: machineName
+								}
+							}
+						},
+						custom: {
+							machines: {
+								MachineName: {
+									name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+									arn: {
+										'Fn::Join': [
+											':',
+											[
+												'arn:aws:states',
+												'${self:custom.region}',
+												{ Ref: 'AWS::AccountId' },
+												'stateMachine',
+												'${self:custom.machines.MachineName.name}'
+											]
+										]
+									}
+								}
+							}
+						}
+					});
+				});
+
+				it('Should return the service config with the complete parameters when the task is in a Map type state with the invalid property', () => {
+
+					const hooksParams = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Map',
+								OtherProperty: {
+									ProcessorConfig: {
+										Mode: 'DISTRIBUTED',
+										ExecutionType: 'EXPRESS'
+									},
+									StartAt: 'TrackingCall',
+									States: {
+										TrackingCall: {
+											Type: 'Task',
+											End: true
+										}
+									}
+								},
+								Next: 'TrackingCall'
+							}
+						})
+					};
+
+					const hooksParamsResult = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Map',
+								OtherProperty: {
+									ProcessorConfig: {
+										Mode: 'DISTRIBUTED',
+										ExecutionType: 'EXPRESS'
+									},
+									StartAt: 'TrackingCall',
+									States: {
+										TrackingCall: {
+											Type: 'Task',
+											End: true
+										}
+									}
+								},
+								Next: 'TrackingCall'
+							}
+						})
+					};
+
+					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+					const serviceConfig = stateMachine({}, hooksParams);
+
+					assert.deepStrictEqual(serviceConfig, {
+						plugins: [
+							'serverless-step-functions'
+						],
+						stepFunctions: {
+							stateMachines: {
+								MachineName: {
+									...hooksParamsResult,
+									name: machineName
+								}
+							}
+						},
+						custom: {
+							machines: {
+								MachineName: {
+									name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+									arn: {
+										'Fn::Join': [
+											':',
+											[
+												'arn:aws:states',
+												'${self:custom.region}',
+												{ Ref: 'AWS::AccountId' },
+												'stateMachine',
+												'${self:custom.machines.MachineName.name}'
+											]
+										]
+									}
+								}
+							}
+						}
+					});
+				});
+
 				it('Should return the service config with the complete parameters when the task is in a Parallel type state', () => {
 
 					const hooksParams = {
