@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.1] - 2023-01-02
+### Fixed
+- Fixed mapping of Map states with differente iterator properties
+
 ## [5.13.0] - 2022-12-26
 ### Added
 - Step function hook now sets Task `Parameters` to include `session`, `body` and `stepFunction` data, so Lmabdas con detect if they are being run inside a step function
