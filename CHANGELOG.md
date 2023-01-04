@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.2] - 2023-01-04
+### Fixed
+- Fixed state machine parameter setup for Tasks that trigger a new State machine
+
 ## [5.13.1] - 2023-01-02
 ### Fixed
 - Fixed mapping of Map states with differente iterator properties
