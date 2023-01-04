@@ -363,12 +363,13 @@ describe('Hooks', () => {
 
 			context('When the task is in the root of the state machine', () => {
 
-				const definitionWithTask = parameters => ({
+				const definitionWithTask = (parameters, resource) => ({
 					Comment: 'Create Session Machine',
 					StartAt: 'ProcessCall',
 					States: {
 						ProcessCall: {
 							Type: 'Task',
+							...resource && { Resource: resource },
 							...parameters && { Parameters: parameters },
 							Next: 'TrackingCall'
 						}
@@ -389,6 +390,56 @@ describe('Hooks', () => {
 							'body.$': '$.body',
 							'stateMachine.$': '$$.StateMachine'
 						})
+					};
+
+					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+					const serviceConfig = stateMachine({}, hooksParams);
+
+					assert.deepStrictEqual(serviceConfig, {
+						plugins: [
+							'serverless-step-functions'
+						],
+						stepFunctions: {
+							stateMachines: {
+								MachineName: {
+									...hooksParamsResult,
+									name: machineName
+								}
+							}
+						},
+						custom: {
+							machines: {
+								MachineName: {
+									name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+									arn: {
+										'Fn::Join': [
+											':',
+											[
+												'arn:aws:states',
+												'${self:custom.region}',
+												{ Ref: 'AWS::AccountId' },
+												'stateMachine',
+												'${self:custom.machines.MachineName.name}'
+											]
+										]
+									}
+								}
+							}
+						}
+					});
+				});
+
+				it('Should return the service config with the complete parameters without new param (stateMachine) when a step execute an State Machine', () => {
+
+					const hooksParams = {
+						name: 'MachineName',
+						definition: definitionWithTask(undefined, 'arn:aws:states:::states:startExecution')
+					};
+
+					const hooksParamsResult = {
+						name: 'MachineName',
+						definition: definitionWithTask(undefined, 'arn:aws:states:::states:startExecution')
 					};
 
 					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
