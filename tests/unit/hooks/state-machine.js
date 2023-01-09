@@ -877,6 +877,114 @@ describe('Hooks', () => {
 					});
 				});
 
+				it('Should return the service config with the complete parameters when the task is in a Parallel type state', () => {
+
+					const hooksParams = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Parallel',
+								Branches: [
+									{
+										StartAt: 'EndCall',
+										States: {
+											EndCall: {
+												Type: 'Task',
+												End: true
+											}
+										}
+									},
+									{
+										StartAt: 'NotifyCall',
+										States: {
+											NotifyCall: {
+												Type: 'Task',
+												End: true
+											}
+										}
+									}
+								]
+							}
+						})
+					};
+
+					const hooksParamsResult = {
+						name: 'MachineName',
+						definition: generateDefinitionByState({
+							ProcessCall: {
+								Type: 'Parallel',
+								Branches: [
+									{
+										StartAt: 'EndCall',
+										States: {
+											EndCall: {
+												Type: 'Task',
+												Parameters: {
+													'session.$': '$.session',
+													'body.$': '$.body',
+													'stateMachine.$': '$$.StateMachine'
+												},
+												End: true
+											}
+										}
+									},
+									{
+										StartAt: 'NotifyCall',
+										States: {
+											NotifyCall: {
+												Type: 'Task',
+												Parameters: {
+													'session.$': '$.session',
+													'body.$': '$.body',
+													'stateMachine.$': '$$.StateMachine'
+												},
+												End: true
+											}
+										}
+									}
+								]
+							}
+						})
+					};
+
+					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+					const serviceConfig = stateMachine({}, hooksParams);
+
+					assert.deepStrictEqual(serviceConfig, {
+						plugins: [
+							'serverless-step-functions'
+						],
+						stepFunctions: {
+							stateMachines: {
+								MachineName: {
+									...hooksParamsResult,
+									name: machineName
+								}
+							}
+						},
+						custom: {
+							machines: {
+								MachineName: {
+									name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+									arn: {
+										'Fn::Join': [
+											':',
+											[
+												'arn:aws:states',
+												'${self:custom.region}',
+												{ Ref: 'AWS::AccountId' },
+												'stateMachine',
+												'${self:custom.machines.MachineName.name}'
+											]
+										]
+									}
+								}
+							}
+						}
+					});
+				});
+
 				it('Should return the service configuration omitting the parameters when the task receives data from Parallel', () => {
 
 					const hooksParams = {
