@@ -877,7 +877,7 @@ describe('Hooks', () => {
 					});
 				});
 
-				it('Should return the service config with the complete parameters when the task is in a Parallel type state', () => {
+				it('Should return the service configuration omitting the parameters when the task receives data from Parallel', () => {
 
 					const hooksParams = {
 						name: 'MachineName',
@@ -886,24 +886,20 @@ describe('Hooks', () => {
 								Type: 'Parallel',
 								Branches: [
 									{
-										StartAt: 'EndCall',
+										StartAt: 'StartCall',
 										States: {
-											EndCall: {
-												Type: 'Task',
-												End: true
-											}
-										}
-									},
-									{
-										StartAt: 'NotifyCall',
-										States: {
-											NotifyCall: {
+											StartCall: {
 												Type: 'Task',
 												End: true
 											}
 										}
 									}
-								]
+								],
+								Next: 'EndCall'
+							},
+							EndCall: {
+								Type: 'Task',
+								End: true
 							}
 						})
 					};
@@ -915,23 +911,9 @@ describe('Hooks', () => {
 								Type: 'Parallel',
 								Branches: [
 									{
-										StartAt: 'EndCall',
+										StartAt: 'StartCall',
 										States: {
-											EndCall: {
-												Type: 'Task',
-												Parameters: {
-													'session.$': '$.session',
-													'body.$': '$.body',
-													'stateMachine.$': '$$.StateMachine'
-												},
-												End: true
-											}
-										}
-									},
-									{
-										StartAt: 'NotifyCall',
-										States: {
-											NotifyCall: {
+											StartCall: {
 												Type: 'Task',
 												Parameters: {
 													'session.$': '$.session',
@@ -942,7 +924,12 @@ describe('Hooks', () => {
 											}
 										}
 									}
-								]
+								],
+								Next: 'EndCall'
+							},
+							EndCall: {
+								Type: 'Task',
+								End: true
 							}
 						})
 					};
