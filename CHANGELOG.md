@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.3] - 2023-01-09
+### Fixed
+- Now `Parameters` are not set in steps that follow a `Parallel` step to avoid setting a property on an array
+
 ## [5.13.2] - 2023-01-04
 ### Fixed
 - Fixed state machine parameter setup for Tasks that trigger a new State machine
