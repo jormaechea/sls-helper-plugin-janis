@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.4] - 2023-03-09
+### Fixed
+- Removed ajv from default excludes and added some mongo and aws sdk dependencies
+
 ## [5.13.3] - 2023-01-09
 ### Fixed
 - Now `Parameters` are not set in steps that follow a `Parallel` step to avoid setting a property on an array
