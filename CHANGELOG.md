@@ -6,6 +6,49 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.13.3] - 2023-01-09
+### Fixed
+- Now `Parameters` are not set in steps that follow a `Parallel` step to avoid setting a property on an array
+
+## [5.13.2] - 2023-01-04
+### Fixed
+- Fixed state machine parameter setup for Tasks that trigger a new State machine
+
+## [5.13.1] - 2023-01-02
+### Fixed
+- Fixed mapping of Map states with differente iterator properties
+
+## [5.13.0] - 2022-12-26
+### Added
+- Step function hook now sets Task `Parameters` to include `session`, `body` and `stepFunction` data, so Lmabdas con detect if they are being run inside a step function
+
+## [5.12.0] - 2022-12-21
+### Added
+- Access logs now contain API Gateway and integration errors
+
+## [5.11.0] - 2022-12-06
+### Added
+- API Gateway response compression enabled starting at 1KB response size
+
+## [5.10.0] - 2022-11-23
+### Added
+- APIs hooks can received `functionName` to use as function name
+
+### Changed
+- Standard for API CRUD function names
+
+## [5.9.0] - 2022-11-16
+### Added
+- Added support for the `skipTraceLayer` in APIs and set it as default in read APIs
+- Docs for Trace Lambda Layer
+
+### Fixed
+- Dependencies updated to fix vulnerabilities
+
+## [5.8.0] - 2022-11-10
+### Added
+- Support for Trace Layer with env vars
+
 ## [5.7.2] - 2022-09-19
 ### Fixed
 - Fixed offline response CORS expose headers

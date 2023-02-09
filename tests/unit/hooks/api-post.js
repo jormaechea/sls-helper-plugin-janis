@@ -44,27 +44,27 @@ describe('Hooks', () => {
 				};
 
 				const result = apiPost({ ...initialConfig }, {
-					entityName: 'product name'
+					entityName: 'product attribute'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APICreate-ProductName': {
-							name: 'APICreate-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'API-Create-ProductAttribute': {
+							name: 'API-${self:custom.serviceName}-Create-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name Post API',
+							description: 'Product Attribute Post API',
 							package: {
 								include: [
-									'src/api/product-name/post.js',
-									'src/models/product-name.js'
+									'src/api/product-attribute/post.js',
+									'src/models/product-attribute.js'
 								]
 							},
 							events: [
 								{
 									http: {
 										integration: 'lambda',
-										path: '/product-name',
+										path: '/product-attribute',
 										method: 'post',
 										request: {
 											template: '${self:custom.apiRequestTemplate}'

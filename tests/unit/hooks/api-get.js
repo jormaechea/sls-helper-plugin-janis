@@ -30,7 +30,8 @@ describe('Hooks', () => {
 				sinon.assert.calledOnce(apiBase.buildApi);
 				sinon.assert.calledWithExactly(apiBase.buildApi, initialConfig, {
 					method: 'get',
-					pathHasId: true
+					pathHasId: true,
+					skipTraceLayer: true
 				});
 			});
 		});
@@ -43,27 +44,27 @@ describe('Hooks', () => {
 				};
 
 				const result = apiGet({ ...initialConfig }, {
-					entityName: 'product name'
+					entityName: 'product attribute'
 				});
 
 				assert.deepStrictEqual(result, {
 					provider: {},
 					functions: [{
-						'APIGet-ProductName': {
-							name: 'APIGet-${self:custom.serviceName}-ProductName-${self:custom.stage}',
+						'API-Get-ProductAttribute': {
+							name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
-							description: 'Product Name Get API',
+							description: 'Product Attribute Get API',
 							package: {
 								include: [
-									'src/api/product-name/get.js',
-									'src/models/product-name.js'
+									'src/api/product-attribute/get.js',
+									'src/models/product-attribute.js'
 								]
 							},
 							events: [
 								{
 									http: {
 										integration: 'lambda',
-										path: '/product-name/{id}',
+										path: '/product-attribute/{id}',
 										method: 'get',
 										request: {
 											template: '${self:custom.apiRequestTemplate}',
