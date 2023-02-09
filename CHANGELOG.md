@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [6.0.0] - 2023-03-09
+### Changed
+- Set default runtime to node 18 **BREAKING CHANGE**
+- Changed `serverless-plugin-split-stacks` plugin to `@janiscommerce/serverless-plugin-split-stacks` **BREAKING CHANGE**
+
 ## [5.13.4] - 2023-03-09
 ### Fixed
 - Removed ajv from default excludes and added some mongo and aws sdk dependencies
