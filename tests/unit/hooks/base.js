@@ -255,7 +255,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'@janiscommerce/serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -664,7 +664,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks',
+					'@janiscommerce/serverless-plugin-split-stacks',
 					'some-custom-plugin'
 				],
 				resources: {
@@ -1047,7 +1047,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'@janiscommerce/serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -1431,7 +1431,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'@janiscommerce/serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -1826,7 +1826,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'@janiscommerce/serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -2570,7 +2570,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'serverless-plugin-split-stacks'
+					'@janiscommerce/serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
