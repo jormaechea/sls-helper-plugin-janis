@@ -231,6 +231,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -638,6 +639,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -1031,6 +1033,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -1419,6 +1422,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -1818,6 +1822,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -2172,6 +2177,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
@@ -2566,6 +2572,7 @@ describe('Hooks', () => {
 
 					'serverless-offline': {
 						httpPort: 3000,
+						lambdaPort: 23000,
 						host: '0.0.0.0',
 						stage: 'local',
 						noPrependStageInUrl: true,
