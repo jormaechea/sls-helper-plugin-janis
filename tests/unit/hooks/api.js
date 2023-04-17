@@ -38,8 +38,7 @@ describe('Hooks', () => {
 					request: {
 						template: '${self:custom.apiRequestTemplate}'
 					},
-					response: '${self:custom.apiResponseTemplate}',
-					responses: '${self:custom.apiOfflineResponseTemplate}'
+					response: '${self:custom.apiResponseTemplate}'
 				}
 			};
 
@@ -175,8 +174,7 @@ describe('Hooks', () => {
 													'x-janis-template/json': 'super custom template'
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -214,8 +212,7 @@ describe('Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -258,8 +255,7 @@ describe('Hooks', () => {
 													}
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -314,8 +310,7 @@ describe('Hooks', () => {
 													}
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -365,8 +360,7 @@ describe('Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -404,8 +398,7 @@ describe('Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -444,7 +437,6 @@ describe('Hooks', () => {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}',
 											caching: {
 												enabled: '${self:custom.apiGatewayCaching.enabled}'
 											}
@@ -486,7 +478,6 @@ describe('Hooks', () => {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}',
 											cors: '${self:custom.cors}'
 										}
 									}
@@ -527,7 +518,6 @@ describe('Hooks', () => {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}',
 											authorizer: '${self:custom.authorizers.FullAuthorizer}'
 										}
 									}
@@ -574,8 +564,7 @@ describe('Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -614,8 +603,7 @@ describe('Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -661,7 +649,6 @@ describe('Hooks', () => {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}',
 											someProp: 'custom'
 										}
 									}

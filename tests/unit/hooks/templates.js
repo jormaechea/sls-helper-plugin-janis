@@ -6,7 +6,6 @@ const { templates } = require('../../..');
 
 const requestTemplate = require('../../../lib/templates/request');
 const response = require('../../../lib/templates/response');
-const offlineResponses = require('../../../lib/templates/response-offline');
 
 describe('Hooks', () => {
 
@@ -19,8 +18,7 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, {
 				custom: {
 					apiRequestTemplate: requestTemplate,
-					apiResponseTemplate: response,
-					apiOfflineResponseTemplate: offlineResponses
+					apiResponseTemplate: response
 				}
 			});
 		});
@@ -38,7 +36,6 @@ describe('Hooks', () => {
 				custom: {
 					apiRequestTemplate: requestTemplate,
 					apiResponseTemplate: response,
-					apiOfflineResponseTemplate: offlineResponses,
 					foo: 'bar'
 				},
 				otherProp: true

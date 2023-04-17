@@ -59,8 +59,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -102,8 +101,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -147,8 +145,7 @@ describe('Internal Hooks', () => {
 													}
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -216,8 +213,7 @@ describe('Internal Hooks', () => {
 													'x-janis-template/json': 'super custom template'
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -262,8 +258,7 @@ describe('Internal Hooks', () => {
 													}
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -319,8 +314,7 @@ describe('Internal Hooks', () => {
 													}
 												}
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -370,8 +364,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -410,8 +403,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -453,8 +445,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -494,8 +485,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -556,8 +546,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -598,8 +587,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -646,8 +634,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -687,8 +674,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -735,7 +721,6 @@ describe('Internal Hooks', () => {
 												template: '${self:custom.apiRequestTemplate}'
 											},
 											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}',
 											someProp: 'custom'
 										}
 									}
@@ -798,8 +783,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -857,8 +841,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]
@@ -905,8 +888,7 @@ describe('Internal Hooks', () => {
 											request: {
 												template: '${self:custom.apiRequestTemplate}'
 											},
-											response: '${self:custom.apiResponseTemplate}',
-											responses: '${self:custom.apiOfflineResponseTemplate}'
+											response: '${self:custom.apiResponseTemplate}'
 										}
 									}
 								]

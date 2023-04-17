@@ -71,8 +71,7 @@ describe('Hooks', () => {
 										request: {
 											template: '${self:custom.apiRequestTemplate}'
 										},
-										response: '${self:custom.apiResponseTemplate}',
-										responses: '${self:custom.apiOfflineResponseTemplate}'
+										response: '${self:custom.apiResponseTemplate}'
 									}
 								}
 							]

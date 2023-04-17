@@ -80,7 +80,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -230,12 +230,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -259,7 +259,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -485,7 +485,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -637,12 +637,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -672,7 +672,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks',
+					'serverless-plugin-split-stacks',
 					'some-custom-plugin'
 				],
 				resources: {
@@ -880,7 +880,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 512,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -1030,12 +1030,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -1059,7 +1059,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -1268,7 +1268,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -1418,12 +1418,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -1447,7 +1447,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -1660,7 +1660,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -1817,12 +1817,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -1846,7 +1846,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {
@@ -2071,7 +2071,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -2171,12 +2171,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -2411,7 +2411,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs18.x',
+					runtime: 'nodejs14.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -2565,12 +2565,12 @@ describe('Hooks', () => {
 					},
 
 					'serverless-offline': {
-						port: 3000,
+						httpPort: 3000,
 						host: '0.0.0.0',
 						stage: 'local',
+						noPrependStageInUrl: true,
 						prefix: 'api',
-						printOutput: true,
-						cacheInvalidationRegex: 'node_modules/(?!\\@janiscommerce\\/[^(mongodb)])'
+						reloadHandler: true
 					},
 
 					stageVariables: {
@@ -2594,7 +2594,7 @@ describe('Hooks', () => {
 					'serverless-api-gateway-caching',
 					'serverless-plugin-stage-variables',
 					'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-					'@janiscommerce/serverless-plugin-split-stacks'
+					'serverless-plugin-split-stacks'
 				],
 				resources: {
 					Resources: {

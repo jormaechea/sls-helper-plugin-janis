@@ -73,8 +73,7 @@ describe('Hooks', () => {
 												}
 											}
 										},
-										response: '${self:custom.apiResponseTemplate}',
-										responses: '${self:custom.apiOfflineResponseTemplate}'
+										response: '${self:custom.apiResponseTemplate}'
 									}
 								}
 							]
@@ -121,8 +120,7 @@ describe('Hooks', () => {
 												}
 											}
 										},
-										response: '${self:custom.apiResponseTemplate}',
-										responses: '${self:custom.apiOfflineResponseTemplate}'
+										response: '${self:custom.apiResponseTemplate}'
 									}
 								}
 							]
