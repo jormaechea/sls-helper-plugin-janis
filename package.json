@@ -57,6 +57,6 @@
   },
   "peerDependencies": {
     "sls-helper": ">= 1.9.0",
-    "serverless": "^2.52.1"
+    "serverless": "^3.30.1"
   }
 }
