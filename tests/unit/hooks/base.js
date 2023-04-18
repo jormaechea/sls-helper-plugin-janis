@@ -127,24 +127,24 @@ describe('Hooks', () => {
 								integError: '$context.integration.error'
 							})
 						}
+					}
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
 					}
 				},
 				package: {
@@ -543,24 +543,24 @@ describe('Hooks', () => {
 								integError: '$context.integration.error'
 							})
 						}
+					}
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
 					}
 				},
 				package: {
@@ -949,24 +949,24 @@ describe('Hooks', () => {
 								integError: '$context.integration.error'
 							})
 						}
+					}
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
 					}
 				},
 				package: {
@@ -1359,24 +1359,24 @@ describe('Hooks', () => {
 								integError: '$context.integration.error'
 							})
 						}
+					}
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
 					}
 				},
 				package: {
@@ -1774,24 +1774,24 @@ describe('Hooks', () => {
 								integError: '$context.integration.error'
 							})
 						}
+					}
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
 					}
 				},
 				package: {
@@ -2127,27 +2127,27 @@ describe('Hooks', () => {
 							})
 						}
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							humanReadableStage: 'QA',
-							janisDomain: 'janisqa.in'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
-					},
 					layers: [
 						'arn:aws:lambda:${aws:region}:012345678910:layer:trace:1'
 					]
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
+					},
+					beta: {
+						humanReadableStage: 'Beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'QA'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
+					}
 				},
 				package: {
 					individually: false,
@@ -2535,28 +2535,28 @@ describe('Hooks', () => {
 							})
 						}
 					},
-					params: {
-						local: {
-							humanReadableStage: 'Local',
-							janisDomain: 'janis.localhost'
-						},
-						beta: {
-							humanReadableStage: 'Super beta',
-							janisDomain: 'janisdev.in'
-						},
-						qa: {
-							janisDomain: 'janisqa.in',
-							humanReadableStage: 'Pruebas',
-							anotherParam: 'I am new'
-						},
-						prod: {
-							humanReadableStage: 'Prod',
-							janisDomain: 'janis.in'
-						}
-					},
 					layers: [
 						'arn:aws:lambda:${aws:region}:012345678910:layer:trace:1'
 					]
+				},
+				params: {
+					local: {
+						humanReadableStage: 'Local',
+						janisDomain: 'janis.localhost'
+					},
+					beta: {
+						humanReadableStage: 'Super beta',
+						janisDomain: 'janisdev.in'
+					},
+					qa: {
+						janisDomain: 'janisqa.in',
+						humanReadableStage: 'Pruebas',
+						anotherParam: 'I am new'
+					},
+					prod: {
+						humanReadableStage: 'Prod',
+						janisDomain: 'janis.in'
+					}
 				},
 				package: {
 					individually: false,
