@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Deprecated
+- Serveless `${self:custom.janisDomains}` and `${self:custom.humanReadableStage}` variables deprecated in favor of `${param:janisDomain}` and `${param:humanReadableStage}`. Custom props will be removed in the next major version.
+
+### Removed
+- 'janis.base` does not accept `apiSecrets` any more. AWS Secrets manager must be used instead.
 
 ## [6.0.0] - 2023-03-09
 ### Changed

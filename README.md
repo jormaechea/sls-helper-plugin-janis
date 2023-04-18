@@ -24,7 +24,6 @@ Used to implement a base service with minimal setup
 |--------|------|-------------|------------|---------------|
 | serviceCode | string | The service name in lowercase dash separated | **Required** | |
 | servicePort | number | The service port | **Required** | |
-| apiSecrets | Object | A mapping of stages to Service API Secret | | `undefined` |
 
 Some properties of the initial configuration have a new special meaning:
 
