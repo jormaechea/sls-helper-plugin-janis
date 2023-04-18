@@ -24,6 +24,7 @@ Used to implement a base service with minimal setup
 |--------|------|-------------|------------|---------------|
 | serviceCode | string | The service name in lowercase dash separated | **Required** | |
 | servicePort | number | The service port | **Required** | |
+| params | { [env]: { [param]: value } } | A mapping of param name and value by environment. Valid environments are: `local`, `beta`, `qa` and `prod` | | The params `humanReadableStage` and `janisDomain` are defined for each env. |
 
 Some properties of the initial configuration have a new special meaning:
 
