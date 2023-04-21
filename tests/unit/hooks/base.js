@@ -203,7 +203,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**'
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**'
 					]
 				},
 				custom: {
@@ -620,7 +621,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**',
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**',
 						'something'
 					]
 				},
@@ -1025,7 +1027,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**'
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**'
 					]
 				},
 				custom: {
@@ -1435,7 +1438,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**'
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**'
 					]
 				},
 				custom: {
@@ -2205,7 +2209,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**'
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**'
 					]
 				},
 				custom: {
@@ -2614,7 +2619,8 @@ describe('Hooks', () => {
 						'node_modules/**/qs/test/**',
 						'node_modules/**/qs/dist/**',
 						'node_modules/**/bson/browser_build/**',
-						'node_modules/**/axios/dist/**'
+						'node_modules/**/axios/dist/browser/**',
+						'node_modules/**/axios/dist/esm/**'
 					]
 				},
 				custom: {
