@@ -5,11 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [7.0.0] - 2023-04-21
+### Added
+- Support for [Serverless parameters](https://www.serverless.com/framework/docs/guides/parameters) for each environment.
+
+### Changed
+- Migration to `serverless@3`. You should probably upgrade every plugin you are using. **BREAKING CHANGE**
+- Rolled back to `serverless-plugin-split-stacks` plugin instead of `@janiscommerce/serverless-plugin-split-stacks` **BREAKING CHANGE**
+
 ### Deprecated
-- Serveless `${self:custom.janisDomains}` and `${self:custom.humanReadableStage}` variables deprecated in favor of `${param:janisDomain}` and `${param:humanReadableStage}`. Custom props will be removed in the next major version.
+- Serveless `${self:custom.janisDomains}` and `${self:custom.humanReadableStage}` variables deprecated in favor of `${param:janisDomain}` and `${param:humanReadableStage}`. Custom props will be removed in a future major version.
 
 ### Removed
-- 'janis.base` does not accept `apiSecrets` any more. AWS Secrets manager must be used instead.
+- 'janis.base` does not accept `apiSecrets` any more. AWS Secrets manager must be used instead. **BREAKING CHANGE**
 
 ## [6.0.0] - 2023-03-09
 ### Changed
