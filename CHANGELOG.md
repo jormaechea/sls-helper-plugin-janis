@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.0.3] - 2023-04-21
+### Changed
+- Changed aws-sdk package for @aws-sdk packages to default exclude to reduce bundle size (it is already installed in lambda)
+
 ## [7.0.2] - 2023-04-21
 ### Fixed
 - Rollbacked `provider.iam.role` to `provider.role` because it wasn't compatible with core `iamStatement` hook
