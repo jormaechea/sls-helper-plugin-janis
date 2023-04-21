@@ -80,7 +80,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -496,7 +496,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -902,7 +902,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 512,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -1305,7 +1305,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -1727,7 +1727,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -2078,7 +2078,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
@@ -2486,7 +2486,7 @@ describe('Hooks', () => {
 				service: 'Janis${self:custom.serviceName}Service',
 				provider: {
 					name: 'aws',
-					runtime: 'nodejs14.x',
+					runtime: 'nodejs18.x',
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
