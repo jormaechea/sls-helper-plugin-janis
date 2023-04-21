@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.0.1] - 2023-04-21
+### Fixed
+- Default axios exclude fixed for axios@1
+
+### Changed
+- Moved `provider.role` to `provider.iam.role` to be ready for next sls major release
+
 ## [7.0.0] - 2023-04-21
 ### Added
 - Support for [Serverless parameters](https://www.serverless.com/framework/docs/guides/parameters) for each environment.
