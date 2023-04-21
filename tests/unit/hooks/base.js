@@ -84,7 +84,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 14,
@@ -501,7 +503,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 30,
@@ -908,7 +912,9 @@ describe('Hooks', () => {
 					memorySize: 512,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 14,
@@ -1312,7 +1318,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					vpc: {
 						securityGroupId: 'sg-123456',
 						subnetIds: [
@@ -1735,7 +1743,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 30,
@@ -2086,7 +2096,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 14,
@@ -2495,7 +2507,9 @@ describe('Hooks', () => {
 					memorySize: 1024,
 					stage: '${opt:stage, \'local\'}',
 					region: '${opt:region, \'us-east-1\'}',
-					role: 'ServiceExecutionRole',
+					iam: {
+						role: 'ServiceExecutionRole'
+					},
 					endpointType: 'REGIONAL',
 					apiName: 'JANIS ${param:humanReadableStage} ${self:custom.serviceTitle} API',
 					logRetentionInDays: 14,
