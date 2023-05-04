@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.1.1] - 2023-05-04
+### Fixed
+- Adapted `functionsVpc` hook to be able to enable or disable by stage
+
 ## [7.1.0] - 2023-05-04
 ### Added
 - New hook `functionsVpc` to attach a service to a VPC
