@@ -37,7 +37,7 @@ describe('Hooks', () => {
 				name: 'MyFunction',
 				handler: 'src/lambda/my-function.js',
 				vpc: {
-					securityGroupIds: { Ref: 'ServiceSecurityGroup' },
+					securityGroupIds: [{ Ref: 'ServiceSecurityGroup' }],
 					subnetIds: hookParams.subnetIds
 				}
 			}
@@ -47,7 +47,7 @@ describe('Hooks', () => {
 				name: 'MyOtherFunction',
 				handler: 'src/lambda/my-other-function.js',
 				vpc: {
-					securityGroupIds: { Ref: 'ServiceSecurityGroup' },
+					securityGroupIds: [{ Ref: 'ServiceSecurityGroup' }],
 					subnetIds: hookParams.subnetIds
 				}
 			}
