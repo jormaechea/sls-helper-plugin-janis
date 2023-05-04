@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.1.3] - 2023-05-04
+### Fixed
+- Fixed function VPC Security Group config
+
 ## [7.1.2] - 2023-05-04
 ### Fixed
 - Now `functionsVpc` hook allows to pass null or undefined params
