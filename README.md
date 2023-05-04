@@ -203,32 +203,19 @@ Used to attach the service to a VPC with a Custom Security Group
 
 | Option | Type | Description | Attributes | Default value |
 |--------|------|-------------|------------|---------------|
-| variables | object | An object where the keys are the stage names and the values are a key-value object of [Serverless parameters](https://www.serverless.com/framework/docs/guides/parameters). This must define the following parameters for each stage: `vpcId`, `subnetIds`. | **Required** | |
+| vpcId | string | The ID of the VPC, for example `vpc-11111111`. If this is not set, VPC will not be attached. | | |
+| subnetIds | string[] | The IDs of the Subnets, for example `subnet-111111111`. If this is not set or is empty, VPC will not be attached. | | |
 
 It will automatically create a Security Group in the given VPC and attach it to every lambda function. The logical name of the SG will be `ServiceSecurityGroup`. It can be overriden using [Serverless resource overrides](https://www.serverless.com/framework/docs/providers/aws/guide/resources#override-aws-cloudformation-resource).
 
 
 ```js
 ['janis.functionsVpc', {
-	variables: {
-		local: {
-			vpcId: 'vpc-11111111',
-			subnetIds: [
-				'subnet-111111111',
-				'subnet-222222222'
-			]
-		},
-		beta: {
-			vpcId: 'vpc-1234567890abcdef0',
-			subnetIds: [
-				'subnet-1234567890abcdef0',
-				'subnet-1234567890abcdef1',
-				'subnet-1234567890abcdef2',
-				'subnet-1234567890abcdef3'
-			]
-		}
-		// And the same for qa and prod
-	}
+	vpcId: 'vpc-11111111',
+	subnetIds: [
+		'subnet-111111111',
+		'subnet-222222222'
+	]
 }]
 ```
 
@@ -324,42 +311,11 @@ module.exports = helper({
 		}],
 
 		['janis.functionsVpc', {
-			variables: {
-				local: {
-					vpcId: 'vpc-11111111',
-					subnetIds: [
-						'subnet-111111111',
-						'subnet-222222222'
-					]
-				},
-				beta: {
-					vpcId: 'vpc-1234567890abcdef0',
-					subnetIds: [
-						'subnet-1234567890abcdef0',
-						'subnet-1234567890abcdef1',
-						'subnet-1234567890abcdef2',
-						'subnet-1234567890abcdef3'
-					]
-				},
-				qa: {
-					vpcId: 'vpc-2234567890abcdef0',
-					subnetIds: [
-						'subnet-2234567890abcdef0',
-						'subnet-2234567890abcdef1',
-						'subnet-2234567890abcdef2',
-						'subnet-2234567890abcdef3'
-					]
-				},
-				prod: {
-					vpcId: 'vpc-3234567890abcdef0',
-					subnetIds: [
-						'subnet-3234567890abcdef0',
-						'subnet-3234567890abcdef1',
-						'subnet-3234567890abcdef2',
-						'subnet-3234567890abcdef3'
-					]
-				}
-			}
+			vpcId: 'vpc-11111111',
+			subnetIds: [
+				'subnet-111111111',
+				'subnet-222222222'
+			]
 		}]
 
 	]

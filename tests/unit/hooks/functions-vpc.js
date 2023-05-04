@@ -23,6 +23,14 @@ describe('Hooks', () => {
 		]
 	};
 
+	const hookParams = {
+		vpcId: 'vpc-11111111',
+		subnetIds: [
+			'subnet-111111111',
+			'subnet-222222222'
+		]
+	};
+
 	const functionsInVPC = [
 		{
 			MyFunction: {
@@ -30,7 +38,7 @@ describe('Hooks', () => {
 				handler: 'src/lambda/my-function.js',
 				vpc: {
 					securityGroupIds: { Ref: 'ServiceSecurityGroup' },
-					subnetIds: '${param:subnetIds}'
+					subnetIds: hookParams.subnetIds
 				}
 			}
 		},
@@ -40,7 +48,7 @@ describe('Hooks', () => {
 				handler: 'src/lambda/my-other-function.js',
 				vpc: {
 					securityGroupIds: { Ref: 'ServiceSecurityGroup' },
-					subnetIds: '${param:subnetIds}'
+					subnetIds: hookParams.subnetIds
 				}
 			}
 		}
@@ -71,60 +79,46 @@ describe('Hooks', () => {
 					Value: '${param:humanReadableStage}'
 				}
 			],
-			VpcId: '${param:vpcId}'
-		}
-	};
-
-	const hookVariables = {
-		local: {
-			vpcId: 'vpc-11111111',
-			subnetIds: [
-				'subnet-111111111',
-				'subnet-222222222'
-			]
-		},
-		beta: {
-			vpcId: 'vpc-1234567890abcdef0',
-			subnetIds: [
-				'subnet-1234567890abcdef0',
-				'subnet-1234567890abcdef1',
-				'subnet-1234567890abcdef2',
-				'subnet-1234567890abcdef3'
-			]
-		},
-		qa: {
-			vpcId: 'vpc-2234567890abcdef0',
-			subnetIds: [
-				'subnet-2234567890abcdef0',
-				'subnet-2234567890abcdef1',
-				'subnet-2234567890abcdef2',
-				'subnet-2234567890abcdef3'
-			]
-		},
-		prod: {
-			vpcId: 'vpc-3234567890abcdef0',
-			subnetIds: [
-				'subnet-3234567890abcdef0',
-				'subnet-3234567890abcdef1',
-				'subnet-3234567890abcdef2',
-				'subnet-3234567890abcdef3'
-			]
+			VpcId: hookParams.vpcId
 		}
 	};
 
 	describe('Functions VPC', () => {
 
+		it('Should not set the VPC up if vpcId is not set', () => {
+
+			const serviceConfig = functionsVpc(serviceBase, {
+				subnetIds: hookParams.subnetIds
+			});
+
+			assert.deepStrictEqual(serviceConfig, serviceBase);
+		});
+
+		it('Should not set the VPC up if subnetIds are not set', () => {
+
+			const serviceConfig = functionsVpc(serviceBase, {
+				vpcId: hookParams.vpcId
+			});
+
+			assert.deepStrictEqual(serviceConfig, serviceBase);
+		});
+
+		it('Should not set the VPC up if subnetIds are empty', () => {
+
+			const serviceConfig = functionsVpc(serviceBase, {
+				vpcId: hookParams.vpcId,
+				subnetIds: []
+			});
+
+			assert.deepStrictEqual(serviceConfig, serviceBase);
+		});
+
 		it('Should set the VPC on each function and set-up the security group', () => {
 
-			const hooksParams = {
-				variables: hookVariables
-			};
-
-			const serviceConfig = functionsVpc(serviceBase, hooksParams);
+			const serviceConfig = functionsVpc(serviceBase, hookParams);
 
 			assert.deepStrictEqual(serviceConfig, {
 				...serviceBase,
-				params: hookVariables,
 				functions: functionsInVPC,
 				resources: {
 					Resources: {
@@ -134,22 +128,10 @@ describe('Hooks', () => {
 			});
 		});
 
-		it('Should not override existing serverless parameters or resources', () => {
-
-			const hooksParams = {
-				variables: hookVariables
-			};
+		it('Should not override existing resources', () => {
 
 			const serviceConfig = functionsVpc({
 				...serviceBase,
-				params: {
-					default: {
-						test: 'foo'
-					},
-					local: {
-						test: 'bar'
-					}
-				},
 				resources: {
 					Resources: [
 						{
@@ -167,20 +149,10 @@ describe('Hooks', () => {
 						}
 					}
 				}
-			}, hooksParams);
+			}, hookParams);
 
 			assert.deepStrictEqual(serviceConfig, {
 				...serviceBase,
-				params: {
-					...hookVariables,
-					default: {
-						test: 'foo'
-					},
-					local: {
-						test: 'bar',
-						...hookVariables.local
-					}
-				},
 				functions: functionsInVPC,
 				resources: {
 					Resources: [
@@ -207,17 +179,12 @@ describe('Hooks', () => {
 
 		it('Should not fail if no functions were declared', () => {
 
-			const hooksParams = {
-				variables: hookVariables
-			};
-
 			const { functions, ...serviceWithoutFunctions } = serviceBase;
 
-			const serviceConfig = functionsVpc(serviceWithoutFunctions, hooksParams);
+			const serviceConfig = functionsVpc(serviceWithoutFunctions, hookParams);
 
 			assert.deepStrictEqual(serviceConfig, {
 				...serviceWithoutFunctions,
-				params: hookVariables,
 				resources: {
 					Resources: {
 						[expectedSecurityGroupName]: expectedSecurityGroupConfig
