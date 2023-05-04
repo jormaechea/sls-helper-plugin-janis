@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.1.2] - 2023-05-04
+### Fixed
+- Now `functionsVpc` hook allows to pass null or undefined params
+
 ## [7.1.1] - 2023-05-04
 ### Fixed
 - Adapted `functionsVpc` hook to be able to enable or disable by stage
