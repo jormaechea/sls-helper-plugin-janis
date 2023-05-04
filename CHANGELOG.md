@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.1.0] - 2023-05-04
+### Added
+- New hook `functionsVpc` to attach a service to a VPC
+
+### Fixed
+- Lambda `AWSLambdaVPCAccessExecutionRole` Role is attached even if a VPC is not set at the provider level
+
 ## [7.0.3] - 2023-04-21
 ### Changed
 - Changed aws-sdk package for @aws-sdk packages to default exclude to reduce bundle size (it is already installed in lambda)
