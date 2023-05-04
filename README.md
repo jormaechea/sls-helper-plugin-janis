@@ -193,9 +193,46 @@ For example, if the following hook is  configured
 
 The following custom props will be set: `custom.machines.MySuperMachine.arn` and `custom.machines.MySuperMachine.name`
 
-## Examples
+### functionsVpc
 
-### Basic Service with one CRUD operation set and an event listener
+_(since 7.1.0)_
+
+Used to attach the service to a VPC with a Custom Security Group
+
+**Important:** This hook MUST be set after declaring every function of the service. If a function is declared after this hook, it won't be attached to the VPC.
+
+| Option | Type | Description | Attributes | Default value |
+|--------|------|-------------|------------|---------------|
+| variables | object | An object where the keys are the stage names and the values are a key-value object of [Serverless parameters](https://www.serverless.com/framework/docs/guides/parameters). This must define the following parameters for each stage: `vpcId`, `subnetIds`. | **Required** | |
+
+It will automatically create a Security Group in the given VPC and attach it to every lambda function. The logical name of the SG will be `ServiceSecurityGroup`. It can be overriden using [Serverless resource overrides](https://www.serverless.com/framework/docs/providers/aws/guide/resources#override-aws-cloudformation-resource).
+
+
+```js
+['janis.functionsVpc', {
+	variables: {
+		local: {
+			vpcId: 'vpc-11111111',
+			subnetIds: [
+				'subnet-111111111',
+				'subnet-222222222'
+			]
+		},
+		beta: {
+			vpcId: 'vpc-1234567890abcdef0',
+			subnetIds: [
+				'subnet-1234567890abcdef0',
+				'subnet-1234567890abcdef1',
+				'subnet-1234567890abcdef2',
+				'subnet-1234567890abcdef3'
+			]
+		}
+		// And the same for qa and prod
+	}
+}]
+```
+
+## Full example
 
 ```js
 // serverless.js
@@ -282,6 +319,45 @@ module.exports = helper({
 						SecondsPath: '$.body.wait',
 						Next: 'Finish'
 					}
+				}
+			}
+		}],
+
+		['janis.functionsVpc', {
+			variables: {
+				local: {
+					vpcId: 'vpc-11111111',
+					subnetIds: [
+						'subnet-111111111',
+						'subnet-222222222'
+					]
+				},
+				beta: {
+					vpcId: 'vpc-1234567890abcdef0',
+					subnetIds: [
+						'subnet-1234567890abcdef0',
+						'subnet-1234567890abcdef1',
+						'subnet-1234567890abcdef2',
+						'subnet-1234567890abcdef3'
+					]
+				},
+				qa: {
+					vpcId: 'vpc-2234567890abcdef0',
+					subnetIds: [
+						'subnet-2234567890abcdef0',
+						'subnet-2234567890abcdef1',
+						'subnet-2234567890abcdef2',
+						'subnet-2234567890abcdef3'
+					]
+				},
+				prod: {
+					vpcId: 'vpc-3234567890abcdef0',
+					subnetIds: [
+						'subnet-3234567890abcdef0',
+						'subnet-3234567890abcdef1',
+						'subnet-3234567890abcdef2',
+						'subnet-3234567890abcdef3'
+					]
 				}
 			}
 		}]
