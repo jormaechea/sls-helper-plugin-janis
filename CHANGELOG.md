@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [7.2.0] - 2023-05-10
+### Added
+- Support for `default` or any other custom stage in stage parameters
+
 ## [7.1.3] - 2023-05-04
 ### Fixed
 - Fixed function VPC Security Group config
