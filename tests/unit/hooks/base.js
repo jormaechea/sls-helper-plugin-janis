@@ -2067,6 +2067,9 @@ describe('Hooks', () => {
 
 			const serviceConfig = base({
 				params: {
+					default: {
+						defaultParam: true
+					},
 					beta: {
 						humanReadableStage: 'Super beta'
 					},
@@ -2138,6 +2141,9 @@ describe('Hooks', () => {
 					]
 				},
 				params: {
+					default: {
+						defaultParam: true
+					},
 					local: {
 						humanReadableStage: 'Local',
 						janisDomain: 'janis.localhost'
