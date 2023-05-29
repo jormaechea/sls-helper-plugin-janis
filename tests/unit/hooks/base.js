@@ -150,7 +150,8 @@ describe('Hooks', () => {
 				package: {
 					individually: false,
 					include: [
-						'src/config/*'
+						'src/config/*',
+						'node_modules/@babel/runtime/**'
 					],
 					exclude: [
 						'.nyc_output/**',
@@ -569,6 +570,7 @@ describe('Hooks', () => {
 					individually: false,
 					include: [
 						'src/config/*',
+						'node_modules/@babel/runtime/**',
 						'custom/path/**'
 					],
 					exclude: [
@@ -976,7 +978,8 @@ describe('Hooks', () => {
 				package: {
 					individually: false,
 					include: [
-						'src/config/*'
+						'src/config/*',
+						'node_modules/@babel/runtime/**'
 					],
 					exclude: [
 						'.nyc_output/**',
@@ -1748,7 +1751,8 @@ describe('Hooks', () => {
 				package: {
 					individually: false,
 					include: [
-						'src/config/*'
+						'src/config/*',
+						'node_modules/@babel/runtime/**'
 					],
 					exclude: [
 						'.nyc_output/**',
@@ -2165,7 +2169,8 @@ describe('Hooks', () => {
 				package: {
 					individually: false,
 					include: [
-						'src/config/*'
+						'src/config/*',
+						'node_modules/@babel/runtime/**'
 					],
 					exclude: [
 						'.nyc_output/**',
