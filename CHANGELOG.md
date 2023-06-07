@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Added
+- VPC Config for all functions of the service using env vars
+
 ## [7.2.1] - 2023-05-29
 ### Fixed
 - Added `@babel/runtime` to default package includes to avoid breaking services that use `date-fns`
@@ -57,7 +60,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Rolled back to `serverless-plugin-split-stacks` plugin instead of `@janiscommerce/serverless-plugin-split-stacks` **BREAKING CHANGE**
 
 ### Deprecated
-- Serveless `${self:custom.janisDomains}` and `${self:custom.humanReadableStage}` variables deprecated in favor of `${param:janisDomain}` and `${param:humanReadableStage}`. Custom props will be removed in a future major version.
+- Serverless `${self:custom.janisDomains}` and `${self:custom.humanReadableStage}` variables deprecated in favor of `${param:janisDomain}` and `${param:humanReadableStage}`. Custom props will be removed in a future major version.
 
 ### Removed
 - 'janis.base` does not accept `apiSecrets` any more. AWS Secrets manager must be used instead. **BREAKING CHANGE**
@@ -81,11 +84,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [5.13.1] - 2023-01-02
 ### Fixed
-- Fixed mapping of Map states with differente iterator properties
+- Fixed mapping of Map states with different iterator properties
 
 ## [5.13.0] - 2022-12-26
 ### Added
-- Step function hook now sets Task `Parameters` to include `session`, `body` and `stepFunction` data, so Lmabdas con detect if they are being run inside a step function
+- Step function hook now sets Task `Parameters` to include `session`, `body` and `stepFunction` data, so Lambdas con detect if they are being run inside a step function
 
 ## [5.12.0] - 2022-12-21
 ### Added
