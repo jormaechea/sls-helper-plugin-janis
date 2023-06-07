@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert').strict;
+const sinon = require('sinon');
 
 const { authorizers } = require('../../..');
 
@@ -130,14 +131,22 @@ describe('Hooks', () => {
 			}
 		};
 
-		it('Should throw if accountId is not passed', () => {
+		const originalEnvs = { ...process.env };
 
-			assert.throws(() => authorizers({}, {}));
+		afterEach(() => {
+			process.env = { ...originalEnvs };
+			sinon.restore();
+		});
+
+		it('Should throw if accountId is not set in env var', () => {
+			assert.throws(() => authorizers({}));
 		});
 
 		it('Should return the authorizers service configuration', () => {
 
-			const serviceConfig = authorizers({}, { accountId });
+			process.env.AUTHORIZER_ACCOUNT_ID = accountId;
+
+			const serviceConfig = authorizers({});
 
 			assert.deepStrictEqual(serviceConfig, {
 				custom: {
@@ -148,13 +157,15 @@ describe('Hooks', () => {
 
 		it('Should return the authorizers service configuration maintaining previous authorizers', () => {
 
+			process.env.AUTHORIZER_ACCOUNT_ID = accountId;
+
 			const serviceConfig = authorizers({
 				custom: {
 					authorizers: {
 						MyCustomAuthorizer: {}
 					}
 				}
-			}, { accountId });
+			});
 
 			assert.deepStrictEqual(serviceConfig, {
 				custom: {
@@ -168,11 +179,13 @@ describe('Hooks', () => {
 
 		it('Should not override other configurations', () => {
 
+			process.env.AUTHORIZER_ACCOUNT_ID = accountId;
+
 			const serviceConfig = authorizers({
 				custom: {
 					foo: 'bar'
 				}
-			}, { accountId });
+			});
 
 			assert.deepStrictEqual(serviceConfig, {
 				custom: {

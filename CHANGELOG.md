@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - VPC Config for all functions of the service using env vars
 
+### Changed
+- Now the `accountId` for hook `authorizers` is read from env var `AUTHORIZER_ACCOUNT_ID`
+
 ## [7.2.1] - 2023-05-29
 ### Fixed
 - Added `@babel/runtime` to default package includes to avoid breaking services that use `date-fns`
