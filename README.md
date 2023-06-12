@@ -193,7 +193,7 @@ The following custom props will be set: `custom.machines.MySuperMachine.arn` and
 
 ### functionsVpc
 
-_(since 7.1.0)_
+_(since 8.0.0)_
 
 Used to attach the service to a VPC with a Custom Security Group
 
