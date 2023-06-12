@@ -52,11 +52,9 @@ _No options_
 
 ### authorizers
 
-Used to implement APIs authorizers as custom props
+Used to implement APIs authorizers as custom props.
 
-| Option | Type | Description | Attributes | Default value |
-|--------|------|-------------|------------|---------------|
-| accountId | string | Indicates the AWS account ID where the authorizers are deployed | **Required** | |
+Using the env var `AUTHORIZER_ACCOUNT_ID` that indicates the AWS account ID where the authorizers are deployed. **Required**.
 
 ### cors
 
