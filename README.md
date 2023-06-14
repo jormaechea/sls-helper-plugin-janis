@@ -193,7 +193,7 @@ The following custom props will be set: `custom.machines.MySuperMachine.arn` and
 
 ### functionsVpc
 
-_(since 8.0.0)_
+_(since 7.1.0)_
 
 Used to attach the service to a VPC with a Custom Security Group
 
@@ -219,7 +219,7 @@ It will automatically create a Security Group in the given VPC and attach it to 
 
 ### VPC Configuration
 
-_(since 7.3.0)_
+_(since 8.0.0)_
 
 If the env vars `LAMBDA_SECURITY_GROUP_ID` and `LAMBDA_SUBNET_IDS` are set, the global VPC configuration for **all functions** added in the service will be added in `provider`.
 

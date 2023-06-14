@@ -1,7 +1,6 @@
 'use strict';
 
 const assert = require('assert').strict;
-const sinon = require('sinon');
 
 const { authorizers } = require('../../..');
 
@@ -135,7 +134,6 @@ describe('Hooks', () => {
 
 		afterEach(() => {
 			process.env = { ...originalEnvs };
-			sinon.restore();
 		});
 
 		it('Should throw if accountId is not set in env var', () => {
