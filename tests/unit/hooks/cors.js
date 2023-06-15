@@ -25,6 +25,8 @@ describe('Hooks', () => {
 			'janis-entity',
 			'janis-entity-id',
 			'x-api-key',
+			'x-janis-totals',
+			'x-janis-only-totals',
 			'x-janis-page',
 			'x-janis-page-size'
 		];
