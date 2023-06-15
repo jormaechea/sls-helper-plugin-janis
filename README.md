@@ -52,11 +52,9 @@ _No options_
 
 ### authorizers
 
-Used to implement APIs authorizers as custom props
+Used to implement APIs authorizers as custom props.
 
-| Option | Type | Description | Attributes | Default value |
-|--------|------|-------------|------------|---------------|
-| accountId | string | Indicates the AWS account ID where the authorizers are deployed | **Required** | |
+Using the env var `AUTHORIZER_ACCOUNT_ID` that indicates the AWS account ID where the authorizers are deployed. **Required**.
 
 ### cors
 
@@ -217,6 +215,19 @@ It will automatically create a Security Group in the given VPC and attach it to 
 		'subnet-222222222'
 	]
 }]
+```
+
+### VPC Configuration
+
+_(since 8.0.0)_
+
+If the env vars `LAMBDA_SECURITY_GROUP_ID` and `LAMBDA_SUBNET_IDS` are set, the global VPC configuration for **all functions** added in the service will be added in `provider`.
+
+See more [VPC Configuration](https://www.serverless.com/framework/docs/providers/aws/guide/functions#vpc-configuration)
+
+```js
+process.env.LAMBDA_SECURITY_GROUP_ID = 'sg-abcdef0001';
+process.env.LAMBDA_SUBNET_IDS = 'subnet-111111111,subnet-222222222';
 ```
 
 ## Full example
