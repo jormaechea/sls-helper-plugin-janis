@@ -82,6 +82,8 @@ You can also customize or override every property:
 	'janis-service',
 	'janis-entity',
 	'x-api-key',
+	'x-janis-totals',
+	'x-janis-only-totals',
 	'x-janis-page',
 	'x-janis-page-size'
 ]

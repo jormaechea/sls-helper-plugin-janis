@@ -6,11 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [8.0.0] - 2023-06-15
 ### Added
-- VPC Config for all functions of the service using env vars
+- Automatic VPC Config for all functions of the service when `LAMBDA_SECURITY_GROUP_ID` and `LAMBDA_SUBNET_IDS` env vars are set
 
 ### Changed
 - Now the `accountId` for hook `authorizers` is read from env var `AUTHORIZER_ACCOUNT_ID`
+
+## [7.3.0] - 2023-06-15
+### Added
+- Added `x-janis-totals` and `x-janis-only-totals` to default CORS configuration
 
 ## [7.2.1] - 2023-05-29
 ### Fixed
