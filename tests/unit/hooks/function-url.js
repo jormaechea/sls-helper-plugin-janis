@@ -17,9 +17,9 @@ describe('Hooks', () => {
 			subdomainName: 'lambda_url',
 			acmCertificate: '123456789',
 			functions: [functionDefinition]
-		}
+		};
 
-		const resourcesName = 'lambda_url.${self:custom.customDomain.domainName}'
+		const resourcesName = 'lambda_url.${self:custom.customDomain.domainName}';
 
 		const getSampleOrigin = (functionName = functionDefinition.functionName) => ({
 			DomainName: {
@@ -67,7 +67,7 @@ describe('Hooks', () => {
 			...defaultCache,
 			TargetOriginId: functionDefinition.functionName,
 			PathPattern: functionDefinition.path
-		}
+		};
 
 		const sampleDistribution = {
 			Type: 'AWS::CloudFront::Distribution',
@@ -118,7 +118,7 @@ describe('Hooks', () => {
 					}
 				}
 			}
-		}
+		};
 
 		context('Config validation', () => {
 
@@ -213,8 +213,6 @@ describe('Hooks', () => {
 					}
 				}, functionUrlConfig);
 
-				console.log(result.resources.Resources[1])
-				
 				assert.deepStrictEqual(result.resources.Resources[1].LambdaUrlCloudFrontDistribution, sampleDistribution);
 			});
 
@@ -254,7 +252,7 @@ describe('Hooks', () => {
 
 				assert.deepStrictEqual(result.resources.Resources.LambdaUrlCloudFrontDistribution, sampleDistribution);
 			});
-		})
+		});
 
 		context('Route53 record set', () => {
 
@@ -283,11 +281,11 @@ describe('Hooks', () => {
 						Resources: [{ LambdaUrlCloudFrontDistribution: sampleDistribution }, { LambdaUrlRecordSet: sampleRouterRecordSet }]
 					}
 				}, {
-						...functionUrlConfig,
-						functions: [{
-							functionName: 'LambdaUrlTest2',
-							path: '/LambdaUrlTest2'
-						}]
+					...functionUrlConfig,
+					functions: [{
+						functionName: 'LambdaUrlTest2',
+						path: '/LambdaUrlTest2'
+					}]
 				});
 
 				assert.deepStrictEqual(result.resources.Resources, [
@@ -314,6 +312,6 @@ describe('Hooks', () => {
 					{ LambdaUrlRecordSet: sampleRouterRecordSet }
 				]);
 			});
-		})
+		});
 	});
 });
