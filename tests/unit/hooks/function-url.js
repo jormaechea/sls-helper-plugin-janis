@@ -274,7 +274,7 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(result.resources.Resources[1].LambdaUrlRecordSet, sampleRouterRecordSet);
 			});
 
-			it('Should not create a new Route53 Record Set', () => {
+			it('Should not create a new Route53 Record Set if it already exists in resources array', () => {
 
 				const result = functionUrl({
 					resources: {
@@ -305,12 +305,53 @@ describe('Hooks', () => {
 										}
 									]
 								}
-
 							}
 						}
 					},
 					{ LambdaUrlRecordSet: sampleRouterRecordSet }
 				]);
+			});
+
+			it('Should create the Route53 Record Set if it does not already exists in resources object', () => {
+
+				const result = functionUrl({
+					resources: {
+						Resources: {
+							LambdaUrl2CloudFrontDistribution: sampleDistribution,
+							LambdaUrl2RecordSet: sampleRouterRecordSet
+						}
+					}
+				}, {
+					...functionUrlConfig,
+					functions: [{
+						functionName: 'LambdaUrlTest2',
+						path: '/LambdaUrlTest2'
+					}]
+				});
+
+				assert.deepStrictEqual(result.resources.Resources, {
+					LambdaUrl2CloudFrontDistribution: sampleDistribution,
+					LambdaUrl2RecordSet: sampleRouterRecordSet,
+					LambdaUrlCloudFrontDistribution: {
+						...sampleDistribution,
+						Properties: {
+							DistributionConfig: {
+								...sampleDistribution.Properties.DistributionConfig,
+								Origins: [getSampleOrigin('LambdaUrlTest2')],
+								CacheBehaviors: [{
+									...defaultCache,
+									TargetOriginId: 'LambdaUrlTest2',
+									PathPattern: '/LambdaUrlTest2'
+								}],
+								DefaultCacheBehavior: {
+									...defaultCache,
+									TargetOriginId: 'LambdaUrlTest2'
+								}
+							}
+						}
+					},
+					LambdaUrlRecordSet: sampleRouterRecordSet
+				});
 			});
 		});
 	});
