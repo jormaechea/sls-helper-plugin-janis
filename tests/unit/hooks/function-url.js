@@ -205,7 +205,7 @@ describe('Hooks', () => {
 
 		context('CloudFront Distribution', () => {
 
-			it('Should create a CloudFront Distribution', () => {
+			it('Should create a CloudFront Distribution if it does not already exist in resources Array', () => {
 
 				const result = functionUrl({
 					resources: {
@@ -214,6 +214,17 @@ describe('Hooks', () => {
 				}, functionUrlConfig);
 
 				assert.deepStrictEqual(result.resources.Resources[1].LambdaUrlCloudFrontDistribution, sampleDistribution);
+			});
+
+			it('Should create a CloudFront Distribution if it does not already exist in resources Object', () => {
+
+				const result = functionUrl({
+					resources: {
+						Resources: { LambdaUrlRecordSet: sampleRouterRecordSet }
+					}
+				}, functionUrlConfig);
+
+				assert.deepStrictEqual(result.resources.Resources.LambdaUrlCloudFrontDistribution, sampleDistribution);
 			});
 
 			it('Should add origin to existing distribution', () => {
