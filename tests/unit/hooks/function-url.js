@@ -19,7 +19,7 @@ describe('Hooks', () => {
 			functions: [functionDefinition]
 		};
 
-		const resourcesName = 'lambda_url.${self:custom.customDomain.domainName}';
+		const resourcesName = 'lambda_url.${self:custom.customDomain.lambdaUrlDomainName, self:custom.customDomain.domainName}';
 
 		const getSampleOrigin = (functionName = functionDefinition.functionName) => ({
 			DomainName: {
@@ -108,7 +108,7 @@ describe('Hooks', () => {
 		const sampleRouterRecordSet = {
 			Type: 'AWS::Route53::RecordSet',
 			Properties: {
-				HostedZoneName: '${self:custom.customDomain.domainName}.',
+				HostedZoneName: '${self:custom.customDomain.lambdaUrlDomainName, self:custom.customDomain.domainName}.',
 				Type: 'A',
 				Name: resourcesName,
 				AliasTarget: {
