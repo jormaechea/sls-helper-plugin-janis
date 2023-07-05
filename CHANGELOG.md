@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Now authorizers `UserAuthorizer`, `DevUserAuthorizer` and `ImportExportAuthorizer` requires `janis-client` header
+- Now authorizers `ServiceNoClientAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` uses their own functions
+
+### Removed
+- Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer`
+
 ## [8.0.0] - 2023-06-15
 ### Added
 - Automatic VPC Config for all functions of the service when `LAMBDA_SECURITY_GROUP_ID` and `LAMBDA_SUBNET_IDS` env vars are set

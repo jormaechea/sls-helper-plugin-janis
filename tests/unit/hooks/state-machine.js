@@ -480,7 +480,7 @@ describe('Hooks', () => {
 					});
 				});
 
-				it('Should return the service config with the the new param (stateMachine) when the parameters exist in the task', () => {
+				it('Should return the service config with the new param (stateMachine) when the parameters exist in the task', () => {
 
 					const hooksParams = {
 						name: 'MachineName',
@@ -537,7 +537,7 @@ describe('Hooks', () => {
 					});
 				});
 
-				it('Should return the service config with the the new param (stateMachine) when the parameters has a "Payload" in the task', () => {
+				it('Should return the service config with the new param (stateMachine) when the parameters has a "Payload" in the task', () => {
 
 					const hooksParams = {
 						name: 'MachineName',
