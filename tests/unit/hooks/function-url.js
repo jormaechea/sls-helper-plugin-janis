@@ -96,7 +96,7 @@ describe('Hooks', () => {
 									'arn:aws:acm',
 									'${self:custom.region}',
 									{ Ref: 'AWS::AccountId' },
-									functionUrlConfig.acmCertificate
+									`certificate/${functionUrlConfig.acmCertificate}`
 								]
 							]
 						}
