@@ -234,17 +234,17 @@ process.env.LAMBDA_SUBNET_IDS = 'subnet-111111111,subnet-222222222';
 
 ### Function URL
 
-Used to create Lambda functions with customized domain
+This plugin is used to create Lambda functions with customized domains. The domain structure follows the format `${customSubdomain}.${hostedZone}/{customPath}`.
 
 **Important:** 
 - This hook links **existing** Lambda functions with custom domains. It means referenced Functions must be defined before this hook.
-- If `${self:custom.customDomain.lambdaUrlDomainName` is not defined, `${self:custom.customDomain.domainName}` will be used instead.
+- The `hostedZone` name is obtained from `${self:custom.customDomain.lambdaUrlDomainName}`. If it is not defined, the value of `${self:custom.customDomain.domainName}` will be used instead.
 
 
 | Option | Type | Description |
 |--------|------|-------------|
 | subdomainName | string | Subdomain to prepend to Service domain name (defined as a custom property for each service). | |
-| acmCertificate | string | AWS's ACM Certificate Id valid for defined subdomain. Expected format `certificate/{certificateId}`| |
+| acmCertificate | string | AWS's ACM Certificate Id valid for defined subdomain.| |
 | functions | Array{} | Array of objects with path definitions for the subdomain. <br/> <br/>* ***The first referenced function will be set as the default for requests with no path.*** | |
 | functions.0.functionName | string | Name of the function being referenced. <br/> <br/> * ***In order to be valid, referenced Functions must be defined as Lambdas Url***.                                                  |
 | functions.0.path | string | Relative path associated with the function. <br/> <br/> * ***Use '*' to redirect all requests with that specific path and any additional subpaths to that specific function***                                                                      |
@@ -257,7 +257,7 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 	"janis.functionUrl",
 	{
 		"subdomainName": "subSubdomain.subdomain",
-		"acmCertificate": "certificate/${param:acmCertificateId}",
+		"acmCertificate": "${param:acmCertificateId}",
 		"functions": [
 			{
 				"functionName": "CustomUrlLambda",
@@ -271,10 +271,10 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 	}
 ]
 ```
->Expected URLs to access CustomUrlLambda: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl`.
+> Expected URLs to access CustomUrlLambda: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl`.
 `https://subSubdomain.subdomain.{HostedZoneName}/customUrl/subpath`
 
-> Expected URL to access CustomUrlLambda: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl`
+> Expected URL to access CustomUrlLambda2: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl2`
 ## Full example
 
 ```js
@@ -375,17 +375,15 @@ module.exports = helper({
 		}],
 
 		['janis.functionUrl', {
-		subdomainName: 'subSubdomain.subdomain',
-		acmCertificate: 'certificate/${param:acmCertificateId}',
-		functions: [
-			{
-				functionName: 'CustomUrlLambda',
-				path: '/customUrl/*'
-			}
-		]
-	}
-]
-
+			subdomainName: 'subSubdomain.subdomain',
+			acmCertificate: '${param:acmCertificateId}',
+			functions: [
+				{
+					functionName: 'CustomUrlLambda',
+					path: '/customUrl/*'
+				}
+			]
+		}]
 	]
 }, {});
 ```
