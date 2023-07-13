@@ -105,7 +105,7 @@ describe('Hooks', () => {
 			}
 		};
 
-		const sampleRouterRecordSet = {
+		const sampleRecordSet = {
 			Type: 'AWS::Route53::RecordSet',
 			Properties: {
 				HostedZoneName: '${self:custom.customDomain.lambdaUrlDomainName, self:custom.customDomain.domainName}.',
@@ -209,7 +209,7 @@ describe('Hooks', () => {
 
 				const result = functionUrl({
 					resources: {
-						Resources: [{ LambdaUrlRecordSet: sampleRouterRecordSet }]
+						Resources: [{ LambdaUrlRecordSet: sampleRecordSet }]
 					}
 				}, functionUrlConfig);
 
@@ -220,7 +220,7 @@ describe('Hooks', () => {
 
 				const result = functionUrl({
 					resources: {
-						Resources: { LambdaUrlRecordSet: sampleRouterRecordSet }
+						Resources: { LambdaUrlRecordSet: sampleRecordSet }
 					}
 				}, functionUrlConfig);
 
@@ -271,25 +271,25 @@ describe('Hooks', () => {
 
 				const result = functionUrl({}, functionUrlConfig);
 
-				assert.deepStrictEqual(result.resources.Resources.LambdaUrlRecordSet, sampleRouterRecordSet);
+				assert.deepStrictEqual(result.resources.Resources.LambdaUrlRecordSet, sampleRecordSet);
 			});
 
 			it('Should add new Route53 Record Set to resources array', () => {
 
 				const result = functionUrl({
 					resources: {
-						Resources: [{ LambdaUrl2RecordSet: sampleRouterRecordSet }]
+						Resources: [{ LambdaUrl2RecordSet: sampleRecordSet }]
 					}
 				}, functionUrlConfig);
 
-				assert.deepStrictEqual(result.resources.Resources[1].LambdaUrlRecordSet, sampleRouterRecordSet);
+				assert.deepStrictEqual(result.resources.Resources[1].LambdaUrlRecordSet, sampleRecordSet);
 			});
 
 			it('Should not create a new Route53 Record Set if it already exists in resources array', () => {
 
 				const result = functionUrl({
 					resources: {
-						Resources: [{ LambdaUrlCloudFrontDistribution: sampleDistribution }, { LambdaUrlRecordSet: sampleRouterRecordSet }]
+						Resources: [{ LambdaUrlCloudFrontDistribution: sampleDistribution }, { LambdaUrlRecordSet: sampleRecordSet }]
 					}
 				}, {
 					...functionUrlConfig,
@@ -319,7 +319,7 @@ describe('Hooks', () => {
 							}
 						}
 					},
-					{ LambdaUrlRecordSet: sampleRouterRecordSet }
+					{ LambdaUrlRecordSet: sampleRecordSet }
 				]);
 			});
 
@@ -329,7 +329,7 @@ describe('Hooks', () => {
 					resources: {
 						Resources: {
 							LambdaUrl2CloudFrontDistribution: sampleDistribution,
-							LambdaUrl2RecordSet: sampleRouterRecordSet
+							LambdaUrl2RecordSet: sampleRecordSet
 						}
 					}
 				}, {
@@ -342,7 +342,7 @@ describe('Hooks', () => {
 
 				assert.deepStrictEqual(result.resources.Resources, {
 					LambdaUrl2CloudFrontDistribution: sampleDistribution,
-					LambdaUrl2RecordSet: sampleRouterRecordSet,
+					LambdaUrl2RecordSet: sampleRecordSet,
 					LambdaUrlCloudFrontDistribution: {
 						...sampleDistribution,
 						Properties: {
@@ -361,7 +361,7 @@ describe('Hooks', () => {
 							}
 						}
 					},
-					LambdaUrlRecordSet: sampleRouterRecordSet
+					LambdaUrlRecordSet: sampleRecordSet
 				});
 			});
 		});
