@@ -148,6 +148,7 @@ Used to implement JANIS Events listeners
 | authorizer | string | The name of the authorizer | | If not set, it defaults to `ServiceAuthorizer` or `ServiceNoClientAuthorizer` based on the value of `mustHaveClient` |
 | package.include | array[string] | The List of paths of files to include |
 | timeout | number | The function timeout in seconds | | |
+| functionRawProps | object | Custom properties to set in the function configuration | | |
 
 ### dbConfig
 
@@ -232,6 +233,49 @@ process.env.LAMBDA_SECURITY_GROUP_ID = 'sg-abcdef0001';
 process.env.LAMBDA_SUBNET_IDS = 'subnet-111111111,subnet-222222222';
 ```
 
+### Function URL
+
+This plugin is used to create Lambda functions with customized domains. The domain structure follows the format `${customSubdomain}.${hostedZone}/{customPath}`.
+
+**Important:** 
+- This hook links **existing** Lambda functions with custom domains. It means referenced Functions must be defined before this hook.
+- The `hostedZone` name is obtained from `${self:custom.customDomain.lambdaUrlDomainName}`. If it is not defined, the value of `${self:custom.customDomain.domainName}` will be used instead.
+
+
+| Option | Type | Description |
+|--------|------|-------------|
+| subdomainName | string | Subdomain to prepend to Service domain name (defined as a custom property for each service). | |
+| acmCertificate | string | AWS's ACM Certificate Id valid for defined subdomain.| |
+| functions | Array{} | Array of objects with path definitions for the subdomain. <br/> <br/>* ***The first referenced function will be set as the default for requests with no path.*** | |
+| functions.0.functionName | string | Name of the function being referenced. <br/> <br/> * ***In order to be valid, referenced Functions must be defined as Lambdas Url***.                                                  |
+| functions.0.path | string | Relative path associated with the function. <br/> <br/> * ***Use '*' to redirect all requests with that specific path and any additional subpaths to that specific function***                                                                      |
+
+It will automatically create (or update) a Cloudfront Distribution and a Route 53 Record Set.
+
+
+```js
+[
+	"janis.functionUrl",
+	{
+		"subdomainName": "subSubdomain.subdomain",
+		"acmCertificate": "${param:acmCertificateId}",
+		"functions": [
+			{
+				"functionName": "CustomUrlLambda",
+				"path": "/customUrl/*"
+			},
+			{
+				"functionName": "CustomUrlLambda2",
+				"path": "/customUrl2/"
+			}
+		]
+	}
+]
+```
+> Expected URLs to access CustomUrlLambda: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl`.
+`https://subSubdomain.subdomain.{HostedZoneName}/customUrl/subpath`
+
+> Expected URL to access CustomUrlLambda2: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl2`
 ## Full example
 
 ```js
@@ -329,8 +373,18 @@ module.exports = helper({
 				'subnet-111111111',
 				'subnet-222222222'
 			]
-		}]
+		}],
 
+		['janis.functionUrl', {
+			subdomainName: 'subSubdomain.subdomain',
+			acmCertificate: '${param:acmCertificateId}',
+			functions: [
+				{
+					functionName: 'CustomUrlLambda',
+					path: '/customUrl/*'
+				}
+			]
+		}]
 	]
 }, {});
 ```

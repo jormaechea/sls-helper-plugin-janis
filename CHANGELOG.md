@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer`
 
+## [8.1.0] - 2023-07-13
+### Added
+- `functionUrl` hook to enable Lambda URLs with Cloudfront Distributions (https://janiscommerce.atlassian.net/browse/JC-268)
+- `eventListener` hook now accepts `functionRawProps` to customize the lambda function
+
 ## [8.0.0] - 2023-06-15
 ### Added
 - Automatic VPC Config for all functions of the service when `LAMBDA_SECURITY_GROUP_ID` and `LAMBDA_SUBNET_IDS` env vars are set
