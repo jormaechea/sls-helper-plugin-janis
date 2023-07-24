@@ -899,6 +899,443 @@ describe('Internal Hooks', () => {
 					]
 				});
 			});
+
+			it('Should set the layers as an empty array if empty custom layers are set and skipTraceLayer is true', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					layers: [],
+					skipTraceLayer: true
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set the trace layer if empty custom layers are set and skipTraceLayer is not true', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					layers: [],
+					skipTraceLayer: false
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [getTraceLayerArn()],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should set the trace layer and custom layers if custom layers are set and skipTraceLayer is not true', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					layers: ['CustomLayer'],
+					skipTraceLayer: false
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [
+									getTraceLayerArn(),
+									'CustomLayer'
+								],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should not prepend the trace layer to custom layers if trace env vars are not set', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '',
+						JANIS_TRACE_EXTENSION_VERSION: ''
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					layers: ['CustomLayer'],
+					skipTraceLayer: false
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [
+									'CustomLayer'
+								],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should append custom layers to the default ones if addLayers is set', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					addLayers: ['CustomLayer'],
+					skipTraceLayer: false
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [
+									getTraceLayerArn(),
+									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1',
+									'CustomLayer'
+								],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should append custom layers to the default ones without the trace later if addLayers is set and skipTraceLayer is true', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					addLayers: ['CustomLayer'],
+					skipTraceLayer: true
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								layers: [
+									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1',
+									'CustomLayer'
+								],
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
+
+			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayerskipTraceLayer is false', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					layers: null,
+					addLayers: [],
+					skipTraceLayer: false
+				});
+
+				assert.deepStrictEqual(serviceConfig, {
+					provider: {
+						layers: [
+							getTraceLayerArn(),
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					},
+					functions: [
+						{
+							'API-Get-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
+								handler: 'src/lambda/RestApi/index.handler',
+								description: 'Product Attribute Get API',
+								package: {
+									include: [
+										'src/api/product-attribute/get.js',
+										'src/models/product-attribute.js'
+									]
+								},
+								events: [
+									{
+										http: {
+											integration: 'lambda',
+											path: '/product-attribute',
+											method: 'get',
+											request: {
+												template: '${self:custom.apiRequestTemplate}'
+											},
+											response: '${self:custom.apiResponseTemplate}'
+										}
+									}
+								]
+							}
+						}
+					]
+				});
+			});
 		});
 	});
 

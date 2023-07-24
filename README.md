@@ -99,6 +99,9 @@ Used to implement a custom API
 | path | string | The API path | **Required** | |
 | method | string | The API HTTP Method | | `'get'` |
 | methodName | string | The JANIS API Method | Enum\<list, get, post, put, patch, delete\> | Defaults to same value of `method` option |
+| layers | array[object] | An array of function-level layers. This will override any provider-level layers, except for the Trace Layer. Use together with `skipTraceLayer` to remove the Trace layer _(since 8.2.0)_ | | |
+| addLayers | array[object] | An array of function-level layers. This will be appended to any provider-level layers _(since 8.2.0)_ | | |
+| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | caching | boolean | Set to `true` to enable cache | | `false` |
 | cors | boolean|object | Set to `true` to enable services default **CORS**, or configure as an object as explained in **CORS** to customize the API CORS | | `false` |
@@ -108,7 +111,6 @@ Used to implement a custom API
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
 | package.include | array[string] | The List of paths of files to include | | |
-| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
@@ -122,6 +124,9 @@ Used to implement JANIS CRUD APIs.
 | entityName | string | The entity name | **Required** | |
 | handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |
+| layers | array[object] | An array of function-level layers. This will override any provider-level layers, except for the Trace Layer. Use together with `skipTraceLayer` to remove the Trace layer _(since 8.2.0)_ | | |
+| addLayers | array[object] | An array of function-level layers. This will be appended to any provider-level layers _(since 8.2.0)_ | | |
+| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` for `post` and `put` APIs, `true` for `get` and `list` APIs |
 | caching | boolean | Set to `true` to enable cache | | `false` |
 | cors | boolean|object | Set to `true` to enable services default **CORS**, or configure as an object as explained in **CORS** to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
@@ -130,7 +135,6 @@ Used to implement JANIS CRUD APIs.
 | authorizer | string | The name of the authorizer | | |
 | timeout | number | The function timeout in seconds | | |
 | package.include | array[string] | The List of paths of files to include | | |
-| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` for `post` and `put` APIs, `true` for `get` and `list` APIs |
 | functionRawProps | object | Custom properties to set in the function configuration | | |
 | eventRawProps | object | Custom properties to set in the event configuration | | |
 
@@ -145,6 +149,9 @@ Used to implement JANIS Events listeners
 | eventName | string | The event name | **Required** | |
 | mustHaveClient | boolean | Indicates if authorizer must validate that client or not | | `false` |
 | listenersDirName | string | Indicates the path where the event listener files are placed | | `'event-listeners'` |
+| layers | array[object] | An array of function-level layers. This will override any provider-level layers, except for the Trace Layer. Use together with `skipTraceLayer` to remove the Trace layer _(since 8.2.0)_ | | |
+| addLayers | array[object] | An array of function-level layers. This will be appended to any provider-level layers _(since 8.2.0)_ | | |
+| skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) _(since 8.2.0)_ | | `false` |
 | authorizer | string | The name of the authorizer | | If not set, it defaults to `ServiceAuthorizer` or `ServiceNoClientAuthorizer` based on the value of `mustHaveClient` |
 | package.include | array[string] | The List of paths of files to include |
 | timeout | number | The function timeout in seconds | | |
@@ -237,7 +244,7 @@ process.env.LAMBDA_SUBNET_IDS = 'subnet-111111111,subnet-222222222';
 
 This plugin is used to create Lambda functions with customized domains. The domain structure follows the format `${customSubdomain}.${hostedZone}/{customPath}`.
 
-**Important:** 
+**Important:**
 - This hook links **existing** Lambda functions with custom domains. It means referenced Functions must be defined before this hook.
 - The `hostedZone` name is obtained from `${self:custom.customDomain.lambdaUrlDomainName}`. If it is not defined, the value of `${self:custom.customDomain.domainName}` will be used instead.
 
