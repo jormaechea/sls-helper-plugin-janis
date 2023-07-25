@@ -16,118 +16,27 @@ describe('Hooks', () => {
 		const headerService = 'method.request.header.janis-service';
 		const headerEntity = 'method.request.header.janis-entity';
 
-		const expectedAuthorizers = {
-			FullAuthorizer: {
-				name: 'FullAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
+		const buildAuthorizer = (name, headers, realLambdaFunction) => ({
+			[name]: {
+				name,
+				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-${realLambdaFunction || name}`,
 				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			NoClientAuthorizer: {
-				name: 'NoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-FullAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			LoggedAuthorizer: {
-				name: 'LoggedAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-LoggedAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			ApiKeyAuthorizer: {
-				name: 'ApiKeyAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ApiKeyAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			UserAuthorizer: {
-				name: 'UserAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-UserAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			DevUserAuthorizer: {
-				name: 'DevUserAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-DevUserAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			AdminAuthorizer: {
-				name: 'AdminAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			AdminNoClientAuthorizer: {
-				name: 'AdminNoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-AdminAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			ServiceAuthorizer: {
-				name: 'ServiceAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerClient},${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			ServiceNoClientAuthorizer: {
-				name: 'ServiceNoClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ServiceAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret}`,
-				type: 'request'
-			},
-
-			ClientAuthorizer: {
-				name: 'ClientAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ClientAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: headerClient,
-				type: 'request'
-			},
-
-			ImportExportAuthorizer: {
-				name: 'ImportExportAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportExportAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity}`,
-				type: 'request'
-			},
-
-			ImportAuthorizer: {
-				name: 'ImportAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ImportAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerService},${headerEntity}`,
-				type: 'request'
-			},
-
-			ExportAuthorizer: {
-				name: 'ExportAuthorizer',
-				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-ExportAuthorizer`,
-				resultTtlInSeconds: 300,
-				identitySource: `${headerApiKey},${headerApiSecret},${headerEntity}`,
+				identitySource: headers.join(','),
 				type: 'request'
 			}
+		});
+
+		const expectedAuthorizers = {
+			...buildAuthorizer('FullAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('NoClientAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('ClientAuthorizer', [headerClient]),
+			...buildAuthorizer('UserAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('DevUserAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('AdminAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('AdminNoClientAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('ServiceAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('ServiceNoClientAuthorizer', [headerApiKey, headerApiSecret]),
+			...buildAuthorizer('ImportExportAuthorizer', [headerClient, headerApiKey, headerApiSecret, headerService, headerEntity])
 		};
 
 		const originalEnvs = { ...process.env };

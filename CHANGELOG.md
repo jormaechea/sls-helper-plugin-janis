@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Now authorizers `UserAuthorizer`, `DevUserAuthorizer`, `ImportExportAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` requires `janis-client` header
+- Now authorizers `ServiceNoClientAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` uses their own functions
+- Now authorizer `ImportExportAuthorizer` requires `janis-service` header
+
+### Removed
+- Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer`
+
 ## [8.2.0] - 2023-07-24
 ### Added
 - `api`, `apiList`, `apiGet`, `apiPost` and `apiPut` helpers now support `layers` and `addLayers` to manage function-level lambda layers
