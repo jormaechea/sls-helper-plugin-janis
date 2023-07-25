@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Removed
 - Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer`
 
+## [8.2.0] - 2023-07-24
+### Added
+- `api`, `apiList`, `apiGet`, `apiPost` and `apiPut` helpers now support `layers` and `addLayers` to manage function-level lambda layers
+- `eventListener` helper now support `layers`, `addLayers` and `skipTraceLayer` to manage function-level lambda layers
+
 ## [8.1.0] - 2023-07-13
 ### Added
 - `functionUrl` hook to enable Lambda URLs with Cloudfront Distributions (https://janiscommerce.atlassian.net/browse/JC-268)
