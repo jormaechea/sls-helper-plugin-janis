@@ -39,21 +39,21 @@
   },
   "homepage": "https://github.com/jormaechea/sls-helper-plugin-janis#readme",
   "devDependencies": {
-    "eslint": "^8.42.0",
+    "eslint": "^8.45.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "husky": "^8.0.3",
     "mocha": "^10.2.0",
     "mock-require": "^3.0.3",
     "nyc": "^15.1.0",
-    "serverless": "^3.32.2",
-    "sinon": "^15.1.2"
+    "serverless": "^3.33.0",
+    "sinon": "^15.2.0"
   },
   "dependencies": {
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.startcase": "^4.4.0",
-    "semver": "^7.5.1"
+    "semver": "^7.5.4"
   },
   "peerDependencies": {
     "sls-helper": ">= 1.9.0",
