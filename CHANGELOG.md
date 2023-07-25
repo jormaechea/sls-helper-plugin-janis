@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.0.0] - 2023-07-24
 ### Changed
-- Now authorizers `UserAuthorizer`, `DevUserAuthorizer`, `ImportExportAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` requires `janis-client` header
-- Now authorizers `ServiceNoClientAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` uses their own functions
-- Now authorizer `ImportExportAuthorizer` requires `janis-service` header
+- Now authorizers `UserAuthorizer`, `DevUserAuthorizer`, `ImportExportAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` require `janis-client` header **BREAKING CHANGE**
+- Now authorizers `ServiceNoClientAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` use their own functions **BREAKING CHANGE**
+- Now authorizer `ImportExportAuthorizer` requires `janis-service` header **BREAKING CHANGE**
 
 ### Removed
-- Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer`
+- Unused authorizers `LoggedAuthorizer`, `ApiKeyAuthorizer`, `ImportAuthorizer` and `ExportAuthorizer` **BREAKING CHANGE**
 
 ## [8.2.0] - 2023-07-24
 ### Added
