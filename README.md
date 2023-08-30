@@ -283,6 +283,284 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 `https://subSubdomain.subdomain.{HostedZoneName}/customUrl/subpath`
 
 > Expected URL to access CustomUrlLambda2: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl2`
+
+## :new: Hook Builders Helpers
+
+This kind of Helpers aren't hooks, this helpers builds hooks (normally many of them) that together makes available some kind of resource.
+
+> This helpers exist to create some kind of standard and re-utilize another hooks
+
+### SQS Helper
+
+This helpers must be use to create SQS resources and consumers with minimal data to a full customization.
+
+#### Require Helpers
+
+Diff to normal Hooks, it must be explicit require from the package.
+
+```js
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+```
+
+#### Permissions
+
+For use SQS resources, AWS permissions must be add, in other to make it easier, you can get it from the Helper using `SQSHelper.sqsPermissions` getter.
+
+#### Build Hook
+
+For build the Hook of:
+
+- SQS Queue
+- DLQ Queue
+- Main Consumer
+- DLQ Consumer (optionally)
+
+You can use `SQSHelper.buildHooks(configs)` method. This create an _array_ of Hooks with the proper data.
+
+**Parameters**
+- `configs`: _Object_
+	- `name`: **REQUIRED** | _String_ | The name of SQS, it will use for every resource, must be not empty and _camelCase_ to avoid problems creating the resources name.
+	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed will use _default_ data.
+	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | _Default_ the DLQ consumer **is not created**, must passed values to create one.
+	- `mainQueueProperties`: **OPTIONAL** _Object_ | If it is not passed will use _default_ data.
+	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed will use _default_ data.
+
+> Only with a name can create everything except for the DLQ Consumer function
+
+**Consumer Properties**:
+For both `consumerProperties`and `dlqConsumerProperties` fields can be customize with the following properties.
+
+- `timeout`: _default_: 15 | Change the Function timeout (in seconds).
+- `handler`: _default_: `src/sqs-consumer/[name in lowerCase]-consumer.handler` | Change the location of the file.
+- `description`: _default_: `[name] SQS Queue Consumer` | Change the function description.
+- `batchSize`: _default_: 1 (only for main consumer) | Change the SQS consumer batch Size.
+- `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
+
+Some other properties
+- `functionProperties`: To add other properties to the function (the same one in `function` hook).
+- `rawProperties`:  To add rawProperties to the function for example changed a `DependsOn`.
+
+> Add other other properties will be added in the SQS events `functionResponseType`
+
+
+**Queue Properties**:
+For both `mainQueueProperties`and `dlqQueueProperties` fields can be customize with the following properties.
+
+- `maxReceiveCount`: _default_: 5 (only for Main Queue) | Change the max receive count properties before sent the message to DLQ.
+- `receiveMessageWaitTimeSeconds`: _default_: 20 (main Queue) or 5 (dlq).
+- `visibilityTimeout`: _default_: 60 (main queue) or 20 (dlq).
+- `messageRetentionPeriod`: _default_: 864000 (only for DLQ).
+
+**Returns**: _array_ of Hooks
+
+#### Quick hook example
+
+```js
+
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		SQSHelper.sqsPermissions
+
+		// must be spread
+		...SQSHelper.buildHooks({ name: 'SessionEnded' })
+	]
+});
+
+/*
+
+Creates the following Hooks
+// For permissions
+
+	['iamStatement', {
+		action: [
+			'sqs:SendMessage',
+			'sqs:DeleteMessage',
+			'sqs:ReceiveMessage',
+			'sqs:GetQueueAttributes'
+		],
+		// eslint-disable-next-line no-template-curly-in-string
+		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
+	}]
+
+// For SQS Consumer
+
+	['function', {
+		functionName: 'SessionEndedQueueConsumer',
+		handler: 'src/sqs-consumer/sessionEnded-consumer.handler',
+		description: 'SessionEnded SQS Queue Consumer',
+		timeout: 15,
+		rawProperties: {
+			dependsOn: ['SessionEndedQueue']
+		},
+		events: [
+			{
+				sqs: {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedQueue',
+					batchSize: 1,
+					maximumBatchingWindow: 10
+				}
+			}
+		]
+	}]
+
+// For SQS Resources
+
+	['resource', {
+		name: 'SessionEndedQueue',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}SessionEndedQueue',
+				ReceiveMessageWaitTimeSeconds: 20,
+				VisibilityTimeout: 60,
+				// eslint-disable-next-line max-len
+				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedDLQ"}'
+			},
+			DependsOn: ['TestDLQ']
+		}
+	}]
+
+	['resource', {
+		name: 'SessionEndedDLQ',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}SessionEndedDLQ',
+				ReceiveMessageWaitTimeSeconds: 5,
+				VisibilityTimeout: 20,
+				MessageRetentionPeriod: 864000
+			}
+		}
+	}]
+*/
+
+```
+
+#### With DLQ Consumer example
+
+```js
+
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		SQSHelper.sqsPermissions
+
+		// must be spread
+		...SQSHelper.buildHooks({
+			name: 'SessionEnded',
+			dlqConsumerProperties: {
+				timeout: 30,
+				batchSize: 10,
+				maximumBatchingWindow: 100
+			}
+		})
+	]
+});
+
+/*
+
+Creates the following Hooks
+
+// For permissions
+
+	['iamStatement', {
+		action: [
+			'sqs:SendMessage',
+			'sqs:DeleteMessage',
+			'sqs:ReceiveMessage',
+			'sqs:GetQueueAttributes'
+		],
+		// eslint-disable-next-line no-template-curly-in-string
+		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
+	}]
+
+// For SQS Consumers
+
+	['function', {
+		functionName: 'SessionEndedQueueConsumer',
+		handler: 'src/sqs-consumer/sessionEnded-consumer.handler',
+		description: 'SessionEnded SQS Queue Consumer',
+		timeout: 15,
+		rawProperties: {
+			dependsOn: ['SessionEndedQueue']
+		},
+		events: [
+			{
+				sqs: {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedQueue',
+					batchSize: 1,
+					maximumBatchingWindow: 10
+				}
+			}
+		]
+	}]
+
+	['function', {
+		functionName: 'SessionEndedDLQQueueConsumer',
+		handler: 'src/sqs-consumer/sessionEndedDLQ-consumer.handler',
+		description: 'SessionEndedDLQ SQS Queue Consumer',
+		timeout: 30,
+		rawProperties: {
+			dependsOn: ['SessionEndedDLQ']
+		},
+		events: [
+			{
+				sqs: {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedDLQ',
+					batchSize: 10,
+					maximumBatchingWindow: 100
+				}
+			}
+		]
+	}]
+
+// For SQS Resources
+
+	['resource', {
+		name: 'SessionEndedQueue',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}SessionEndedQueue',
+				ReceiveMessageWaitTimeSeconds: 20,
+				VisibilityTimeout: 60,
+				// eslint-disable-next-line max-len
+				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedDLQ"}'
+			},
+			DependsOn: ['TestDLQ']
+		}
+	}]
+
+	['resource', {
+		name: 'SessionEndedDLQ',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}SessionEndedDLQ',
+				ReceiveMessageWaitTimeSeconds: 5,
+				VisibilityTimeout: 20,
+				MessageRetentionPeriod: 864000
+			}
+		}
+	}]
+*/
+
+```
+
 ## Full example
 
 ```js
@@ -291,6 +569,9 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 'use strict';
 
 const { helper } = require('sls-helper'); // eslint-disable-line
+
+// Only for SQS
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
 
 module.exports = helper({
 	hooks: [
@@ -391,7 +672,10 @@ module.exports = helper({
 					path: '/customUrl/*'
 				}
 			]
-		}]
+		}],
+
+		SQSHelper.sqsPermissions
+		...SQSHelper.buildHooks({ name: 'ProductToUpdate' })
 	]
 }, {});
 ```

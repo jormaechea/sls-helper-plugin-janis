@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 
 const SQSHelper = require('../../../lib/sqs-helper');
 
-describe('Build Hook Helpers', () => {
+describe('Hook Builder Helpers', () => {
 
 	describe('SQS', () => {
 
@@ -29,14 +29,14 @@ describe('Build Hook Helpers', () => {
 
 			it('Should throw if SQS Helper not received name', () => {
 
-				assert.throws(() => SQSHelper.createSQS(), {
+				assert.throws(() => SQSHelper.buildHooks(), {
 					message: 'Missing or empty name hook configuration in SQS helper'
 				});
 			});
 
 			it('Should throw if SQS Helper received empty name ', () => {
 
-				assert.throws(() => SQSHelper.createSQS({ name: '' }), {
+				assert.throws(() => SQSHelper.buildHooks({ name: '' }), {
 					message: 'Missing or empty name hook configuration in SQS helper'
 				});
 			});
@@ -50,7 +50,7 @@ describe('Build Hook Helpers', () => {
 
 				it(`Should throw if SQS Helper received invalid ${type} data`, () => {
 
-					assert.throws(() => SQSHelper.createSQS({ name: 'test', ...data }), {
+					assert.throws(() => SQSHelper.buildHooks({ name: 'test', ...data }), {
 						message: `${type} Properties must be an Object with configuration in SQS helper`
 					});
 				});
@@ -65,7 +65,7 @@ describe('Build Hook Helpers', () => {
 
 				it(`Should throw if SQS Helper received an array ${type} data`, () => {
 
-					assert.throws(() => SQSHelper.createSQS({ name: 'test', ...data }), {
+					assert.throws(() => SQSHelper.buildHooks({ name: 'test', ...data }), {
 						message: `${type} Properties must be an Object with configuration in SQS helper`
 					});
 				});
@@ -124,7 +124,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({ name: 'Test' }), [
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test' }), [
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook
@@ -133,7 +133,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name in LowerCase', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({ name: 'test' }), [
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'test' }), [
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook
@@ -142,7 +142,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and both consumers for main queue using a name and some config for dlq consumer', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({ name: 'Test', dlqConsumerProperties: { batchSize: 1 } }), [
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqConsumerProperties: { batchSize: 1 } }), [
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook,
@@ -172,7 +172,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom main consumer properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					consumerProperties: {
 						timeout: 30,
@@ -205,7 +205,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and both consumers for main queue using custom dlq consumer properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					dlqConsumerProperties: {
 						timeout: 30,
@@ -239,7 +239,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom consumer handler and description', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					consumerProperties: {
 						handler: 'src/sqs-listener/test.handler',
@@ -271,7 +271,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom consumer sqs events properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					consumerProperties: {
 						functionResponseType: 'ReportBatchFailures'
@@ -303,7 +303,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom consumer function and changed raw properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					consumerProperties: {
 						functionProperties: {
@@ -343,7 +343,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom main queue properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					mainQueueProperties: {
 						maxReceiveCount: 1,
@@ -372,7 +372,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom dlq queue properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					dlqQueueProperties: {
 						receiveMessageWaitTimeSeconds: 10,
@@ -399,7 +399,7 @@ describe('Build Hook Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom queue extra properties', () => {
 
-				assert.deepStrictEqual(SQSHelper.createSQS({
+				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					mainQueueProperties: {
 						extraProp: true
