@@ -101,7 +101,7 @@ describe('Hook Builder Helpers', () => {
 					ReceiveMessageWaitTimeSeconds: 20,
 					VisibilityTimeout: 60,
 					// eslint-disable-next-line max-len
-					RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
+					RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
 				},
 				DependsOn: ['TestDLQ']
 			}
@@ -274,7 +274,9 @@ describe('Hook Builder Helpers', () => {
 				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					consumerProperties: {
-						functionResponseType: 'ReportBatchFailures'
+						eventProperties: {
+							functionResponseType: 'ReportBatchFailures'
+						}
 					}
 				}), [
 					['function', {
@@ -361,7 +363,7 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 10,
 								VisibilityTimeout: 50,
 								// eslint-disable-next-line max-len
-								RedrivePolicy: '{"maxReceiveCount": 1, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
+								RedrivePolicy: '{"maxReceiveCount":1,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
 							},
 							DependsOn: ['TestDLQ']
 						}
@@ -415,7 +417,7 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 20,
 								VisibilityTimeout: 60,
 								// eslint-disable-next-line max-len
-								RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
+								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
 								extraProp: true
 							},
 							DependsOn: ['TestDLQ']

@@ -338,10 +338,9 @@ For both `consumerProperties`and `dlqConsumerProperties` fields can be customize
 - `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
 
 Some other properties
-- `functionProperties`: To add other properties to the function (the same one in `function` hook).
-- `rawProperties`:  To add rawProperties to the function for example changed a `DependsOn`.
-
-> Add other other properties will be added in the SQS events `functionResponseType`
+- `functionProperties`: _Object_ | To add other properties to the function (the same one in `function` hook).
+- `rawProperties`: _Object_ | To add rawProperties to the function for example changed a `DependsOn`.
+- `eventProperties`: _Object_ | To add extra Properties to the sqs event configuration, for example `functionResponseType`
 
 
 **Queue Properties**:
