@@ -286,17 +286,17 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 
 ## :new: Hook Builders Helpers
 
-This kind of Helpers aren't hooks, this helpers builds hooks (normally many of them) that together makes available some kind of resource.
+This kind of Helpers aren't hooks, this helpers builds hooks (normally many of them) that together make available some kind of resource.
 
 > This helpers exist to create some kind of standard and re-utilize another hooks
 
 ### SQS Helper
 
-This helpers must be use to create SQS resources and consumers with minimal data to a full customization.
+This helpers must be used to create SQS resources and consumers with minimal data to a full customization.
 
 #### Require Helpers
 
-Diff to normal Hooks, it must be explicit require from the package.
+Unlike to normal Hooks, they must be explicitly required from the package.
 
 ```js
 const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
@@ -305,11 +305,11 @@ const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-lin
 
 #### Permissions
 
-For use SQS resources, AWS permissions must be add, in other to make it easier, you can get it from the Helper using `SQSHelper.sqsPermissions` getter.
+To use SQS resources, AWS permissions must be added, in order to make it easier, you can get them from the Helper using `SQSHelper.sqsPermissions` getter.
 
 #### Build Hook
 
-For build the Hook of:
+To use the hook Builder of:
 
 - SQS Queue
 - DLQ Queue
@@ -424,7 +424,7 @@ Creates the following Hooks
 				// eslint-disable-next-line max-len
 				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedDLQ"}'
 			},
-			DependsOn: ['TestDLQ']
+			DependsOn: ['SessionEndedDLQ']
 		}
 	}]
 
