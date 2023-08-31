@@ -120,11 +120,17 @@ describe('Hook Builder Helpers', () => {
 			}
 		}];
 
+		const sqsUrlEnvVarsHook = ['envVars', {
+			Test_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
+			Test_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
+		}];
+
 		context('Create basic SQS Hooks', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test' }), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook
@@ -134,6 +140,7 @@ describe('Hook Builder Helpers', () => {
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name in LowerCase', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'test' }), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook
@@ -143,6 +150,7 @@ describe('Hook Builder Helpers', () => {
 			it('Should create an SQS Hook for Main Queue, DLQ, and both consumers for main queue using a name and some config for dlq consumer', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqConsumerProperties: { batchSize: 1 } }), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook,
@@ -180,6 +188,7 @@ describe('Hook Builder Helpers', () => {
 						maximumBatchingWindow: 100
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					['function', {
 						functionName: 'TestQueueConsumer',
 						handler: 'src/sqs-consumer/test-consumer.handler',
@@ -213,6 +222,7 @@ describe('Hook Builder Helpers', () => {
 						maximumBatchingWindow: 100
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook,
@@ -246,6 +256,7 @@ describe('Hook Builder Helpers', () => {
 						description: 'SQS Listener'
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					['function', {
 						functionName: 'TestQueueConsumer',
 						handler: 'src/sqs-listener/test.handler',
@@ -279,6 +290,7 @@ describe('Hook Builder Helpers', () => {
 						}
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					['function', {
 						functionName: 'TestQueueConsumer',
 						handler: 'src/sqs-consumer/test-consumer.handler',
@@ -316,6 +328,7 @@ describe('Hook Builder Helpers', () => {
 						}
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					['function', {
 						functionName: 'TestQueueConsumer',
 						handler: 'src/sqs-consumer/test-consumer.handler',
@@ -353,6 +366,7 @@ describe('Hook Builder Helpers', () => {
 						visibilityTimeout: 50
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					['resource', {
 						name: 'TestQueue',
@@ -382,6 +396,7 @@ describe('Hook Builder Helpers', () => {
 						messageRetentionPeriod: 432000
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					['resource', {
@@ -407,6 +422,7 @@ describe('Hook Builder Helpers', () => {
 						extraProp: true
 					}
 				}), [
+					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					['resource', {
 						name: 'TestQueue',

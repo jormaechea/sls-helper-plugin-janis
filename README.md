@@ -315,6 +315,7 @@ To use the hook Builder of:
 - DLQ Queue
 - Main Consumer
 - DLQ Consumer (optionally)
+- Env Vars for SQS Urls
 
 You can use `SQSHelper.buildHooks(configs)` method. This create an _array_ of Hooks with the proper data.
 
@@ -387,6 +388,13 @@ Creates the following Hooks
 		],
 		// eslint-disable-next-line no-template-curly-in-string
 		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
+	}]
+
+// For Env Vars
+
+	['envVars', {
+		SessionEnded_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
+		SessionEnded_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
 	}]
 
 // For SQS Consumer
@@ -485,6 +493,13 @@ Creates the following Hooks
 		],
 		// eslint-disable-next-line no-template-curly-in-string
 		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
+	}]
+
+// For Env Vars
+
+	['envVars', {
+		SessionEnded_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
+		SessionEnded_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
 	}]
 
 // For SQS Consumers
