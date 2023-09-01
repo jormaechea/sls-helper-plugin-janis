@@ -314,18 +314,18 @@ To use the hook Builder of:
 - SQS Queue
 - DLQ Queue
 - Main Consumer
-- DLQ Consumer (optionally)
+- DLQ Consumer (optional)
 - Env Vars for SQS Urls
 
-You can use `SQSHelper.buildHooks(configs)` method. This create an _array_ of Hooks with the proper data.
+You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ of Hooks with the proper data.
 
 **Parameters**
 - `configs`: _Object_
-	- `name`: **REQUIRED** | _String_ | The name of SQS, it will use for every resource, must be not empty and _camelCase_ to avoid problems creating the resources name.
-	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed will use _default_ data.
-	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | _Default_ the DLQ consumer **is not created**, must passed values to create one.
-	- `mainQueueProperties`: **OPTIONAL** _Object_ | If it is not passed will use _default_ data.
-	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed will use _default_ data.
+	- `name`: **REQUIRED** | _String_ | The name of SQS, it will be uses for every resource. It must be not empty and _camelCase_ to avoid issues creating the resources names.
+	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data.
+	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
+	- `mainQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
+	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 
 > Only with a name can create everything except for the DLQ Consumer function
 
@@ -345,7 +345,7 @@ Some other properties
 
 
 **Queue Properties**:
-For both `mainQueueProperties`and `dlqQueueProperties` fields can be customize with the following properties.
+Both `mainQueueProperties`and `dlqQueueProperties` fields can be customized with the following properties:
 
 - `maxReceiveCount`: _default_: 5 (only for Main Queue) | Change the max receive count properties before sent the message to DLQ.
 - `receiveMessageWaitTimeSeconds`: _default_: 20 (main Queue) or 5 (dlq).
@@ -367,9 +367,10 @@ module.exports = helper({
 	hooks: [
 		// other hooks
 
+		// Permissions must be applied once
 		SQSHelper.sqsPermissions
 
-		// must be spread
+		// must spread it
 		...SQSHelper.buildHooks({ name: 'SessionEnded' })
 	]
 });
