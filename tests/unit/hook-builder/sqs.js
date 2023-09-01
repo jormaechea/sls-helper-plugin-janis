@@ -121,8 +121,8 @@ describe('Hook Builder Helpers', () => {
 		}];
 
 		const sqsUrlEnvVarsHook = ['envVars', {
-			Test_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
-			Test_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
+			TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
+			TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
 		}];
 
 		context('Create basic SQS Hooks', () => {
@@ -156,7 +156,7 @@ describe('Hook Builder Helpers', () => {
 					dlqQueueHook,
 					['function', {
 						functionName: 'TestDLQQueueConsumer',
-						handler: 'src/sqs-consumer/testDLQ-consumer.handler',
+						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
 						description: 'TestDLQ SQS Queue Consumer',
 						timeout: 15,
 						rawProperties: {
@@ -166,6 +166,77 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
+									batchSize: 1
+								}
+							}
+						]
+					}]
+				]);
+			});
+
+			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name in camelCase', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'TestBegin', dlqConsumerProperties: { batchSize: 1 } }), [
+					['envVars', {
+						TEST_BEGIN_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginQueue',
+						TEST_BEGIN_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginDLQ'
+					}],
+					['function', {
+						functionName: 'TestBeginQueueConsumer',
+						handler: 'src/sqs-consumer/test-begin-consumer.handler',
+						description: 'TestBegin SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['TestBeginQueue']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginQueue',
+									batchSize: 1,
+									maximumBatchingWindow: 10
+								}
+							}
+						]
+					}],
+					['resource', {
+						name: 'TestBeginQueue',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestBeginQueue',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 60,
+								// eslint-disable-next-line max-len
+								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ"}'
+							},
+							DependsOn: ['TestBeginDLQ']
+						}
+					}],
+					['resource', {
+						name: 'TestBeginDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestBeginDLQ',
+								ReceiveMessageWaitTimeSeconds: 5,
+								VisibilityTimeout: 20,
+								MessageRetentionPeriod: 864000
+							}
+						}
+					}],
+					['function', {
+						functionName: 'TestBeginDLQQueueConsumer',
+						handler: 'src/sqs-consumer/test-begin-dlq-consumer.handler',
+						description: 'TestBeginDLQ SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['TestBeginDLQ']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ',
 									batchSize: 1
 								}
 							}
@@ -228,7 +299,7 @@ describe('Hook Builder Helpers', () => {
 					dlqQueueHook,
 					['function', {
 						functionName: 'TestDLQQueueConsumer',
-						handler: 'src/sqs-consumer/testDLQ-consumer.handler',
+						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
 						description: 'TestDLQ SQS Queue Consumer',
 						timeout: 30,
 						rawProperties: {

@@ -354,6 +354,20 @@ Both `mainQueueProperties`and `dlqQueueProperties` fields can be customized with
 
 **Returns**: _array_ of Hooks
 
+#### Consumer Files
+
+If handler's location don't change (uses default values), the files must be located in
+
+* `src/sqs-consumer/[name-in-kebab-case]-consumer.js` for main queue consumer
+* `src/sqs-consumer/[name-in-kebab-case]-dlq-consumer.js` for dlq consumer
+
+#### SQS URL Env Vars
+
+Environment Variables will be created for SQS URLs (both):
+
+* `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue consumer
+* `[NAME_IN_SNAKE_CASE]_DLQ_SQS_QUEUE_URL` for dlq consumer
+
 #### Quick hook example
 
 ```js
@@ -394,15 +408,15 @@ Creates the following Hooks
 // For Env Vars
 
 	['envVars', {
-		SessionEnded_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
-		SessionEnded_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
+		SESSION_ENDED_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
+		SESSION_ENDED_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
 	}]
 
 // For SQS Consumer
 
 	['function', {
 		functionName: 'SessionEndedQueueConsumer',
-		handler: 'src/sqs-consumer/sessionEnded-consumer.handler',
+		handler: 'src/sqs-consumer/session-ended-consumer.handler',
 		description: 'SessionEnded SQS Queue Consumer',
 		timeout: 15,
 		rawProperties: {
@@ -499,15 +513,15 @@ Creates the following Hooks
 // For Env Vars
 
 	['envVars', {
-		SessionEnded_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
-		SessionEnded_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
+		SESSION_ENDED_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedQueue',
+		SESSION_ENDED_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}SessionEndedDLQ'
 	}]
 
 // For SQS Consumers
 
 	['function', {
 		functionName: 'SessionEndedQueueConsumer',
-		handler: 'src/sqs-consumer/sessionEnded-consumer.handler',
+		handler: 'src/sqs-consumer/session-ended-consumer.handler',
 		description: 'SessionEnded SQS Queue Consumer',
 		timeout: 15,
 		rawProperties: {
@@ -526,7 +540,7 @@ Creates the following Hooks
 
 	['function', {
 		functionName: 'SessionEndedDLQQueueConsumer',
-		handler: 'src/sqs-consumer/sessionEndedDLQ-consumer.handler',
+		handler: 'src/sqs-consumer/session-ended-dlq-consumer.handler',
 		description: 'SessionEndedDLQ SQS Queue Consumer',
 		timeout: 30,
 		rawProperties: {
