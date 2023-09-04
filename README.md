@@ -330,7 +330,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 > Only with a name can create everything except for the DLQ Consumer function
 
 **Consumer Properties**:
-For both `consumerProperties`and `dlqConsumerProperties` fields can be customize with the following properties.
+Both `consumerProperties`and `dlqConsumerProperties` fields can be customized with the following properties:
 
 - `timeout`: _default_: 15 | Change the Function timeout (in seconds).
 - `handler`: _default_: `src/sqs-consumer/[name in lowerCase]-consumer.handler` | Change the location of the file.
