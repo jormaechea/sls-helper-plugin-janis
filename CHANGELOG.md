@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.1.0] - 2023-08-04
+### Added
+- `SQS Helper` added to easily implement Queues and DLQs
+
 ## [9.0.0] - 2023-07-24
 ### Changed
 - Now authorizers `UserAuthorizer`, `DevUserAuthorizer`, `ImportExportAuthorizer`, `AdminNoClientAuthorizer` and `NoClientAuthorizer` require `janis-client` header **BREAKING CHANGE**
