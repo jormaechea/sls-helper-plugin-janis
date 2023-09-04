@@ -1,12 +1,9 @@
 'use strict';
 
 const assert = require('assert').strict;
-const camelCase = require('lodash.camelcase');
-const startCase = require('lodash.startcase');
 
 const { stateMachine } = require('../../..');
-
-const pascalCase = name => startCase(camelCase(name)).replace(/ /g, '');
+const { camelCase, upperCamelCase } = require('../../../lib/utils/string');
 
 describe('Hooks', () => {
 
@@ -160,7 +157,7 @@ describe('Hooks', () => {
 					],
 					stepFunctions: {
 						stateMachines: {
-							[pascalCase(hooksParams.name)]: {
+							[upperCamelCase(hooksParams.name)]: {
 								...hooksParams,
 								name: machineName
 							}
@@ -245,7 +242,7 @@ describe('Hooks', () => {
 								name: 'previousMachineName',
 								definition: { foo: 'bar' }
 							},
-							[pascalCase(hooksParams.name)]: {
+							[upperCamelCase(hooksParams.name)]: {
 								...hooksParams,
 								name: machineName
 							}

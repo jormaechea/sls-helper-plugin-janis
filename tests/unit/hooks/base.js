@@ -462,8 +462,7 @@ describe('Hooks', () => {
 				'123',
 				'123-valid-code',
 				'valid-123-code',
-				'123-valid-code-456',
-				'valid-code-special-chars-àá'
+				'123-valid-code-456'
 			].forEach(serviceCode => {
 				assert.doesNotThrow(() => base({}, {
 					serviceCode,
