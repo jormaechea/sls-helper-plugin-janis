@@ -85,12 +85,32 @@ describe('Hook Builder Helpers', () => {
 				{
 					sqs: {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
-						batchSize: 1,
-						maximumBatchingWindow: 10
+						functionResponseType: 'ReportBatchItemFailures',
+						batchSize: 10,
+						maximumBatchingWindow: 20
 					}
 				}
 			]
 		}];
+
+		const queueTags = name => [
+			{
+				Key: 'Owner',
+				Value: 'Janis'
+			},
+			{
+				Key: 'Microservice',
+				Value: '${self:custom.serviceName}'
+			},
+			{
+				Key: 'Stack',
+				Value: '${param:humanReadableStage}'
+			},
+			{
+				Key: 'SQSConstruct',
+				Value: name
+			}
+		];
 
 		const mainQueueHook = ['resource', {
 			name: 'TestQueue',
@@ -99,9 +119,10 @@ describe('Hook Builder Helpers', () => {
 				Properties: {
 					QueueName: '${self:custom.serviceName}TestQueue',
 					ReceiveMessageWaitTimeSeconds: 20,
-					VisibilityTimeout: 60,
+					VisibilityTimeout: 90,
 					// eslint-disable-next-line max-len
-					RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
+					RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
+					Tags: queueTags('Test')
 				},
 				DependsOn: ['TestDLQ']
 			}
@@ -113,9 +134,10 @@ describe('Hook Builder Helpers', () => {
 				Type: 'AWS::SQS::Queue',
 				Properties: {
 					QueueName: '${self:custom.serviceName}TestDLQ',
-					ReceiveMessageWaitTimeSeconds: 5,
-					VisibilityTimeout: 20,
-					MessageRetentionPeriod: 864000
+					ReceiveMessageWaitTimeSeconds: 20,
+					VisibilityTimeout: 90,
+					MessageRetentionPeriod: 864000,
+					Tags: queueTags('Test')
 				}
 			}
 		}];
@@ -149,7 +171,7 @@ describe('Hook Builder Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and both consumers for main queue using a name and some config for dlq consumer', () => {
 
-				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqConsumerProperties: { batchSize: 1 } }), [
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqConsumerProperties: { batchSize: 10 } }), [
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
@@ -166,7 +188,8 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
-									batchSize: 1
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10
 								}
 							}
 						]
@@ -176,7 +199,7 @@ describe('Hook Builder Helpers', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name in camelCase', () => {
 
-				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'TestBegin', dlqConsumerProperties: { batchSize: 1 } }), [
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'TestBegin', dlqConsumerProperties: { batchSize: 10 } }), [
 					['envVars', {
 						TEST_BEGIN_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginQueue',
 						TEST_BEGIN_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginDLQ'
@@ -193,8 +216,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginQueue',
-									batchSize: 1,
-									maximumBatchingWindow: 10
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10,
+									maximumBatchingWindow: 20
 								}
 							}
 						]
@@ -206,9 +230,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginQueue',
 								ReceiveMessageWaitTimeSeconds: 20,
-								VisibilityTimeout: 60,
+								VisibilityTimeout: 90,
 								// eslint-disable-next-line max-len
-								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ"}'
+								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ"}',
+								Tags: queueTags('TestBegin')
 							},
 							DependsOn: ['TestBeginDLQ']
 						}
@@ -219,9 +244,10 @@ describe('Hook Builder Helpers', () => {
 							Type: 'AWS::SQS::Queue',
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginDLQ',
-								ReceiveMessageWaitTimeSeconds: 5,
-								VisibilityTimeout: 20,
-								MessageRetentionPeriod: 864000
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: queueTags('TestBegin')
 							}
 						}
 					}],
@@ -237,7 +263,8 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ',
-									batchSize: 1
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10
 								}
 							}
 						]
@@ -255,8 +282,8 @@ describe('Hook Builder Helpers', () => {
 					name: 'Test',
 					consumerProperties: {
 						timeout: 30,
-						batchSize: 10,
-						maximumBatchingWindow: 100
+						batchSize: 20,
+						maximumBatchingWindow: 80
 					}
 				}), [
 					sqsUrlEnvVarsHook,
@@ -272,8 +299,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
-									batchSize: 10,
-									maximumBatchingWindow: 100
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 20,
+									maximumBatchingWindow: 80
 								}
 							}
 						]
@@ -289,8 +317,8 @@ describe('Hook Builder Helpers', () => {
 					name: 'Test',
 					dlqConsumerProperties: {
 						timeout: 30,
-						batchSize: 10,
-						maximumBatchingWindow: 100
+						batchSize: 20,
+						maximumBatchingWindow: 80
 					}
 				}), [
 					sqsUrlEnvVarsHook,
@@ -309,8 +337,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
-									batchSize: 10,
-									maximumBatchingWindow: 100
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 20,
+									maximumBatchingWindow: 80
 								}
 							}
 						]
@@ -340,8 +369,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
-									batchSize: 1,
-									maximumBatchingWindow: 10
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10,
+									maximumBatchingWindow: 20
 								}
 							}
 						]
@@ -357,7 +387,7 @@ describe('Hook Builder Helpers', () => {
 					name: 'Test',
 					consumerProperties: {
 						eventProperties: {
-							functionResponseType: 'ReportBatchFailures'
+							functionResponseType: null
 						}
 					}
 				}), [
@@ -374,9 +404,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
-									batchSize: 1,
-									maximumBatchingWindow: 10,
-									functionResponseType: 'ReportBatchFailures'
+									batchSize: 10,
+									maximumBatchingWindow: 20,
+									functionResponseType: null
 								}
 							}
 						]
@@ -413,8 +443,9 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
-									batchSize: 1,
-									maximumBatchingWindow: 10
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10,
+									maximumBatchingWindow: 20
 								}
 							}
 						]
@@ -448,7 +479,8 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 10,
 								VisibilityTimeout: 50,
 								// eslint-disable-next-line max-len
-								RedrivePolicy: '{"maxReceiveCount":1,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}'
+								RedrivePolicy: '{"maxReceiveCount":1,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
+								Tags: queueTags('Test')
 							},
 							DependsOn: ['TestDLQ']
 						}
@@ -478,7 +510,8 @@ describe('Hook Builder Helpers', () => {
 								QueueName: '${self:custom.serviceName}TestDLQ',
 								ReceiveMessageWaitTimeSeconds: 10,
 								VisibilityTimeout: 50,
-								MessageRetentionPeriod: 432000
+								MessageRetentionPeriod: 432000,
+								Tags: queueTags('Test')
 							}
 						}
 					}]
@@ -502,9 +535,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestQueue',
 								ReceiveMessageWaitTimeSeconds: 20,
-								VisibilityTimeout: 60,
+								VisibilityTimeout: 90,
 								// eslint-disable-next-line max-len
 								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
+								Tags: queueTags('Test'),
 								extraProp: true
 							},
 							DependsOn: ['TestDLQ']
