@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [5.14.1] - 2023-09-22
+### Added
+- New headers `x-janis-totals` and `x-janis-only-totals` allowed in default CORS config
+
+## [5.14.0] - 2023-07-05
+### Added
+- `eventListener` hook now accepts `functionRawProps` to customize the lambda function
+
 ## [5.13.4] - 2023-03-09
 ### Fixed
 - Removed ajv from default excludes and added some mongo and aws sdk dependencies
