@@ -150,6 +150,7 @@ Used to implement JANIS Events listeners
 | authorizer | string | The name of the authorizer | | If not set, it defaults to `ServiceAuthorizer` or `ServiceNoClientAuthorizer` based on the value of `mustHaveClient` |
 | package.include | array[string] | The List of paths of files to include |
 | timeout | number | The function timeout in seconds | | |
+| functionRawProps | object | Custom properties to set in the function configuration | | |
 
 ### dbConfig
 
