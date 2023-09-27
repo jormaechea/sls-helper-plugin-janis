@@ -28,12 +28,12 @@ describe('Hooks', () => {
 
 		const expectedAuthorizers = {
 			...buildAuthorizer('FullAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
-			...buildAuthorizer('NoClientAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('NoClientAuthorizer', [headerApiKey, headerApiSecret]),
 			...buildAuthorizer('ClientAuthorizer', [headerClient]),
 			...buildAuthorizer('UserAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
 			...buildAuthorizer('DevUserAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
 			...buildAuthorizer('AdminAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
-			...buildAuthorizer('AdminNoClientAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
+			...buildAuthorizer('AdminNoClientAuthorizer', [headerApiKey, headerApiSecret]),
 			...buildAuthorizer('ServiceAuthorizer', [headerClient, headerApiKey, headerApiSecret]),
 			...buildAuthorizer('ServiceNoClientAuthorizer', [headerApiKey, headerApiSecret]),
 			...buildAuthorizer('ImportExportAuthorizer', [headerClient, headerApiKey, headerApiSecret, headerService, headerEntity])
