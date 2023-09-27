@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.2.1] - 2023-09-27
+### Fixed
+- Rollback `kebabCase` implementation to avoid breaking services with alphanumeric names
+
 ## [9.2.0] - 2023-08-05
 ### Added
 - `SQS Helper` queues now have tags to filter costs and metrics
