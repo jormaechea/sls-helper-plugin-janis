@@ -181,6 +181,9 @@ Used to implement AWS State Machines
 |--------|------|-------------|------------|---------------|
 | name | string | The name of the state machine | **Required** | |
 | definition | object | The definition of the state machine. See more [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-state-machine-structure.html)| **Required**  | |
+| type | string | The [type of workflow](https://www.serverless.com/plugins/serverless-step-functions#express-workflow) of the state machine. | Enum\<`STANDARD`,`EXPRESS`\> | `STANDARD` |
+| loggingConfig | object | The Cloudwatch Logging Configuration of the state machine. | See [loggingConfig documentation](https://www.serverless.com/plugins/serverless-step-functions#cloudwatch-logs) | |
+| rawProperties | object | A free form object to set any property supported by the [Step Functions Plugin](https://www.serverless.com/plugins/serverless-step-functions) but not supported by this package. | |
 
 It will automatically include the `serverless-step-functions` plugin.
 

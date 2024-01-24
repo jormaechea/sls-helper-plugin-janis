@@ -46,6 +46,17 @@ describe('Hooks', () => {
 					message: /definition/
 				});
 			});
+
+			it('Should throw if type param is invalid', () => {
+
+				assert.throws(() => stateMachine(serviceBase, {
+					name: 'my service',
+					definition,
+					type: 'UNKNOWN'
+				}), {
+					message: /UNKNOWN/
+				});
+			});
 		});
 
 		context('State Machine generation', () => {
@@ -69,6 +80,67 @@ describe('Hooks', () => {
 						stateMachines: {
 							MachineName: {
 								...hooksParams,
+								name: machineName
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
+			it('Should be able to handle express workflows, logging configuration and raw properties', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					loggingConfig: {
+						level: 'ERROR',
+						includeExecutionData: true,
+						destinations: [{
+							'Fn::GetAtt': ['MyLogGroup', 'Arn']
+						}]
+					},
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
 								name: machineName
 							}
 						}
