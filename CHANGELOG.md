@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.3.0] - 2024-01-24
+### Added
+- `State Machine` now sets execution State to tasks by default. This allows to check whether a task is executed as a retry or not.
+- `State Machine` now supports Express Workflows, Logginf configuration and Raw properties.
+
 ## [9.2.2] - 2023-09-27
 ### Fixed
 - `NoClientAuthorizer` and `AdminNoClientAuthorizer` don't require the janis-client header any more
