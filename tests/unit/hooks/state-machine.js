@@ -385,7 +385,8 @@ describe('Hooks', () => {
 						definition: definitionWithTask({
 							'session.$': '$.session',
 							'body.$': '$.body',
-							'stateMachine.$': '$$.StateMachine'
+							'stateMachine.$': '$$.StateMachine',
+							'state.$': '$$.State'
 						})
 					};
 
@@ -492,7 +493,8 @@ describe('Hooks', () => {
 						definition: definitionWithTask({
 							'session.$': '$.session',
 							'body.$': '$.body',
-							'stateMachine.$': '$$.StateMachine'
+							'stateMachine.$': '$$.StateMachine',
+							'state.$': '$$.State'
 						})
 					};
 
@@ -552,7 +554,8 @@ describe('Hooks', () => {
 							Payload: {
 								'session.$': '$.session',
 								'body.$': '$.body',
-								'stateMachine.$': '$$.StateMachine'
+								'stateMachine.$': '$$.StateMachine',
+								'state.$': '$$.State'
 							}
 						})
 					};
@@ -648,7 +651,8 @@ describe('Hooks', () => {
 											Parameters: {
 												'session.$': '$.session',
 												'body.$': '$.body',
-												'stateMachine.$': '$$.StateMachine'
+												'stateMachine.$': '$$.StateMachine',
+												'state.$': '$$.State'
 											},
 											End: true
 										}
@@ -739,7 +743,8 @@ describe('Hooks', () => {
 											Parameters: {
 												'session.$': '$.session',
 												'body.$': '$.body',
-												'stateMachine.$': '$$.StateMachine'
+												'stateMachine.$': '$$.StateMachine',
+												'state.$': '$$.State'
 											},
 											End: true
 										}
@@ -919,7 +924,8 @@ describe('Hooks', () => {
 												Parameters: {
 													'session.$': '$.session',
 													'body.$': '$.body',
-													'stateMachine.$': '$$.StateMachine'
+													'stateMachine.$': '$$.StateMachine',
+													'state.$': '$$.State'
 												},
 												End: true
 											}
@@ -933,7 +939,8 @@ describe('Hooks', () => {
 												Parameters: {
 													'session.$': '$.session',
 													'body.$': '$.body',
-													'stateMachine.$': '$$.StateMachine'
+													'stateMachine.$': '$$.StateMachine',
+													'state.$': '$$.State'
 												},
 												End: true
 											}
@@ -1023,7 +1030,8 @@ describe('Hooks', () => {
 												Parameters: {
 													'session.$': '$.session',
 													'body.$': '$.body',
-													'stateMachine.$': '$$.StateMachine'
+													'stateMachine.$': '$$.StateMachine',
+													'state.$': '$$.State'
 												},
 												End: true
 											}
@@ -1143,7 +1151,9 @@ describe('Hooks', () => {
 								Parameters: {
 									'session.$': '$.session',
 									'body.$': '$.body',
-									'stateMachine.$': '$$.StateMachine'
+									'stateMachine.$': '$$.StateMachine',
+									'state.$': '$$.State'
+
 								},
 								Next: 'TrackingCall'
 							},
@@ -1167,7 +1177,8 @@ describe('Hooks', () => {
 															Parameters: {
 																'session.$': '$.session',
 																'body.$': '$.body',
-																'stateMachine.$': '$$.StateMachine'
+																'stateMachine.$': '$$.StateMachine',
+																'state.$': '$$.State'
 															},
 															End: true
 														}
@@ -1186,7 +1197,8 @@ describe('Hooks', () => {
 													Payload: {
 														'session.$': '$.session',
 														'body.$': '$.body',
-														'stateMachine.$': '$$.StateMachine'
+														'stateMachine.$': '$$.StateMachine',
+														'state.$': '$$.State'
 													}
 												},
 												End: true
