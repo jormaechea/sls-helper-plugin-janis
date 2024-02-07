@@ -182,7 +182,7 @@ Used to implement AWS State Machines
 | name | string | The name of the state machine | **Required** | |
 | definition | object | The definition of the state machine. See more [Step Functions](https://docs.aws.amazon.com/step-functions/latest/dg/amazon-states-language-state-machine-structure.html)| **Required**  | |
 | type | string | The [type of workflow](https://www.serverless.com/plugins/serverless-step-functions#express-workflow) of the state machine. | Enum\<`STANDARD`,`EXPRESS`\> | `STANDARD` |
-| loggingConfig | object | The Cloudwatch Logging Configuration of the state machine. | See [loggingConfig documentation](https://www.serverless.com/plugins/serverless-step-functions#cloudwatch-logs) | |
+| loggingConfig | boolean\|string\|object | The Cloudwatch Logging Configuration of the state machine. | If not set, logging will be OFF. <br/> If set to `true`, logging will be set to `INFO` and a default Log Group will be created. <br/> If set as `string`, it will be used as log level and a default Log Group will be created. <br/> If set as an `object`, it will be used as is (a default  Log Group will be created if `destinations` property is not set) <br/><br/> See [loggingConfig documentation](https://www.serverless.com/plugins/serverless-step-functions#cloudwatch-logs) for full configuration options. | |
 | rawProperties | object | A free form object to set any property supported by the [Step Functions Plugin](https://www.serverless.com/plugins/serverless-step-functions) but not supported by this package. | |
 
 It will automatically include the `serverless-step-functions` plugin.

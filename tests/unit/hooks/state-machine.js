@@ -167,6 +167,308 @@ describe('Hooks', () => {
 				});
 			});
 
+			it('Should set default logging config and create default log group if loggingConfig is true', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					loggingConfig: true,
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, loggingConfig, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
+								name: machineName,
+								loggingConfig: {
+									level: 'INFO',
+									includeExecutionData: true,
+									destinations: [
+										{
+											'Fn::GetAtt': ['MachineNameLogGroup', 'Arn']
+										}
+									]
+								}
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					},
+					resources: {
+						Resources: {
+							MachineNameLogGroup: {
+								Type: 'AWS::Logs::LogGroup',
+								Properties: {
+									LogGroupName: '/janis/state-machine/${self:custom.serviceName}-MachineName-${self:custom.stage}',
+									RetentionInDays: 14,
+									Tags: [
+										{
+											Key: 'Owner',
+											Value: 'Janis'
+										},
+										{
+											Key: 'Microservice',
+											Value: '${self:custom.serviceName}'
+										},
+										{
+											Key: 'Stack',
+											Value: '${param:humanReadableStage}'
+										}
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
+			it('Should set default logging config with custom log level and create default log group if loggingConfig is a string', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					loggingConfig: 'ERROR',
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, loggingConfig, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
+								name: machineName,
+								loggingConfig: {
+									level: 'ERROR',
+									includeExecutionData: true,
+									destinations: [
+										{
+											'Fn::GetAtt': ['MachineNameLogGroup', 'Arn']
+										}
+									]
+								}
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					},
+					resources: {
+						Resources: {
+							MachineNameLogGroup: {
+								Type: 'AWS::Logs::LogGroup',
+								Properties: {
+									LogGroupName: '/janis/state-machine/${self:custom.serviceName}-MachineName-${self:custom.stage}',
+									RetentionInDays: 14,
+									Tags: [
+										{
+											Key: 'Owner',
+											Value: 'Janis'
+										},
+										{
+											Key: 'Microservice',
+											Value: '${self:custom.serviceName}'
+										},
+										{
+											Key: 'Stack',
+											Value: '${param:humanReadableStage}'
+										}
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
+			it('Should not create a log group if destinations array is provided', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					loggingConfig: {
+						level: 'ERROR',
+						includeExecutionData: false,
+						destinations: [{
+							'Fn::GetAtt': ['MyLogGroup', 'Arn']
+						}]
+					},
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, loggingConfig, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
+								name: machineName,
+								loggingConfig: {
+									level: 'ERROR',
+									includeExecutionData: false,
+									destinations: [
+										{
+											'Fn::GetAtt': ['MyLogGroup', 'Arn']
+										}
+									]
+								}
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
+			it('Should not create a log group if loggingConfig is not set', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, loggingConfig, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
+								name: machineName
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					}
+				});
+			});
+
 			it('Should return the service config and the state machine with name in camelCase', () => {
 
 				const hooksParams = {
