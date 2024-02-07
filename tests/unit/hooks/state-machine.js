@@ -469,6 +469,75 @@ describe('Hooks', () => {
 				});
 			});
 
+			it('Should not create a log group if loggingConfig is not set (with previous resources set)', () => {
+
+				const hooksParams = {
+					name: 'MachineName',
+					type: 'EXPRESS',
+					definition,
+					rawProperties: {
+						tracingConfig: {
+							enabled: true
+						}
+					}
+				};
+
+				const { rawProperties, loggingConfig, ...bypassParams } = hooksParams;
+
+				const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+				const serviceConfig = stateMachine({
+					resources: {
+						Resources: {
+							SomeResource: {
+								foo: 'bar'
+							}
+						}
+					}
+				}, hooksParams);
+
+				assert.deepStrictEqual(serviceConfig, {
+					plugins: [
+						'serverless-step-functions'
+					],
+					stepFunctions: {
+						stateMachines: {
+							MachineName: {
+								...hooksParams.rawProperties,
+								...bypassParams,
+								name: machineName
+							}
+						}
+					},
+					custom: {
+						machines: {
+							MachineName: {
+								name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+								arn: {
+									'Fn::Join': [
+										':',
+										[
+											'arn:aws:states',
+											'${self:custom.region}',
+											{ Ref: 'AWS::AccountId' },
+											'stateMachine',
+											'${self:custom.machines.MachineName.name}'
+										]
+									]
+								}
+							}
+						}
+					},
+					resources: {
+						Resources: {
+							SomeResource: {
+								foo: 'bar'
+							}
+						}
+					}
+				});
+			});
+
 			it('Should return the service config and the state machine with name in camelCase', () => {
 
 				const hooksParams = {
