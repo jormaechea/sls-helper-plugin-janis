@@ -6,10 +6,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.4.0] - 2024-02-07
+### Added
+- `State Machine` can now create a Log Group automatically when `loggingConfig` is set
+- `Tags` were added to Cloudformation Stacks, their resources and to deployment artifacts
+
+### Changed
+- `Authorizers` are now marked as external so they don't generate a permission resource
+- Deployment is now direct instead of via Cloudformation Change Sets
+
 ## [9.3.0] - 2024-01-24
 ### Added
 - `State Machine` now sets execution State to tasks by default. This allows to check whether a task is executed as a retry or not.
-- `State Machine` now supports Express Workflows, Logginf configuration and Raw properties.
+- `State Machine` now supports Express Workflows, Logging configuration and Raw properties.
 
 ## [9.2.2] - 2023-09-27
 ### Fixed
