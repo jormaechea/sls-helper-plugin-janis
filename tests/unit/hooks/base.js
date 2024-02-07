@@ -43,6 +43,20 @@ describe('Hooks', () => {
 					Microservice: '${self:custom.serviceName}',
 					Stack: '${param:humanReadableStage}'
 				},
+				stackTags: {
+					Owner: 'Janis',
+					Microservice: '${self:custom.serviceName}',
+					Stack: '${param:humanReadableStage}'
+				},
+				deploymentMethod: 'direct',
+				deploymentBucket: {
+					tags: {
+						Owner: 'Janis',
+						Microservice: '${self:custom.serviceName}',
+						Stack: '${param:humanReadableStage}'
+					}
+				},
+
 				versionFunctions: false,
 				apiGateway: {
 					disableDefaultEndpoint: true,

@@ -22,7 +22,8 @@ describe('Hooks', () => {
 				arn: `arn:aws:lambda:us-east-1:${accountId}:function:JanisAuthorizerService-\${self:custom.stage}-${realLambdaFunction || name}`,
 				resultTtlInSeconds: 300,
 				identitySource: headers.join(','),
-				type: 'request'
+				type: 'request',
+				managedExternally: true
 			}
 		});
 
