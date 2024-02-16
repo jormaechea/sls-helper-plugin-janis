@@ -112,6 +112,14 @@ describe('Hook Builder Helpers', () => {
 			}
 		];
 
+		const dlqTags = name => [
+			...queueTags(name),
+			{
+				Key: 'IsDLQ',
+				Value: 'true'
+			}
+		];
+
 		const mainQueueHook = ['resource', {
 			name: 'TestQueue',
 			resource: {
@@ -137,7 +145,7 @@ describe('Hook Builder Helpers', () => {
 					ReceiveMessageWaitTimeSeconds: 20,
 					VisibilityTimeout: 90,
 					MessageRetentionPeriod: 864000,
-					Tags: queueTags('Test')
+					Tags: dlqTags('Test')
 				}
 			}
 		}];
@@ -247,7 +255,7 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 20,
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
-								Tags: queueTags('TestBegin')
+								Tags: dlqTags('TestBegin')
 							}
 						}
 					}],
@@ -511,7 +519,7 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 10,
 								VisibilityTimeout: 50,
 								MessageRetentionPeriod: 432000,
-								Tags: queueTags('Test')
+								Tags: dlqTags('Test')
 							}
 						}
 					}]
