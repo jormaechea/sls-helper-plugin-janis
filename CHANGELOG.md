@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.0] - 2024-02-16
+### Added
+- `SQS` DLQs now have a `IsDLQ` tag
+
 ## [9.4.0] - 2024-02-07
 ### Added
 - `State Machine` can now create a Log Group automatically when `loggingConfig` is set
