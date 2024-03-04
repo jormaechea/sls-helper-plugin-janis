@@ -1040,6 +1040,72 @@ describe('Hooks', () => {
 						}
 					});
 				});
+
+				it('Should return the service config with the new param (stateMachine) when the parameters has a "Target.Input" in the task', () => {
+
+					const hooksParams = {
+						name: 'MachineName',
+						definition: definitionWithTask({
+							Target: {
+								Input: {
+									'session.$': '$.session',
+									'body.$': '$.body'
+								}
+							}
+						})
+					};
+
+					const hooksParamsResult = {
+						name: 'MachineName',
+						definition: definitionWithTask({
+							Target: {
+								Input: {
+									'session.$': '$.session',
+									'body.$': '$.body',
+									'stateMachine.$': '$$.StateMachine',
+									'state.$': '$$.State'
+								}
+							}
+						})
+					};
+
+					const machineName = '${self:custom.serviceName}-machineName-${self:custom.stage}';
+
+					const serviceConfig = stateMachine({}, hooksParams);
+
+					assert.deepStrictEqual(serviceConfig, {
+						plugins: [
+							'serverless-step-functions'
+						],
+						stepFunctions: {
+							stateMachines: {
+								MachineName: {
+									...hooksParamsResult,
+									name: machineName
+								}
+							}
+						},
+						custom: {
+							machines: {
+								MachineName: {
+									name: '${self:custom.serviceName}-machineName-${self:custom.stage}',
+									arn: {
+										'Fn::Join': [
+											':',
+											[
+												'arn:aws:states',
+												'${self:custom.region}',
+												{ Ref: 'AWS::AccountId' },
+												'stateMachine',
+												'${self:custom.machines.MachineName.name}'
+											]
+										]
+									}
+								}
+							}
+						}
+					});
+				});
 			});
 
 			context('When tasks are in other states', () => {
