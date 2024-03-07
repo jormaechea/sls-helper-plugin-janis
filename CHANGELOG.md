@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.2] - 2024-03-07
+### Fixed
+- `State Machine` now supports task with `Parameters.Input` such as Step Functions Execution Trigger
+
 ## [9.5.1] - 2024-03-04
 ### Fixed
 - `State Machine` now supports task with `Parameters.Target.Input` such as EventBridge Scheduler
