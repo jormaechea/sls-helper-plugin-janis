@@ -301,6 +301,23 @@ describe('Hooks', () => {
 						}
 					},
 
+					BadRequestDefault: {
+						Type: 'AWS::ApiGateway::GatewayResponse',
+						Properties: {
+							ResponseParameters: {
+								'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
+							},
+							ResponseTemplates: {
+								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
+							},
+							ResponseType: 'DEFAULT_4XX',
+							RestApiId: {
+								Ref: 'ApiGatewayRestApi'
+							},
+							StatusCode: '400'
+						}
+					},
+
 					UnauthorizedResponse: {
 						Type: 'AWS::ApiGateway::GatewayResponse',
 						Properties: {
@@ -308,47 +325,13 @@ describe('Hooks', () => {
 								'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
 							},
 							ResponseTemplates: {
-								'application/json': '{"message":$context.error.messageString,"authorizerErrorType":"$context.error.responseType"}'
+								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
 							},
 							ResponseType: 'UNAUTHORIZED',
 							RestApiId: {
 								Ref: 'ApiGatewayRestApi'
 							},
 							StatusCode: '401'
-						}
-					},
-
-					BadRequestBodyResponse: {
-						Type: 'AWS::ApiGateway::GatewayResponse',
-						Properties: {
-							ResponseParameters: {
-								'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
-							},
-							ResponseTemplates: {
-								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
-							},
-							ResponseType: 'BAD_REQUEST_BODY',
-							RestApiId: {
-								Ref: 'ApiGatewayRestApi'
-							},
-							StatusCode: '400'
-						}
-					},
-
-					BadRequestParameters: {
-						Type: 'AWS::ApiGateway::GatewayResponse',
-						Properties: {
-							ResponseParameters: {
-								'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
-							},
-							ResponseTemplates: {
-								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
-							},
-							ResponseType: 'BAD_REQUEST_PARAMETERS',
-							RestApiId: {
-								Ref: 'ApiGatewayRestApi'
-							},
-							StatusCode: '400'
 						}
 					},
 
@@ -369,7 +352,7 @@ describe('Hooks', () => {
 						}
 					},
 
-					AuthorizerConfigurationErrorResponse: {
+					ServerErrorDefault: {
 						Type: 'AWS::ApiGateway::GatewayResponse',
 						Properties: {
 							ResponseParameters: {
@@ -378,24 +361,7 @@ describe('Hooks', () => {
 							ResponseTemplates: {
 								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
 							},
-							ResponseType: 'AUTHORIZER_CONFIGURATION_ERROR',
-							RestApiId: {
-								Ref: 'ApiGatewayRestApi'
-							},
-							StatusCode: '500'
-						}
-					},
-
-					AuthorizerFailureResponse: {
-						Type: 'AWS::ApiGateway::GatewayResponse',
-						Properties: {
-							ResponseParameters: {
-								'gatewayresponse.header.Access-Control-Allow-Origin': 'method.request.header.Origin'
-							},
-							ResponseTemplates: {
-								'application/json': '{"message":$context.error.messageString,"detail":"$context.authorizer.errorMessage","authorizerErrorType":"$context.error.responseType"}'
-							},
-							ResponseType: 'AUTHORIZER_FAILURE',
+							ResponseType: 'DEFAULT_5XX',
 							RestApiId: {
 								Ref: 'ApiGatewayRestApi'
 							},
