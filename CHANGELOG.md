@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.3] - 2024-03-08
+### Changed
+- Simplified and added CORS to more Gateway Responses using `DEFAULT_4XX` and `DEFAULT_5XX`
+
+### Fixed
+- API Gateway request template does not fail when receiving single quotes in qs parameters, headers, etc
+
 ## [9.5.2] - 2024-03-07
 ### Fixed
 - `State Machine` now supports task with `Parameters.Input` such as Step Functions Execution Trigger
