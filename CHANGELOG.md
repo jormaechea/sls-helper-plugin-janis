@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.5] - 2024-06-19
+### changed
+- Changed log retention from 14 days to 60 days
+
 ## [9.5.4] - 2024-06-11
 ### changed
 - Improved package default exclude list

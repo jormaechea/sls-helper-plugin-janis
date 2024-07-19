@@ -234,7 +234,7 @@ describe('Hooks', () => {
 								Type: 'AWS::Logs::LogGroup',
 								Properties: {
 									LogGroupName: '/janis/state-machine/${self:custom.serviceName}-MachineName-${self:custom.stage}',
-									RetentionInDays: 14,
+									RetentionInDays: 60,
 									Tags: [
 										{
 											Key: 'Owner',
@@ -323,7 +323,7 @@ describe('Hooks', () => {
 								Type: 'AWS::Logs::LogGroup',
 								Properties: {
 									LogGroupName: '/janis/state-machine/${self:custom.serviceName}-MachineName-${self:custom.stage}',
-									RetentionInDays: 14,
+									RetentionInDays: 60,
 									Tags: [
 										{
 											Key: 'Owner',
