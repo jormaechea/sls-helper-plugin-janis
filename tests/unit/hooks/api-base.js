@@ -776,6 +776,11 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+									JANIS_ENV: '${self:custom.stage}',
+									MS_PATH: 'src'
+								},
 								events: [
 									{
 										http: {
@@ -834,6 +839,11 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+									JANIS_ENV: '${self:custom.stage}',
+									MS_PATH: 'src'
+								},
 								events: [
 									{
 										http: {
@@ -880,6 +890,11 @@ describe('Internal Hooks', () => {
 										'src/api/product-attribute/get.js',
 										'src/models/product-attribute.js'
 									]
+								},
+								environment: {
+									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+									JANIS_ENV: '${self:custom.stage}',
+									MS_PATH: 'src'
 								},
 								events: [
 									{
@@ -941,6 +956,11 @@ describe('Internal Hooks', () => {
 										'src/api/product-attribute/get.js',
 										'src/models/product-attribute.js'
 									]
+								},
+								environment: {
+									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+									JANIS_ENV: '${self:custom.stage}',
+									MS_PATH: 'src'
 								},
 								events: [
 									{
@@ -1257,6 +1277,11 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
+									JANIS_ENV: '${self:custom.stage}',
+									MS_PATH: 'src'
+								},
 								events: [
 									{
 										http: {
@@ -1276,7 +1301,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayerskipTraceLayer is false', () => {
+			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayer is false', () => {
 
 				sinon.stub(process, 'env')
 					.value({
