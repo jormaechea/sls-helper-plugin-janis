@@ -777,9 +777,7 @@ describe('Internal Hooks', () => {
 									]
 								},
 								environment: {
-									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
-									JANIS_ENV: '${self:custom.stage}',
-									MS_PATH: 'src'
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -840,9 +838,7 @@ describe('Internal Hooks', () => {
 									]
 								},
 								environment: {
-									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
-									JANIS_ENV: '${self:custom.stage}',
-									MS_PATH: 'src'
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -892,9 +888,7 @@ describe('Internal Hooks', () => {
 									]
 								},
 								environment: {
-									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
-									JANIS_ENV: '${self:custom.stage}',
-									MS_PATH: 'src'
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -958,9 +952,7 @@ describe('Internal Hooks', () => {
 									]
 								},
 								environment: {
-									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
-									JANIS_ENV: '${self:custom.stage}',
-									MS_PATH: 'src'
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -1251,7 +1243,8 @@ describe('Internal Hooks', () => {
 				}, {
 					entityName: 'product attribute',
 					addLayers: ['CustomLayer'],
-					skipTraceLayer: true
+					skipTraceLayer: true,
+					functionRawProps: { environment: { MY_CUSTOM_VAR: '1' } }
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -1278,9 +1271,8 @@ describe('Internal Hooks', () => {
 									]
 								},
 								environment: {
-									JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
-									JANIS_ENV: '${self:custom.stage}',
-									MS_PATH: 'src'
+									JANIS_TRACE_EXTENSION_ENABLED: '',
+									MY_CUSTOM_VAR: '1'
 								},
 								events: [
 									{
