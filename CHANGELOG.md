@@ -6,12 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.5.6] - 2024-07-24
+### Changed
+- APIs and Event Listeners with the `skipTraceLayer` property do not set the `JANIS_TRACE_EXTENSION_ENABLED` env var any more (#61)
+
 ## [9.5.5] - 2024-06-19
-### changed
+### Changed
 - Changed log retention from 14 days to 60 days
 
 ## [9.5.4] - 2024-06-11
-### changed
+### Changed
 - Improved package default exclude list
 
 ## [9.5.3] - 2024-03-08
