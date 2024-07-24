@@ -776,6 +776,9 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_TRACE_EXTENSION_ENABLED: ''
+								},
 								events: [
 									{
 										http: {
@@ -834,6 +837,9 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_TRACE_EXTENSION_ENABLED: ''
+								},
 								events: [
 									{
 										http: {
@@ -880,6 +886,9 @@ describe('Internal Hooks', () => {
 										'src/api/product-attribute/get.js',
 										'src/models/product-attribute.js'
 									]
+								},
+								environment: {
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -941,6 +950,9 @@ describe('Internal Hooks', () => {
 										'src/api/product-attribute/get.js',
 										'src/models/product-attribute.js'
 									]
+								},
+								environment: {
+									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
 								events: [
 									{
@@ -1231,7 +1243,8 @@ describe('Internal Hooks', () => {
 				}, {
 					entityName: 'product attribute',
 					addLayers: ['CustomLayer'],
-					skipTraceLayer: true
+					skipTraceLayer: true,
+					functionRawProps: { environment: { MY_CUSTOM_VAR: '1' } }
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
@@ -1257,6 +1270,10 @@ describe('Internal Hooks', () => {
 										'src/models/product-attribute.js'
 									]
 								},
+								environment: {
+									JANIS_TRACE_EXTENSION_ENABLED: '',
+									MY_CUSTOM_VAR: '1'
+								},
 								events: [
 									{
 										http: {
@@ -1276,7 +1293,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayerskipTraceLayer is false', () => {
+			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayer is false', () => {
 
 				sinon.stub(process, 'env')
 					.value({
