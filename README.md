@@ -340,6 +340,7 @@ Both `consumerProperties`and `dlqConsumerProperties` fields can be customized wi
 - `description`: _default_: `[name] SQS Queue Consumer` | Change the function description.
 - `batchSize`: _default_: 1 (only for main consumer) | Change the SQS consumer batch Size.
 - `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
+- `prefixPath`: _String_: To add optional prefix path after `src/sqs-consumer`. e.g. `src/sqs-consumer/[prefixPath]/[name in lowerCase]-consumer.handler`
 
 Some other properties
 - `functionProperties`: _Object_ | To add other properties to the function (the same one in `function` hook).
@@ -355,6 +356,12 @@ Both `mainQueueProperties`and `dlqQueueProperties` fields can be customized with
 - `visibilityTimeout`: _default_: 60 (main queue) or 20 (dlq).
 - `messageRetentionPeriod`: _default_: 864000 (only for DLQ).
 
+FIFO properties (since _9.6.0_)
+- `fifoQueue`: _boolean_ | If set to `true`, creates a FIFO queue.
+- `contentBasedDeduplication`: _boolean_ | Specifies whether to enable content-based deduplication.
+- `fifoThroughputLimit`: _string_ | Valid values are `perQueue` and `perMessageGroupId`.
+- `deduplicationScope`: _string_ | Valid values are `queue` and `messageGroup`.
+
 **Returns**: _array_ of Hooks
 
 #### Consumer Files
@@ -364,12 +371,19 @@ If handler's location don't change (uses default values), the files must be loca
 * `src/sqs-consumer/[name-in-kebab-case]-consumer.js` for main queue consumer
 * `src/sqs-consumer/[name-in-kebab-case]-dlq-consumer.js` for dlq consumer
 
+If `prefixPath` received the location will be
+
+* `src/sqs-consumer/[prefixPath]/[name-in-kebab-case]-consumer.js` for main queue consumer
+* `src/sqs-consumer/[prefixPath]/[name-in-kebab-case]-dlq-consumer.js` for dlq consumer
+
 #### SQS URL Env Vars
 
 Environment Variables will be created for SQS URLs (both):
 
 * `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue consumer
 * `[NAME_IN_SNAKE_CASE]_DLQ_SQS_QUEUE_URL` for dlq consumer
+
+> FIFO queues uses the same Environment Variables as Standard queues.
 
 #### Quick hook example
 
