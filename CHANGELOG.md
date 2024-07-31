@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.6.0] - 2024-07-31
+### Added
+- Support for FIFO Queues in SQS Helper (#62)
+
 ## [9.5.6] - 2024-07-24
 ### Changed
 - APIs and Event Listeners with the `skipTraceLayer` property do not set the `JANIS_TRACE_EXTENSION_ENABLED` env var any more (#61)
