@@ -279,7 +279,6 @@ describe('Hook Builder Helpers', () => {
 					}]
 				]);
 			});
-
 		});
 
 		context('Create SQS Hooks with Custom Consumer configuration', () => {
@@ -554,6 +553,107 @@ describe('Hook Builder Helpers', () => {
 					}],
 					dlqQueueHook
 				]);
+			});
+		});
+
+		context('Create FIFO SQS', () => {
+
+			it('Should create SQS hook for Main Queue, DLQ, and consumers', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'MyFifo',
+					mainQueueProperties: {
+						fifoQueue: true,
+						fifoThroughputLimit: 'perMessageGroupId',
+						deduplicationScope: 'messageGroup',
+						contentBasedDeduplication: true
+					},
+					consumerProperties: { prefixPath: 'my-custom-path' },
+					dlqConsumerProperties: { prefixPath: 'my-custom-path' }
+				}), [
+
+					['envVars', {
+						MY_FIFO_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}MyFifoQueue.fifo',
+						MY_FIFO_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}MyFifoDLQ.fifo'
+					}],
+
+					['function', {
+						functionName: 'MyFifoQueueConsumer',
+						handler: 'src/sqs-consumer/my-custom-path/my-fifo-consumer.handler',
+						description: 'MyFifo SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['MyFifoQueue']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoQueue.fifo',
+									functionResponseType: 'ReportBatchItemFailures',
+									batchSize: 10,
+									maximumBatchingWindow: 20
+								}
+							}
+						]
+					}],
+
+					['resource', {
+						name: 'MyFifoQueue',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}MyFifoQueue.fifo',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								// eslint-disable-next-line max-len
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoDLQ.fifo'
+								}),
+								FifoQueue: true,
+								FifoThroughputLimit: 'perMessageGroupId',
+								DeduplicationScope: 'messageGroup',
+								ContentBasedDeduplication: true,
+								Tags: queueTags('MyFifo')
+							},
+							DependsOn: ['MyFifoDLQ']
+						}
+					}],
+
+					['resource', {
+						name: 'MyFifoDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}MyFifoDLQ.fifo',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								FifoQueue: true,
+								Tags: dlqTags('MyFifo')
+							}
+						}
+					}],
+
+					['function', {
+						functionName: 'MyFifoDLQQueueConsumer',
+						handler: 'src/sqs-consumer/my-custom-path/my-fifo-dlq-consumer.handler',
+						description: 'MyFifoDLQ SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['MyFifoDLQ']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoDLQ.fifo',
+									functionResponseType: 'ReportBatchItemFailures'
+								}
+							}
+						]
+					}]
+				]);
+
 			});
 		});
 	});
