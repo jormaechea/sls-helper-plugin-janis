@@ -44,6 +44,8 @@ describe('Hook Builder Helpers', () => {
 			[
 				['Main Consumer', { consumerProperties: 'invalid' }],
 				['Main Queue', { mainQueueProperties: 'invalid' }],
+				['Delayed Consumer', { delayedConsumerProperties: 'invalid' }],
+				['Delayed Queue', { delayedQueueProperties: 'invalid' }],
 				['DLQ Consumer', { dlqConsumerProperties: 'invalid' }],
 				['DLQ Queue', { dlqQueueProperties: 'invalid' }]
 			].forEach(([type, data]) => {
@@ -59,6 +61,8 @@ describe('Hook Builder Helpers', () => {
 			[
 				['Main Consumer', { consumerProperties: ['invalid'] }],
 				['Main Queue', { mainQueueProperties: ['invalid'] }],
+				['Delayed Consumer', { delayedConsumerProperties: ['invalid'] }],
+				['Delayed Queue', { delayedQueueProperties: ['invalid'] }],
 				['DLQ Consumer', { dlqConsumerProperties: ['invalid'] }],
 				['DLQ Queue', { dlqQueueProperties: ['invalid'] }]
 			].forEach(([type, data]) => {
@@ -277,6 +281,30 @@ describe('Hook Builder Helpers', () => {
 							}
 						]
 					}]
+				]);
+			});
+
+			it('Should create an SQS Hook for Main Queue, DLQ and consumer used for both Queues', () => {
+
+				const mainConsumerForBothQueuesFunctionHook = JSON.parse(JSON.stringify(mainConsumerFunctionHook));
+
+				mainConsumerForBothQueuesFunctionHook[1].events.push({
+					sqs: {
+						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
+						functionResponseType: 'ReportBatchItemFailures',
+						batchSize: 50,
+						maximumBatchingWindow: 30
+					}
+				});
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { useMainHandler: true, batchSize: 50, maximumBatchingWindow: 30 }
+				}), [
+					sqsUrlEnvVarsHook,
+					mainConsumerForBothQueuesFunctionHook,
+					mainQueueHook,
+					dlqQueueHook
 				]);
 			});
 		});
@@ -652,6 +680,125 @@ describe('Hook Builder Helpers', () => {
 							}
 						]
 					}]
+				]);
+
+			});
+		});
+
+		context('Create SQS Hooks with Delayed Queue', () => {
+
+			const envVarsHook = ['envVars', {
+				TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
+				TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ',
+				TEST_DELAYED_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayedQueue'
+			}];
+
+			const delayedQueueTags = name => [
+				...queueTags(name),
+				{
+					Key: 'DelayedQueue',
+					Value: 'true'
+				}
+			];
+
+			const delayedQueueHook = ['resource', {
+				name: 'TestDelayedQueue',
+				resource: {
+					Type: 'AWS::SQS::Queue',
+					Properties: {
+						QueueName: '${self:custom.serviceName}TestDelayedQueue',
+						ReceiveMessageWaitTimeSeconds: 20,
+						VisibilityTimeout: 600,
+						RedrivePolicy: JSON.stringify({
+							maxReceiveCount: 5,
+							deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ'
+						}),
+						Tags: delayedQueueTags('Test')
+					},
+					DependsOn: ['TestDLQ']
+				}
+			}];
+
+			it('Should create SQS hook for Main Queue, DelayedQueue, DLQ, using default consumers', () => {
+
+				const mainQueueHookPointingDelayedQueue = JSON.parse(JSON.stringify(mainQueueHook));
+
+				mainQueueHookPointingDelayedQueue[1].resource.Properties.RedrivePolicy = JSON.stringify({
+					maxReceiveCount: 5,
+					deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayedQueue'
+				});
+
+				mainQueueHookPointingDelayedQueue[1].resource.DependsOn = ['TestDelayedQueue'];
+
+				const delayedConsumerFunctionHook = ['function', {
+					functionName: 'TestDelayedQueueConsumer',
+					handler: 'src/sqs-consumer/test-delayed-consumer.handler',
+					description: 'TestDelayed SQS Queue Consumer',
+					timeout: 15,
+					rawProperties: {
+						dependsOn: ['TestDelayedQueue']
+					},
+					events: [{
+						sqs: {
+							arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayedQueue',
+							functionResponseType: 'ReportBatchItemFailures',
+							batchSize: 10,
+							maximumBatchingWindow: 20
+						}
+					}]
+				}];
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					delayedQueueProperties: { visibilityTimeout: 600 }
+					// default consumer (with main consumer config)
+				}), [
+					envVarsHook,
+					mainConsumerFunctionHook,
+					mainQueueHookPointingDelayedQueue,
+					delayedConsumerFunctionHook,
+					delayedQueueHook,
+					dlqQueueHook
+				]);
+
+			});
+
+			it('Should create SQS hook for Main Queue, DelayedQueue, DLQ, using main consumer for delayed queue', () => {
+
+				const mainQueueHookPointingDelayedQueue = JSON.parse(JSON.stringify(mainQueueHook));
+
+				mainQueueHookPointingDelayedQueue[1].resource.Properties.RedrivePolicy = JSON.stringify({
+					maxReceiveCount: 5,
+					deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayedQueue'
+				});
+
+				mainQueueHookPointingDelayedQueue[1].resource.DependsOn = ['TestDelayedQueue'];
+
+				const mainConsumerForBothQueuesFunctionHook = JSON.parse(JSON.stringify(mainConsumerFunctionHook));
+
+				mainConsumerForBothQueuesFunctionHook[1].events.push({
+					sqs: {
+						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayedQueue',
+						functionResponseType: 'ReportBatchItemFailures',
+						batchSize: 50,
+						maximumBatchingWindow: 30
+					}
+				});
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					delayedQueueProperties: { visibilityTimeout: 600 },
+					delayedConsumerProperties: {
+						useMainHandler: true, // should use main consumer not creating another function
+						batchSize: 50,
+						maximumBatchingWindow: 30
+					}
+				}), [
+					envVarsHook,
+					mainConsumerForBothQueuesFunctionHook,
+					mainQueueHookPointingDelayedQueue,
+					delayedQueueHook,
+					dlqQueueHook
 				]);
 
 			});
