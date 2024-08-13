@@ -318,8 +318,8 @@ To use the hook Builder of:
 - DLQ Queue
 - Delayed Queue (optional). Since _9.7.0_
 - Main Consumer
-- DLQ Consumer (optional). Since _9.7.0_
-- Delayed Consumer (optional)
+- DLQ Consumer (optional)
+- Delayed Consumer (optional). Since _9.7.0_
 - Env Vars for SQS Urls
 
 You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ of Hooks with the proper data.
