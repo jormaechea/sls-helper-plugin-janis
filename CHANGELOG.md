@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.7.0] - 2024-08-15
+### Added
+- Support for Delay Queues in SQS Helepr (#63)
+
 ## [9.6.0] - 2024-07-31
 ### Added
 - Support for FIFO Queues in SQS Helper (#62)
