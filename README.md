@@ -315,8 +315,10 @@ To use SQS resources, AWS permissions must be added, in order to make it easier,
 To use the hook Builder of:
 
 - SQS Queue
+- Delay Queue (optional). Since _9.7.0_
 - DLQ Queue
 - Main Consumer
+- Delay Consumer (optional). Since _9.7.0_
 - DLQ Consumer (optional)
 - Env Vars for SQS Urls
 
@@ -325,15 +327,17 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 **Parameters**
 - `configs`: _Object_
 	- `name`: **REQUIRED** | _String_ | The name of SQS, it will be uses for every resource. It must be not empty and _camelCase_ to avoid issues creating the resources names.
-	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data.
-	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
 	- `mainQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
+	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data.
+	- `delayConsumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data when `delayQueueProperties` received.
+	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
+	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
 
-> Only with a name can create everything except for the DLQ Consumer function
+> Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
 
 **Consumer Properties**:
-Both `consumerProperties`and `dlqConsumerProperties` fields can be customized with the following properties:
+All `consumerProperties`, `delayConsumerProperties` and `dlqConsumerProperties` fields can be customized with the following properties:
 
 - `timeout`: _default_: 15 | Change the Function timeout (in seconds).
 - `handler`: _default_: `src/sqs-consumer/[name in lowerCase]-consumer.handler` | Change the location of the file.
@@ -347,14 +351,18 @@ Some other properties
 - `rawProperties`: _Object_ | To add rawProperties to the function for example changed a `DependsOn`.
 - `eventProperties`: _Object_ | To add extra Properties to the sqs event configuration, for example `functionResponseType`
 
+Delay Consumer and DLQ Consumer properties
+- `useMainHandler`: _boolean_ | To use the main consumer and not creating other function.
 
 **Queue Properties**:
-Both `mainQueueProperties`and `dlqQueueProperties` fields can be customized with the following properties:
+All `mainQueueProperties`, `delayQueueProperties` and `dlqQueueProperties` fields can be customized with the following properties:
 
-- `maxReceiveCount`: _default_: 5 (only for Main Queue) | Change the max receive count properties before sent the message to DLQ.
-- `receiveMessageWaitTimeSeconds`: _default_: 20 (main Queue) or 5 (dlq).
-- `visibilityTimeout`: _default_: 60 (main queue) or 20 (dlq).
+- `maxReceiveCount`: _default_: 5 (only for MainQueue and DelayQueue) | Change the max receive count properties before sent the message to DelayQueue or DLQ.
+- `receiveMessageWaitTimeSeconds`: _default_: 20 (MainQueue and DelayQueue) or 5 (DLQ).
+- `visibilityTimeout`: _default_: 60 (MainQueue and DelayQueue) or 20 (DLQ).
 - `messageRetentionPeriod`: _default_: 864000 (only for DLQ).
+- `delaySeconds`: _default_: 300 (only for DelayQueue).
+- `addTags`: _object array_: To add Tags for queues. The AWS tag format is `[{ Key: 'myTag', Value: 'theTagValue' }]`
 
 FIFO properties (since _9.6.0_)
 - `fifoQueue`: _boolean_ | If set to `true`, creates a FIFO queue.
@@ -369,19 +377,22 @@ FIFO properties (since _9.6.0_)
 If handler's location don't change (uses default values), the files must be located in
 
 * `src/sqs-consumer/[name-in-kebab-case]-consumer.js` for main queue consumer
+* `src/sqs-consumer/[name-in-kebab-case]-delay-consumer.js` for delay consumer
 * `src/sqs-consumer/[name-in-kebab-case]-dlq-consumer.js` for dlq consumer
 
 If `prefixPath` received the location will be
 
 * `src/sqs-consumer/[prefixPath]/[name-in-kebab-case]-consumer.js` for main queue consumer
+* `src/sqs-consumer/[prefixPath]/[name-in-kebab-case]-delay-consumer.js` for delay consumer
 * `src/sqs-consumer/[prefixPath]/[name-in-kebab-case]-dlq-consumer.js` for dlq consumer
 
 #### SQS URL Env Vars
 
-Environment Variables will be created for SQS URLs (both):
+Environment Variables will be created for SQS URLs:
 
-* `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue consumer
-* `[NAME_IN_SNAKE_CASE]_DLQ_SQS_QUEUE_URL` for dlq consumer
+* `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue
+* `[NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL` for delay queue (when `delayQueueProperties` received)
+* `[NAME_IN_SNAKE_CASE]_DLQ_SQS_QUEUE_URL` for dlq
 
 > FIFO queues uses the same Environment Variables as Standard queues.
 
@@ -587,7 +598,7 @@ Creates the following Hooks
 				// eslint-disable-next-line max-len
 				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}SessionEndedDLQ"}'
 			},
-			DependsOn: ['TestDLQ']
+			DependsOn: ['SessionEndedDLQ']
 		}
 	}]
 
@@ -597,6 +608,147 @@ Creates the following Hooks
 			Type: 'AWS::SQS::Queue',
 			Properties: {
 				QueueName: '${self:custom.serviceName}SessionEndedDLQ',
+				ReceiveMessageWaitTimeSeconds: 5,
+				VisibilityTimeout: 20,
+				MessageRetentionPeriod: 864000
+			}
+		}
+	}]
+*/
+
+```
+
+#### Delay Queue using main consumer example
+
+```js
+
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		SQSHelper.sqsPermissions
+
+		// must be spread
+		...SQSHelper.buildHooks({
+			name: 'ProcessStock',
+			consumerProperties: {
+				batchSize: 100,
+				maximumBatchingWindow: 60,
+				eventProperties: { maximumConcurrency: 5 }
+			}
+			delayQueueProperties: {
+				// this delay the process
+				visibilityTimeout: 600
+			},
+			delayConsumerProperties: {
+				// same process as main consumer
+				useMainHandler: true,
+				batchSize: 50,
+				maximumBatchingWindow: 30,
+				eventProperties: { maximumConcurrency: 1 }
+			}
+		})
+	]
+});
+
+/*
+
+Creates the following Hooks
+
+// For permissions
+
+	['iamStatement', {
+		action: [
+			'sqs:SendMessage',
+			'sqs:DeleteMessage',
+			'sqs:ReceiveMessage',
+			'sqs:GetQueueAttributes'
+		],
+		// eslint-disable-next-line no-template-curly-in-string
+		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
+	}]
+
+// For Env Vars
+
+	['envVars', {
+		PROCESS_STOCK_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}ProcessStockQueue',
+		PROCESS_STOCK_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}ProcessStockDLQ',
+		PROCESS_STOCK_DELAY_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}ProcessStockDelayQueue'
+	}]
+
+// For SQS Consumers
+
+	['function', {
+		functionName: 'ProcessStockQueueConsumer',
+		handler: 'src/sqs-consumer/process-stock-consumer.handler',
+		description: 'ProcessStock SQS Queue Consumer',
+		timeout: 15,
+		rawProperties: {
+			dependsOn: ['ProcessStockQueue']
+		},
+		events: [
+			{
+				sqs: {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}ProcessStockQueue',
+					batchSize: 100,
+					maximumBatchingWindow: 60,
+					maximumConcurrency: 5
+				}
+			}, {
+				sqs: {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}ProcessStockDelayQueue',
+					batchSize: 50,
+					maximumBatchingWindow: 30,
+					maximumConcurrency: 1
+				}
+			}
+		]
+	}]
+
+// For SQS Resources
+
+	['resource', {
+		name: 'ProcessStockQueue',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}ProcessStockQueue',
+				ReceiveMessageWaitTimeSeconds: 20,
+				VisibilityTimeout: 60,
+				// eslint-disable-next-line max-len
+				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}ProcessStockDelayQueue"}'
+			},
+			DependsOn: ['ProcessStockDelayQueue']
+		}
+	}],
+
+	['resource', {
+		name: 'ProcessStockDelayQueue',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}ProcessStockDelayQueue',
+				ReceiveMessageWaitTimeSeconds: 20,
+				VisibilityTimeout: 600,
+				DelaySeconds: 300,
+				// eslint-disable-next-line max-len
+				RedrivePolicy: '{"maxReceiveCount": 5, "deadLetterTargetArn": "arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}ProcessStockDLQ"}'
+			},
+			DependsOn: ['ProcessStockDLQ']
+		}
+	}],
+
+	['resource', {
+		name: 'ProcessStockDLQ',
+		resource: {
+			Type: 'AWS::SQS::Queue',
+			Properties: {
+				QueueName: '${self:custom.serviceName}ProcessStockDLQ',
 				ReceiveMessageWaitTimeSeconds: 5,
 				VisibilityTimeout: 20,
 				MessageRetentionPeriod: 864000
