@@ -85,6 +85,16 @@ describe('Hook Builder Helpers', () => {
 				});
 			});
 
+			it('Should throw if source SNS Topic name is not a string', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopicName: true
+				}), {
+					message: 'sourceSnsTopicName must be a String in SQS helper'
+				});
+			});
+
 		});
 
 		const mainConsumerFunctionHook = ['function', {
@@ -166,6 +176,36 @@ describe('Hook Builder Helpers', () => {
 
 		const sqsUrlEnvVarsHook = ['envVars', {
 			TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
+		}];
+
+		const queuePolicyHook = ['resource', {
+			name: 'TestQueuePolicy',
+			resource: {
+				Type: 'AWS::SQS::QueuePolicy',
+				Properties: {
+					Queues: [
+						'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue'
+					],
+					PolicyDocument: {
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Action: 'sqs:SendMessage',
+								Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+								Principal: {
+									Service: 'sns.amazonaws.com',
+									Condition: {
+										ArnEquals: {
+											'aws:SourceArn': 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
+										}
+									}
+								}
+							}
+						]
+					}
+				}
+			}
 		}];
 
 		context('Create basic SQS Hooks', () => {
@@ -908,6 +948,24 @@ describe('Hook Builder Helpers', () => {
 				// Reset the global env vars
 				SQSHelper.shouldSetGlobalEnvVars(true);
 			});
+		});
+
+		context('Create SQS Hooks with SNS Source Topic', () => {
+
+			it('Should add a Queue Policy that allows SNS to publish messages from the given topic to the main queue', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					sourceSnsTopicName: 'TestTopic'
+				}), [
+					sqsUrlEnvVarsHook,
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook,
+					queuePolicyHook
+				]);
+			});
+
 		});
 	});
 });
