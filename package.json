@@ -50,6 +50,7 @@
     "sinon": "^15.2.0"
   },
   "dependencies": {
+    "fastest-validator": "^1.19.0",
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",
