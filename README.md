@@ -333,7 +333,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
-	- `sourceSnsTopicName`: **OPTIONAL** | _String_ | The name of an SNS to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
+	- `sourceSnsTopicName`: **OPTIONAL** | _String_ | The name of an SNS Topic to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
 
 > Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
 
