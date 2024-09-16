@@ -333,6 +333,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
+	- `sourceSnsTopicName`: **OPTIONAL** | _String_ | The name of an SNS to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
 
 > Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
 
@@ -811,6 +812,64 @@ Creates the following Hooks
 
 ```
 
+### SNS Helper
+
+This helpers must be used to create SNS resources and subscribers with minimal data to a full customization.
+
+#### Require Helpers
+
+Unlike to normal Hooks, they must be explicitly required from the package.
+
+```js
+const { SNSHelper } = require('sls-helper-plugin-janis');
+```
+
+#### Permissions
+
+SNS Permissions are automatically created when creating a topic, you don't need to do nothing else :sparkles:
+
+#### Build Hook
+
+To create a new SNS Topic, you just have to call the `SNS.buildHooks(config: SNSConfig)` method with the proper configuration object.
+
+**Types**
+
+You can see `SNSConfig` and their properties in the [types definition](lib/sns-helper/types/config.ts)
+
+> Only with a topic name you are ready to go
+
+#### SNS ARN Env Vars
+
+Environment Variables will be created for SNS Topic ARNs:
+
+* `[TOPIC_NAME_IN_UPPERCASE_SNAKE_CASE]_SNS_TOPIC_ARN` for the topic ARN
+
+For example, for a topic with the name `userCreated`, the `USER_CREATED_SNS_TOPIC_ARN` env var will be set.
+
+#### SQS Connection
+
+See [SQSHelper](#build-hook) (`sourceSnsTopicName` property) to know how to link a topic to an SQS Queue.
+
+#### Quick hook example
+
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SNSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		// must spread it
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'userCreated'
+			}
+		})
+	]
+});
+```
+
 ## Full example
 
 ```js
@@ -924,8 +983,19 @@ module.exports = helper({
 			]
 		}],
 
-		SQSHelper.sqsPermissions
-		...SQSHelper.buildHooks({ name: 'ProductToUpdate' })
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'productUpdated'
+			}
+		}),
+
+		SQSHelper.sqsPermissions,
+
+		...SQSHelper.buildHooks({
+			name: 'ProductToUpdate',
+			// Link previously created SNS Topic to the main queue
+			sourceSnsTopicName: 'productUpdated'
+		})
 	]
 }, {});
 ```
