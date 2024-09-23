@@ -2,6 +2,6 @@ type TopicConfig = {
 	name: string
 }
 
-type SNSConfig = {
+export type SNSConfig = {
 	topic: TopicConfig
 }
