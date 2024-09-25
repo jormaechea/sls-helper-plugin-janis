@@ -208,6 +208,19 @@ describe('Hook Builder Helpers', () => {
 			}
 		}];
 
+		const snsSubscriptionHook = ['resource', {
+			name: 'SnsSub-TestTopic-Test',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
+				}
+			}
+		}];
+
 		context('Create basic SQS Hooks', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name', () => {
@@ -952,7 +965,7 @@ describe('Hook Builder Helpers', () => {
 
 		context('Create SQS Hooks with SNS Source Topic', () => {
 
-			it('Should add a Queue Policy that allows SNS to publish messages from the given topic to the main queue', () => {
+			it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
@@ -962,7 +975,8 @@ describe('Hook Builder Helpers', () => {
 					mainConsumerFunctionHook,
 					mainQueueHook,
 					dlqQueueHook,
-					queuePolicyHook
+					queuePolicyHook,
+					snsSubscriptionHook
 				]);
 			});
 
