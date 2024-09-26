@@ -204,7 +204,8 @@ describe('Hook Builder Helpers', () => {
 							}
 						]
 					}
-				}
+				},
+				DependsOn: ['TestQueue']
 			}
 		}];
 
@@ -217,7 +218,8 @@ describe('Hook Builder Helpers', () => {
 					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 					RawMessageDelivery: true,
 					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
-				}
+				},
+				DependsOn: ['TestQueue']
 			}
 		}];
 
