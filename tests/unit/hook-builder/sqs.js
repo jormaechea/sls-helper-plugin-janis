@@ -194,11 +194,11 @@ describe('Hook Builder Helpers', () => {
 								Action: 'sqs:SendMessage',
 								Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 								Principal: {
-									Service: 'sns.amazonaws.com',
-									Condition: {
-										ArnEquals: {
-											'aws:SourceArn': 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
-										}
+									Service: 'sns.amazonaws.com'
+								},
+								Condition: {
+									ArnEquals: {
+										'aws:SourceArn': 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
 									}
 								}
 							}
