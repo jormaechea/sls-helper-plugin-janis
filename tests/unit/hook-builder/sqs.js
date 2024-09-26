@@ -200,7 +200,7 @@ describe('Hook Builder Helpers', () => {
 		}];
 
 		const snsSubscriptionHook = ['resource', {
-			name: 'SnsSub-TestTopic-Test',
+			name: 'SubSNSTestTopicSQSTest',
 			resource: {
 				Type: 'AWS::SNS::Subscription',
 				Properties: {
