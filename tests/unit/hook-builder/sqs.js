@@ -184,7 +184,7 @@ describe('Hook Builder Helpers', () => {
 				Type: 'AWS::SQS::QueuePolicy',
 				Properties: {
 					Queues: [
-						'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue'
+						'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
 					],
 					PolicyDocument: {
 						Version: '2012-10-17',
