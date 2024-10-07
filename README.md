@@ -326,7 +326,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 
 **Parameters**
 - `configs`: _Object_
-	- `name`: **REQUIRED** | _String_ | The name of SQS, it will be uses for every resource. It must be not empty and _camelCase_ to avoid issues creating the resources names.
+	- `name`: **REQUIRED** | _String_ | The name of SQS, it will be used for every resource. It must be not empty and _camelCase_ to avoid issues creating the resources names.
 	- `mainQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `consumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data.
 	- `delayConsumerProperties`: **OPTIONAL** | _Object_ | If it is not passed, it will use _default_ data when `delayQueueProperties` received.
@@ -362,7 +362,8 @@ All `mainQueueProperties`, `delayQueueProperties` and `dlqQueueProperties` field
 - `visibilityTimeout`: _default_: 60 (MainQueue and DelayQueue) or 20 (DLQ).
 - `messageRetentionPeriod`: _default_: 864000 (only for DLQ).
 - `delaySeconds`: _default_: 300 (only for DelayQueue).
-- `addTags`: _object array_: To add Tags for queues. The AWS tag format is `[{ Key: 'myTag', Value: 'theTagValue' }]`
+- `addTags`: _object array_: To add Tags for queues. The AWS tag format is `[{ Key: 'myTag', Value: 'theTagValue' }]`.
+- `generateEnvVars`: _boolean_ | If set to true, the environment variables with the SQS url will be generated. The default will be `true` only for SQS queues.
 
 FIFO properties (since _9.6.0_)
 - `fifoQueue`: _boolean_ | If set to `true`, creates a FIFO queue.
@@ -388,7 +389,7 @@ If `prefixPath` received the location will be
 
 #### SQS URL Env Vars
 
-Environment Variables will be created for SQS URLs:
+Environment Variables will be created for SQS URL if the property `generateEnvVars` of each queue is set as true (for main queues, `generateEnvVars` defaults to `true`):
 
 * `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue
 * `[NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL` for delay queue (when `delayQueueProperties` received)
