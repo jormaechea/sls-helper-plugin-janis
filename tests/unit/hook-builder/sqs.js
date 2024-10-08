@@ -79,9 +79,24 @@ describe('Hook Builder Helpers', () => {
 
 				assert.throws(() => SQSHelper.buildHooks({
 					name: 'test',
-					sourceSnsTopicName: true
+					sourceSnsTopic: {
+						name: true
+					}
 				}), {
-					message: 'sourceSnsTopicName must be a String in SQS helper'
+					message: 'sourceSnsTopic.name must be a String in SQS helper. Received true'
+				});
+			});
+
+			it('Should throw if source SNS Topic filter policy is not an object', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						filterPolicy: ['notAnObject']
+					}
+				}), {
+					message: 'sourceSnsTopic.filterPolicy must be an object in SQS helper. Received [ \'notAnObject\' ]'
 				});
 			});
 
@@ -209,6 +224,23 @@ describe('Hook Builder Helpers', () => {
 					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 					RawMessageDelivery: true,
 					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
+				},
+				DependsOn: ['TestQueue']
+			}
+		}];
+
+		const snsSubscriptionHookWithFilterPolicy = ['resource', {
+			name: 'SubSNSTestTopicSQSTest',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic',
+					FilterPolicy: {
+						platform: ['fullcommerce']
+					}
 				},
 				DependsOn: ['TestQueue']
 			}
@@ -897,7 +929,9 @@ describe('Hook Builder Helpers', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
-					sourceSnsTopicName: 'TestTopic'
+					sourceSnsTopic: {
+						name: 'TestTopic'
+					}
 				}), [
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
@@ -905,6 +939,26 @@ describe('Hook Builder Helpers', () => {
 					dlqQueueHook,
 					queuePolicyHook,
 					snsSubscriptionHook
+				]);
+			});
+
+			it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic with a filter policy to the main queue', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						filterPolicy: {
+							platform: ['fullcommerce']
+						}
+					}
+				}), [
+					sqsUrlEnvVarsHook,
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook,
+					queuePolicyHook,
+					snsSubscriptionHookWithFilterPolicy
 				]);
 			});
 
