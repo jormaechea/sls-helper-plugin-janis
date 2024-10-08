@@ -333,7 +333,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
-	- `sourceSnsTopicName`: **OPTIONAL** | _String_ | The name of an SNS Topic to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
+	- `sourceSnsTopic`: **OPTIONAL** | _Object_ | The configuration of an SNS Topic to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
 
 > Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
 
@@ -371,6 +371,11 @@ FIFO properties (since _9.6.0_)
 - `contentBasedDeduplication`: _boolean_ | Specifies whether to enable content-based deduplication.
 - `fifoThroughputLimit`: _string_ | Valid values are `perQueue` and `perMessageGroupId`.
 - `deduplicationScope`: _string_ | Valid values are `queue` and `messageGroup`.
+
+**Source SNS Topic**
+The `sourceSnsTopic` parameter has the following structure:
+- `name` **REQUIRED** The name of the SNS Topic
+- `filterPolicy` **OPTIONAL** An object defining a [SNS Subscription Policy](https://docs.aws.amazon.com/sns/latest/dg/sns-subscription-filter-policies.html) to apply. The policy will be applied to the messages attributes scope, not to the event payload.
 
 **Returns**: _array_ of Hooks
 
@@ -848,7 +853,7 @@ For example, for a topic with the name `userCreated`, the `USER_CREATED_SNS_TOPI
 
 #### SQS Connection
 
-See [SQSHelper](#build-hook) (`sourceSnsTopicName` property) to know how to link a topic to an SQS Queue.
+See [SQSHelper](#build-hook) (`sourceSnsTopic` property) to know how to link a topic to an SQS Queue.
 
 #### Quick hook example
 
@@ -994,7 +999,12 @@ module.exports = helper({
 		...SQSHelper.buildHooks({
 			name: 'ProductToUpdate',
 			// Link previously created SNS Topic to the main queue
-			sourceSnsTopicName: 'productUpdated'
+			sourceSnsTopic: {
+				name: 'productUpdated',
+				filterPolicy: {
+					'platform': ['fullcommerce']
+				}
+			}
 		})
 	]
 }, {});
