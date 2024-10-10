@@ -155,8 +155,7 @@ describe('Hook Builder Helpers', () => {
 		}];
 
 		const sqsUrlEnvVarsHook = ['envVars', {
-			TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
-			TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
+			TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
 		}];
 
 		context('Create basic SQS Hooks', () => {
@@ -209,12 +208,26 @@ describe('Hook Builder Helpers', () => {
 				]);
 			});
 
+			it('Should generate generate environment variables for dlq consumer if the configuration is received', () => {
+
+				const envVarsHook = ['envVars', {
+					TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
+					TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
+				}];
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqQueueProperties: { generateEnvVars: true } }), [
+					envVarsHook,
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook
+				]);
+			});
+
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name in camelCase', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'TestBegin', dlqConsumerProperties: { batchSize: 10 } }), [
 					['envVars', {
-						TEST_BEGIN_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginQueue',
-						TEST_BEGIN_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginDLQ'
+						TEST_BEGIN_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestBeginQueue'
 					}],
 					['function', {
 						functionName: 'TestBeginQueueConsumer',
@@ -517,6 +530,20 @@ describe('Hook Builder Helpers', () => {
 
 		context('Create SQS Hooks with Custom Queue configuration', () => {
 
+			it('Should not generate environment variables if it is specified in the configuration', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					mainQueueProperties: {
+						generateEnvVars: false
+					}
+				}), [
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook
+				]);
+			});
+
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom main queue properties', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({
@@ -620,6 +647,7 @@ describe('Hook Builder Helpers', () => {
 						deduplicationScope: 'messageGroup',
 						contentBasedDeduplication: true
 					},
+					dlqQueueProperties: { generateEnvVars: true },
 					consumerProperties: { prefixPath: 'my-custom-path' },
 					dlqConsumerProperties: { prefixPath: 'my-custom-path' }
 				}), [
@@ -713,9 +741,13 @@ describe('Hook Builder Helpers', () => {
 
 			const envVarsHook = ['envVars', {
 				TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue',
-				TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ',
 				TEST_DELAY_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayQueue'
 			}];
+
+			const defaultDelayQueueProperties = {
+				visibilityTimeout: 600,
+				generateEnvVars: true
+			};
 
 			const delayQueueTags = name => [
 				...queueTags(name),
@@ -775,7 +807,7 @@ describe('Hook Builder Helpers', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
-					delayQueueProperties: { visibilityTimeout: 600 }
+					delayQueueProperties: defaultDelayQueueProperties
 					// default consumer (with main consumer config)
 				}), [
 					envVarsHook,
@@ -817,7 +849,7 @@ describe('Hook Builder Helpers', () => {
 				assert.deepStrictEqual(SQSHelper.buildHooks({
 					name: 'Test',
 					delayQueueProperties: {
-						visibilityTimeout: 600,
+						...defaultDelayQueueProperties,
 						delaySeconds: 60 // custom DelaySeconds
 					},
 					delayConsumerProperties: {
