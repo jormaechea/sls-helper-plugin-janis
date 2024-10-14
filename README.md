@@ -397,10 +397,61 @@ Environment Variables will be created for SQS URL if the property `generateEnvVa
 
 > FIFO queues uses the same Environment Variables as Standard queues.
 
+**Disable Global env vars**
+
+As service grows, the environment variable size quota is reached and breaks service deployments. To avoid it, global env vars can be disabled, and Queue URL env vars can be set in a per-function basis.
+
+To do so, you can use `SQSHelper.shouldSetGlobalEnvVars(false)` method (by default, global env vars are enabled).
+
+Once disabled, you MUST set the variables to each Lambda function that needs them using `SQSHelper.getEnvVar(queueName)`, for example:
+
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+SQSHelper.shouldSetGlobalEnvVars(false);
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		// Permissions must be applied once
+		SQSHelper.sqsPermissions
+
+		// must spread it
+		...SQSHelper.buildHooks({ name: 'SessionEnded' }),
+
+		['function', {
+			functionName: 'EndSession',
+			handler: 'src/lambda/Session/End.handler',
+			rawProperties: {
+				environment: {
+					...SQSHelper.getEnvVar('SessionEnded')
+				}
+			}
+		}],
+
+		[['janis.api',
+			{
+				path: '/session/{id}/end',
+				method: 'post',
+				cors: true,
+				functionRawProps: {
+					environment: {
+						...SQSHelper.getEnvVar('SessionEnded')
+					}
+				}
+			}
+		]]
+	]
+});
+```
+
 #### Quick hook example
 
 ```js
-
 const { helper } = require('sls-helper'); // eslint-disable-line
 const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
 

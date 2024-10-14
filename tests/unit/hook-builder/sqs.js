@@ -25,6 +25,16 @@ describe('Hook Builder Helpers', () => {
 			});
 		});
 
+		context('Queue env var getter', () => {
+
+			it('Should return the env var with the main queue URL based on the queue name', () => {
+
+				assert.deepStrictEqual(SQSHelper.getEnvVar('Test'), {
+					TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
+				});
+			});
+		});
+
 		context('SQS properties validations', () => {
 
 			it('Should throw if SQS Helper not received name', () => {
@@ -865,6 +875,38 @@ describe('Hook Builder Helpers', () => {
 					dlqQueueHook
 				]);
 
+			});
+		});
+
+		context('Global environments variables', () => {
+
+			it('Should set global env vars if the shouldSetGlobalEnvVars is set as true', () => {
+
+				SQSHelper.shouldSetGlobalEnvVars(true);
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test' }), [
+					sqsUrlEnvVarsHook,
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook
+				]);
+
+				// Reset the global env vars
+				SQSHelper.shouldSetGlobalEnvVars(true);
+			});
+
+			it('Should not set global env vars if the shouldSetGlobalEnvVars is set as false', () => {
+
+				SQSHelper.shouldSetGlobalEnvVars(false);
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test' }), [
+					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook
+				]);
+
+				// Reset the global env vars
+				SQSHelper.shouldSetGlobalEnvVars(true);
 			});
 		});
 	});
