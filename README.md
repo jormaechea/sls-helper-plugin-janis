@@ -845,11 +845,13 @@ You can see `SNSConfig` and their properties in the [types definition](lib/sns-h
 
 #### SNS ARN Env Vars
 
-Environment Variables will be created for SNS Topic ARNs:
+Environment Variables can be generated using the `SNSHelper.getEnvVar(topicName)` method, that will return the following env var:
 
 * `[TOPIC_NAME_IN_UPPERCASE_SNAKE_CASE]_SNS_TOPIC_ARN` for the topic ARN
 
-For example, for a topic with the name `userCreated`, the `USER_CREATED_SNS_TOPIC_ARN` env var will be set.
+For example, for a topic with the name `userCreated`, the `USER_CREATED_SNS_TOPIC_ARN` env var will be returned.
+
+You MUST add it to the lambda function that uses it.
 
 #### SQS Connection
 
@@ -870,7 +872,17 @@ module.exports = helper({
 			topic: {
 				name: 'userCreated'
 			}
-		})
+		}),
+
+		['function', {
+			functionName: 'CreateUser',
+			handler: 'src/lambda/User/Create.handler',
+			rawProperties: {
+				environment: {
+					...SNSHelper.getEnvVar('userCreated')
+				}
+			}
+		}],
 	]
 });
 ```

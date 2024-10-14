@@ -83,9 +83,9 @@ describe('Hook Builder Helpers', () => {
 			resource: topicARN
 		}];
 
-		const envVarsHook = ['envVars', {
+		const envVar = {
 			SOMETHING_HAPPENED_SNS_TOPIC_ARN: topicARN
-		}];
+		};
 
 		context('Create basic SNS Topic', () => {
 
@@ -97,11 +97,20 @@ describe('Hook Builder Helpers', () => {
 					}
 				}), [
 					topicHook,
-					topicPermissionsHook,
-					envVarsHook
+					topicPermissionsHook
 				]);
 			});
 
+		});
+
+		context('Environment variable', () => {
+
+			it('Should return the Env var object based on the topic name', () => {
+
+				const result = SNSHelper.getEnvVar('somethingHappened');
+
+				assert.deepStrictEqual(result, envVar);
+			});
 		});
 	});
 });
