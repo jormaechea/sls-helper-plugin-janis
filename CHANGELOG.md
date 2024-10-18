@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.8.0] - 2024-10-18
+### Added
+- Opt-in to completely disable SQS env vars. The `getEnvVar` method is available to get the key-value env var for main queues
+- SNS Topic creation support
+- SNS to SQS subscription support
+
+### Changed
+- Delayed Queues and DLQs do not set env vars by default any more. To keep them available, you must set the `generateEnvVars` property on each queue configuration (#64)
+
 ## [9.7.0] - 2024-08-15
 ### Added
 - Support for Delay Queues in SQS Helepr (#63)
