@@ -146,16 +146,32 @@ describe('Hook Builder Helpers', () => {
 				Value: '${param:humanReadableStage}'
 			},
 			{
-				Key: 'SQSConstruct',
+				Key: 'ResourceSet',
 				Value: name
 			}
 		];
 
-		const dlqTags = name => [
+		const mainQueueTags = name => [
 			...queueTags(name),
 			{
-				Key: 'IsDLQ',
+				Key: 'SQSType',
+				Value: 'Main'
+			},
+			{
+				Key: 'HasConsumer',
 				Value: 'true'
+			}
+		];
+
+		const dlqTags = (name, hasConsumer) => [
+			...queueTags(name),
+			{
+				Key: 'SQSType',
+				Value: 'DLQ'
+			},
+			{
+				Key: 'HasConsumer',
+				Value: hasConsumer?.toString() || 'false'
 			}
 		];
 
@@ -169,13 +185,13 @@ describe('Hook Builder Helpers', () => {
 					VisibilityTimeout: 90,
 					// eslint-disable-next-line max-len
 					RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
-					Tags: queueTags('Test')
+					Tags: mainQueueTags('Test')
 				},
 				DependsOn: ['TestDLQ']
 			}
 		}];
 
-		const dlqQueueHook = ['resource', {
+		const dlqQueueHook = hasConsumer => ['resource', {
 			name: 'TestDLQ',
 			resource: {
 				Type: 'AWS::SQS::Queue',
@@ -184,7 +200,7 @@ describe('Hook Builder Helpers', () => {
 					ReceiveMessageWaitTimeSeconds: 20,
 					VisibilityTimeout: 90,
 					MessageRetentionPeriod: 864000,
-					Tags: dlqTags('Test')
+					Tags: dlqTags('Test', hasConsumer)
 				}
 			}
 		}];
@@ -263,7 +279,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -273,7 +289,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -283,7 +299,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook,
+					dlqQueueHook(true),
 					['function', {
 						functionName: 'TestDLQQueueConsumer',
 						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
@@ -316,7 +332,7 @@ describe('Hook Builder Helpers', () => {
 					envVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -355,7 +371,7 @@ describe('Hook Builder Helpers', () => {
 								VisibilityTimeout: 90,
 								// eslint-disable-next-line max-len
 								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ"}',
-								Tags: queueTags('TestBegin')
+								Tags: mainQueueTags('TestBegin')
 							},
 							DependsOn: ['TestBeginDLQ']
 						}
@@ -369,7 +385,7 @@ describe('Hook Builder Helpers', () => {
 								ReceiveMessageWaitTimeSeconds: 20,
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
-								Tags: dlqTags('TestBegin')
+								Tags: dlqTags('TestBegin', true)
 							}
 						}
 					}],
@@ -414,7 +430,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerForBothQueuesFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook(true)
 				]);
 			});
 
@@ -423,7 +439,7 @@ describe('Hook Builder Helpers', () => {
 				const mainQueueHookTags = JSON.parse(JSON.stringify(mainQueueHook));
 				mainQueueHookTags[1].resource.Properties.Tags = [...mainQueueHookTags[1].resource.Properties.Tags, { Key: 'isCritical', Value: true }];
 
-				const dlqQueueHookTags = JSON.parse(JSON.stringify(dlqQueueHook));
+				const dlqQueueHookTags = JSON.parse(JSON.stringify(dlqQueueHook()));
 				dlqQueueHookTags[1].resource.Properties.Tags = [...dlqQueueHookTags[1].resource.Properties.Tags, { Key: 'isCritical', Value: true }];
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({
@@ -476,7 +492,7 @@ describe('Hook Builder Helpers', () => {
 						]
 					}],
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -493,7 +509,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook,
+					dlqQueueHook(true),
 					['function', {
 						functionName: 'TestDLQQueueConsumer',
 						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
@@ -546,7 +562,7 @@ describe('Hook Builder Helpers', () => {
 						]
 					}],
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -581,7 +597,7 @@ describe('Hook Builder Helpers', () => {
 						]
 					}],
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -620,7 +636,7 @@ describe('Hook Builder Helpers', () => {
 						]
 					}],
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 		});
@@ -637,7 +653,7 @@ describe('Hook Builder Helpers', () => {
 				}), [
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -663,12 +679,12 @@ describe('Hook Builder Helpers', () => {
 								VisibilityTimeout: 50,
 								// eslint-disable-next-line max-len
 								RedrivePolicy: '{"maxReceiveCount":1,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
-								Tags: queueTags('Test')
+								Tags: mainQueueTags('Test')
 							},
 							DependsOn: ['TestDLQ']
 						}
 					}],
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 
@@ -721,13 +737,13 @@ describe('Hook Builder Helpers', () => {
 								VisibilityTimeout: 90,
 								// eslint-disable-next-line max-len
 								RedrivePolicy: '{"maxReceiveCount":5,"deadLetterTargetArn":"arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ"}',
-								Tags: queueTags('Test'),
+								Tags: mainQueueTags('Test'),
 								extraProp: true
 							},
 							DependsOn: ['TestDLQ']
 						}
 					}],
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 			});
 		});
@@ -791,7 +807,7 @@ describe('Hook Builder Helpers', () => {
 								FifoThroughputLimit: 'perMessageGroupId',
 								DeduplicationScope: 'messageGroup',
 								ContentBasedDeduplication: true,
-								Tags: queueTags('MyFifo')
+								Tags: mainQueueTags('MyFifo')
 							},
 							DependsOn: ['MyFifoDLQ']
 						}
@@ -807,7 +823,7 @@ describe('Hook Builder Helpers', () => {
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								FifoQueue: true,
-								Tags: dlqTags('MyFifo')
+								Tags: dlqTags('MyFifo', true)
 							}
 						}
 					}],
@@ -846,15 +862,19 @@ describe('Hook Builder Helpers', () => {
 				generateEnvVars: true
 			};
 
-			const delayQueueTags = name => [
+			const delayQueueTags = (name, hasConsumer) => [
 				...queueTags(name),
 				{
-					Key: 'DelayQueue',
-					Value: 'true'
+					Key: 'SQSType',
+					Value: 'Delay'
+				},
+				{
+					Key: 'HasConsumer',
+					Value: hasConsumer?.toString() || 'false'
 				}
 			];
 
-			const delayQueueHook = ['resource', {
+			const delayQueueHook = hasConsumer => ['resource', {
 				name: 'TestDelayQueue',
 				resource: {
 					Type: 'AWS::SQS::Queue',
@@ -867,7 +887,7 @@ describe('Hook Builder Helpers', () => {
 							maxReceiveCount: 5,
 							deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ'
 						}),
-						Tags: delayQueueTags('Test')
+						Tags: delayQueueTags('Test', hasConsumer)
 					},
 					DependsOn: ['TestDLQ']
 				}
@@ -911,8 +931,8 @@ describe('Hook Builder Helpers', () => {
 					mainConsumerFunctionHook,
 					mainQueueHookPointingDelayQueue,
 					delayConsumerFunctionHook,
-					delayQueueHook,
-					dlqQueueHook
+					delayQueueHook(true),
+					dlqQueueHook()
 				]);
 
 			});
@@ -939,7 +959,7 @@ describe('Hook Builder Helpers', () => {
 					}
 				});
 
-				const customDelayQueueHook = JSON.parse(JSON.stringify(delayQueueHook));
+				const customDelayQueueHook = delayQueueHook(true);
 
 				customDelayQueueHook[1].resource.Properties.DelaySeconds = 60; // custom DelaySeconds
 
@@ -959,7 +979,7 @@ describe('Hook Builder Helpers', () => {
 					mainConsumerForBothQueuesFunctionHook,
 					mainQueueHookPointingDelayQueue,
 					customDelayQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 
 			});
@@ -975,7 +995,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 
 				// Reset the global env vars
@@ -989,7 +1009,7 @@ describe('Hook Builder Helpers', () => {
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test' }), [
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook
+					dlqQueueHook()
 				]);
 
 				// Reset the global env vars
@@ -1010,7 +1030,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook,
+					dlqQueueHook(),
 					queuePolicyHook,
 					snsSubscriptionHook
 				]);
@@ -1030,7 +1050,7 @@ describe('Hook Builder Helpers', () => {
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
 					mainQueueHook,
-					dlqQueueHook,
+					dlqQueueHook(),
 					queuePolicyHook,
 					snsSubscriptionHookWithFilterPolicy
 				]);
