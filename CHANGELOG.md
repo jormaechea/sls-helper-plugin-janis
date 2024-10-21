@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.8.1] - 2024-10-21
+### Changed
+- Cost allocation tags changed to make them simpler: `SQSConstruct` changed to `ResourceSet`; `IsDLQ` and `IsDelayed` unified into `SQSType: Main | Delay | DLQ`
+- Added `HasConsumer` tag to queues to improve monitoring of DLQs
+
 ## [9.8.0] - 2024-10-18
 ### Added
 - Opt-in to completely disable SQS env vars. The `getEnvVar` method is available to get the key-value env var for main queues
