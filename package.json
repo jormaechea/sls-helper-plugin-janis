@@ -50,6 +50,8 @@
     "sinon": "^15.2.0"
   },
   "dependencies": {
+    "@aws-sdk/client-ram": "^3.677.0",
+    "@aws-sdk/client-ssm": "^3.677.0",
     "fastest-validator": "^1.19.0",
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",

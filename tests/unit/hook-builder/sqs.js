@@ -228,8 +228,8 @@ describe('Hook Builder Helpers', () => {
 									Service: 'sns.amazonaws.com'
 								},
 								Condition: {
-									ArnEquals: {
-										'aws:SourceArn': 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
+									'ForAnyValue:StringLike': {
+										'aws:SourceOrgPaths': '${env:AWS_ORGANIZATIONAL_UNIT_PATH}'
 									}
 								}
 							}
