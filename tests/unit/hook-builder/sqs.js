@@ -3,6 +3,7 @@
 const assert = require('assert').strict;
 
 const SQSHelper = require('../../../lib/sqs-helper');
+const { snsTopicScopes } = require('../../../lib/utils/sns-topic-scopes');
 
 describe('Hook Builder Helpers', () => {
 
@@ -94,6 +95,59 @@ describe('Hook Builder Helpers', () => {
 					}
 				}), {
 					message: 'sourceSnsTopic.name must be a String in SQS helper. Received true'
+				});
+			});
+
+			it('Should throw if source SNS Topic scope is not a string', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						scope: true
+					}
+				}), {
+					message: 'sourceSnsTopic.scope must be one of [remote,local] in SQS helper. Received true'
+				});
+			});
+
+			it('Should throw if source SNS Topic scope is not a valid option', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						scope: 'unknownScope'
+					}
+				}), {
+					message: 'sourceSnsTopic.scope must be one of [remote,local] in SQS helper. Received \'unknownScope\''
+				});
+			});
+
+			it('Should throw if source SNS Topic remote serviceCode is not a string', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						scope: snsTopicScopes.remote,
+						serviceCode: true
+					}
+				}), {
+					message: 'sourceSnsTopic.serviceCode must be a String in SQS helper. Received true'
+				});
+			});
+
+			it('Should throw if source SNS Topic serviceCode is set but scope is not remote', () => {
+
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					sourceSnsTopic: {
+						name: 'TestTopic',
+						serviceCode: true
+					}
+				}), {
+					message: 'sourceSnsTopic.serviceCode is only allowed when scope is remote in SQS helper. Received { name: \'TestTopic\', serviceCode: true }'
 				});
 			});
 
@@ -249,6 +303,34 @@ describe('Hook Builder Helpers', () => {
 					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 					RawMessageDelivery: true,
 					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestTopic'
+				},
+				DependsOn: ['TestQueue']
+			}
+		}];
+
+		const secondSnsSubscriptionHook = ['resource', {
+			name: 'SubSNSSecondTopicSQSTest',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:SecondTopic'
+				},
+				DependsOn: ['TestQueue']
+			}
+		}];
+
+		const snsSubscriptionCrossAccountHook = ['resource', {
+			name: 'SubSNSTestTopicSQSTest',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${self:custom.awsAccountsByService.another-service}:TestTopic'
 				},
 				DependsOn: ['TestQueue']
 			}
@@ -1019,41 +1101,89 @@ describe('Hook Builder Helpers', () => {
 
 		context('Create SQS Hooks with SNS Source Topic', () => {
 
-			it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue', () => {
+			context('SNS Topics from the same account', () => {
 
-				assert.deepStrictEqual(SQSHelper.buildHooks({
-					name: 'Test',
-					sourceSnsTopic: {
-						name: 'TestTopic'
-					}
-				}), [
-					sqsUrlEnvVarsHook,
-					mainConsumerFunctionHook,
-					mainQueueHook,
-					dlqQueueHook(),
-					queuePolicyHook,
-					snsSubscriptionHook
-				]);
+				it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'Test',
+						sourceSnsTopic: {
+							name: 'TestTopic'
+						}
+					}), [
+						sqsUrlEnvVarsHook,
+						mainConsumerFunctionHook,
+						mainQueueHook,
+						dlqQueueHook(),
+						queuePolicyHook,
+						snsSubscriptionHook
+					]);
+				});
+
+				it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic with a filter policy to the main queue', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'Test',
+						sourceSnsTopic: {
+							name: 'TestTopic',
+							filterPolicy: {
+								platform: ['fullcommerce']
+							}
+						}
+					}), [
+						sqsUrlEnvVarsHook,
+						mainConsumerFunctionHook,
+						mainQueueHook,
+						dlqQueueHook(),
+						queuePolicyHook,
+						snsSubscriptionHookWithFilterPolicy
+					]);
+				});
+
+				it('Should allow to subscribe a Queue to multiple SNS Topics', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'Test',
+						sourceSnsTopic: [
+							{
+								name: 'TestTopic'
+							},
+							{
+								name: 'SecondTopic'
+							}
+						]
+					}), [
+						sqsUrlEnvVarsHook,
+						mainConsumerFunctionHook,
+						mainQueueHook,
+						dlqQueueHook(),
+						queuePolicyHook,
+						snsSubscriptionHook,
+						secondSnsSubscriptionHook
+					]);
+				});
 			});
 
-			it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic with a filter policy to the main queue', () => {
+			context('SNS Topics from the another account', () => {
 
-				assert.deepStrictEqual(SQSHelper.buildHooks({
-					name: 'Test',
-					sourceSnsTopic: {
-						name: 'TestTopic',
-						filterPolicy: {
-							platform: ['fullcommerce']
+				it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'Test',
+						sourceSnsTopic: {
+							scope: snsTopicScopes.remote,
+							serviceCode: 'another-service',
+							name: 'TestTopic'
 						}
-					}
-				}), [
-					sqsUrlEnvVarsHook,
-					mainConsumerFunctionHook,
-					mainQueueHook,
-					dlqQueueHook(),
-					queuePolicyHook,
-					snsSubscriptionHookWithFilterPolicy
-				]);
+					}), [
+						sqsUrlEnvVarsHook,
+						mainConsumerFunctionHook,
+						mainQueueHook,
+						dlqQueueHook(),
+						queuePolicyHook,
+						snsSubscriptionCrossAccountHook
+					]);
+				});
 			});
 
 		});

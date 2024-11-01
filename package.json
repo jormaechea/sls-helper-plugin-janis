@@ -39,6 +39,7 @@
   },
   "homepage": "https://github.com/jormaechea/sls-helper-plugin-janis#readme",
   "devDependencies": {
+    "aws-sdk-client-mock": "^4.1.0",
     "eslint": "^8.48.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.28.1",
@@ -60,7 +61,7 @@
     "semver": "^7.5.4"
   },
   "peerDependencies": {
-    "sls-helper": ">= 1.9.0",
-    "serverless": "^3.30.1"
+    "serverless": "^3.30.1",
+    "sls-helper": ">= 1.15.0"
   }
 }
