@@ -86,7 +86,7 @@ describe('Hook Builder Helpers', () => {
 		const topicPermissionsPolicy = ['resource', {
 			name: 'somethingHappenedTopicPolicy',
 			resource: {
-				Type: 'Type: AWS::SNS::TopicPolicy',
+				Type: 'AWS::SNS::TopicPolicy',
 				Properties: {
 					PolicyDocument: {
 						Version: '2008-10-17',
