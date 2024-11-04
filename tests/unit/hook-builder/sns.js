@@ -124,7 +124,7 @@ describe('Hook Builder Helpers', () => {
 								Action: 'SNS:Subscribe',
 								Resource: topicARN,
 								Condition: {
-									StringEquals: {
+									'ForAnyValue:StringLike': {
 										'aws:PrincipalOrgPaths': '${env:AWS_ORGANIZATIONAL_UNIT_PATH}'
 									}
 								}
