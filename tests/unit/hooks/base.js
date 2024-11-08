@@ -296,6 +296,31 @@ describe('Hooks', () => {
 											}
 										]
 									}
+								},
+								{
+									PolicyName: 'janis-${self:custom.serviceCode}-get-databases-parameter-store',
+									PolicyDocument: {
+										Version: '2012-10-17',
+										Statement: [
+											{
+												Effect: 'Allow',
+												Action: 'ssm:GetParameter',
+												Resource: [
+													{
+														'Fn::Join': [
+															':',
+															[
+																'arn:aws:ssm',
+																{ Ref: 'AWS::Region' },
+																{ Ref: 'AWS::AccountId' },
+																'parameter/${self:custom.serviceCode}-databases'
+															]
+														]
+													}
+												]
+											}
+										]
+									}
 								}
 							]
 						}
