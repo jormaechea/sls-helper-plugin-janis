@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.0.0] - 2024-11-08
+### Added
+- Support for SNS to SQS cross-account subscription
+- Support for multiple SNS Topics as SQS Sources
+
+### Changed
+- Peer Dependency `sls-helper@1.15` is now required **BREAKING CHANGE**
+
 ## [9.9.0] - 2024-11-08
 ### Added
 - New default IAM Policy to grant access to SSM Parameter Store
