@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [9.9.0] - 2024-11-08
+### Added
+- New default IAM Policy to grant access to SSM Parameter Store
+
 ## [9.8.1] - 2024-10-21
 ### Changed
 - Cost allocation tags changed to make them simpler: `SQSConstruct` changed to `ResourceSet`; `IsDLQ` and `IsDelayed` unified into `SQSType: Main | Delay | DLQ`
