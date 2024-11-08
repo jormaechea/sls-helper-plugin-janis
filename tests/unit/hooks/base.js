@@ -5,6 +5,8 @@
 const assert = require('assert').strict;
 const sinon = require('sinon');
 
+const ParameterStore = require('../../../lib/utils/parameter-store');
+
 const { base } = require('../../..');
 
 describe('Hooks', () => {
@@ -12,6 +14,14 @@ describe('Hooks', () => {
 	describe('Base service', () => {
 
 		const originalEnvs = { ...process.env };
+
+		const accountIdsParameterValue = {
+			'other-service': '00000000000'
+		};
+
+		beforeEach(() => {
+			sinon.stub(ParameterStore, 'getSharedParameter').resolves(accountIdsParameterValue);
+		});
 
 		afterEach(() => {
 			process.env = { ...originalEnvs };
@@ -173,6 +183,7 @@ describe('Hooks', () => {
 				serviceCode: 'testing',
 				stage: '${self:provider.stage}',
 				region: '${self:provider.region}',
+				awsAccountsByService: accountIdsParameterValue,
 
 				humanReadableStage: {
 					local: 'Local',
@@ -417,14 +428,14 @@ describe('Hooks', () => {
 
 		context('When required config is missing', () => {
 
-			it('Should throw if serviceCode hook config is not defined', () => {
-				assert.throws(() => base({}, {
+			it('Should throw if serviceCode hook config is not defined', async () => {
+				await assert.rejects(() => base({}, {
 					servicePort: validServicePort
 				}));
 			});
 
-			it('Should throw if servicePort hook config is not defined', () => {
-				assert.throws(() => base({}, {
+			it('Should throw if servicePort hook config is not defined', async () => {
+				await assert.rejects(() => base({}, {
 					serviceCode: validServiceCode
 				}));
 			});
@@ -432,53 +443,65 @@ describe('Hooks', () => {
 
 		context('When invalid config received', () => {
 
-			it('Should throw if serviceCode hook config is not a string', () => {
-				assert.throws(() => base({}, {
+			it('Should throw if serviceCode hook config is not a string', async () => {
+				await assert.rejects(() => base({}, {
 					serviceCode: ['invalid'],
 					servicePort: validServicePort
 				}));
 			});
 
-			it('Should throw if serviceCode hook config is not in dash-case', () => {
+			it('Should throw if serviceCode hook config is not in dash-case', async () => {
 
-				[
-					'SomeInvalidCode',
-					'Some Invalid Code'
-				].forEach(serviceCode => {
-					assert.throws(() => base({}, {
-						serviceCode,
-						servicePort: validServicePort
-					}));
-				});
+				await assert.rejects(() => base({}, {
+					serviceCode: 'SomeInvalidCode',
+					servicePort: validServicePort
+				}));
+
+				await assert.rejects(() => base({}, {
+					serviceCode: 'Some Invalid Code',
+					servicePort: validServicePort
+				}));
 			});
 
-			it('Should throw if servicePort hook config is not a string', () => {
-				assert.throws(() => base({}, {
+			it('Should throw if servicePort hook config is not a string', async () => {
+				await assert.rejects(() => base({}, {
 					serviceCode: validServiceCode,
 					servicePort: ['invalid']
 				}));
 			});
 		});
 
-		it('Should not throw if a valid serviceCode and servicePort is received', () => {
+		it('Should not throw if a valid serviceCode and servicePort is received', async () => {
 
-			[
-				'valid-code',
-				'123',
-				'123-valid-code',
-				'valid-123-code',
-				'123-valid-code-456'
-			].forEach(serviceCode => {
-				assert.doesNotThrow(() => base({}, {
-					serviceCode,
-					servicePort: validServicePort
-				}));
-			});
+			await assert.doesNotReject(() => base({}, {
+				serviceCode: 'valid-code',
+				servicePort: validServicePort
+			}));
+
+			await assert.doesNotReject(() => base({}, {
+				serviceCode: '123',
+				servicePort: validServicePort
+			}));
+
+			await assert.doesNotReject(() => base({}, {
+				serviceCode: '123-valid-code',
+				servicePort: validServicePort
+			}));
+
+			await assert.doesNotReject(() => base({}, {
+				serviceCode: 'valid-123-code',
+				servicePort: validServicePort
+			}));
+
+			await assert.doesNotReject(() => base({}, {
+				serviceCode: '123-valid-code-456',
+				servicePort: validServicePort
+			}));
 		});
 
-		it('Should return the base service configuration', () => {
+		it('Should return the base service configuration', async () => {
 
-			const serviceConfig = base({}, {
+			const serviceConfig = await base({}, {
 				serviceCode: validServiceCode,
 				servicePort: validServicePort
 			});
@@ -486,9 +509,9 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, expectedConfig);
 		});
 
-		it('Should not override the original configuration', () => {
+		it('Should not override the original configuration', async () => {
 
-			const serviceConfig = base({
+			const serviceConfig = await base({
 				provider: {
 					logRetentionInDays: 30
 				},
@@ -528,9 +551,9 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should use original configuration to override hook defaults', () => {
+		it('Should use original configuration to override hook defaults', async () => {
 
-			const serviceConfig = base({
+			const serviceConfig = await base({
 				provider: {
 					memorySize: 512
 				}
@@ -546,9 +569,9 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should override the original configuration for xxxOnly configurations', () => {
+		it('Should override the original configuration for xxxOnly configurations', async () => {
 
-			const serviceConfig = base({
+			const serviceConfig = await base({
 				package: {
 					includeOnly: [
 						'custom/path/**'
@@ -574,12 +597,12 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should setup the Trace Layer if env vars are set', () => {
+		it('Should setup the Trace Layer if env vars are set', async () => {
 
 			process.env.TRACE_ACCOUNT_ID = '012345678910';
 			process.env.JANIS_TRACE_EXTENSION_VERSION = '1';
 
-			const serviceConfig = base({}, {
+			const serviceConfig = await base({}, {
 				serviceCode: validServiceCode,
 				servicePort: validServicePort
 			});
@@ -592,9 +615,9 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should add and override sls params if they are passed', () => {
+		it('Should add and override sls params if they are passed', async () => {
 
-			const serviceConfig = base({
+			const serviceConfig = await base({
 				params: {
 					default: {
 						defaultParam: true
@@ -622,12 +645,12 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should add the VPC Config when env vars LAMBDA_SECURITY_GROUP_ID and LAMBDA_SUBNET_IDS are set', () => {
+		it('Should add the VPC Config when env vars LAMBDA_SECURITY_GROUP_ID and LAMBDA_SUBNET_IDS are set', async () => {
 
 			process.env.LAMBDA_SECURITY_GROUP_ID = 'sg-abcdef0001';
 			process.env.LAMBDA_SUBNET_IDS = ' subnet-111111111, subnet-222222222,subnet-333333333';
 
-			const serviceConfig = base({}, {
+			const serviceConfig = await base({}, {
 				serviceCode: validServiceCode,
 				servicePort: validServicePort
 			});

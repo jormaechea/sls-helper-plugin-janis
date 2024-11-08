@@ -83,6 +83,59 @@ describe('Hook Builder Helpers', () => {
 			resource: topicARN
 		}];
 
+		const topicPermissionsPolicy = ['resource', {
+			name: 'somethingHappenedTopicPolicy',
+			resource: {
+				Type: 'AWS::SNS::TopicPolicy',
+				Properties: {
+					PolicyDocument: {
+						Version: '2008-10-17',
+						Id: 'TopicPolicy',
+						Statement: [
+							{
+								Sid: 'defaultStatement',
+								Effect: 'Allow',
+								Principal: {
+									AWS: '*'
+								},
+								Action: [
+									'SNS:GetTopicAttributes',
+									'SNS:SetTopicAttributes',
+									'SNS:AddPermission',
+									'SNS:RemovePermission',
+									'SNS:DeleteTopic',
+									'SNS:Subscribe',
+									'SNS:ListSubscriptionsByTopic',
+									'SNS:Publish'
+								],
+								Resource: topicARN,
+								Condition: {
+									StringEquals: {
+										'AWS:SourceOwner': '${aws:accountId}'
+									}
+								}
+							},
+							{
+								Sid: 'organizationSubscribe',
+								Effect: 'Allow',
+								Principal: {
+									AWS: '*'
+								},
+								Action: 'SNS:Subscribe',
+								Resource: topicARN,
+								Condition: {
+									'ForAnyValue:StringLike': {
+										'aws:PrincipalOrgPaths': '${env:AWS_ORGANIZATIONAL_UNIT_PATH}'
+									}
+								}
+							}
+						]
+					},
+					Topics: [topicARN]
+				}
+			}
+		}];
+
 		const envVar = {
 			SOMETHING_HAPPENED_SNS_TOPIC_ARN: topicARN
 		};
@@ -97,7 +150,8 @@ describe('Hook Builder Helpers', () => {
 					}
 				}), [
 					topicHook,
-					topicPermissionsHook
+					topicPermissionsHook,
+					topicPermissionsPolicy
 				]);
 			});
 
