@@ -333,7 +333,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
-	- `sourceSnsTopic`: **OPTIONAL** | _Object_ | The configuration of an SNS Topic to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
+	- `sourceSnsTopic`: **OPTIONAL** | _Object_ | _Array<Object>_ | The configuration of one or more SNS Topics to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
 
 > Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
 
@@ -376,6 +376,10 @@ FIFO properties (since _9.6.0_)
 The `sourceSnsTopic` parameter has the following structure:
 - `name` **REQUIRED** The name of the SNS Topic
 - `filterPolicy` **OPTIONAL** An object defining a [SNS Subscription Policy](https://docs.aws.amazon.com/sns/latest/dg/sns-subscription-filter-policies.html) to apply. The policy will be applied to the messages attributes scope, not to the event payload.
+
+For cross-account topics (ie, topics pubished in another AWS Accounts / Janis Services), you must add the following properties:
+- `scope`: _string_ With the fixed value of `remote`
+- `serviceCode`: _string_ With the service code of the remote service that will publish the topic
 
 **Returns**: _array_ of Hooks
 
