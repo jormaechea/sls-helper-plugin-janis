@@ -21,6 +21,7 @@ describe('Hooks', () => {
 
 		beforeEach(() => {
 			sinon.stub(ParameterStore, 'getSharedParameter').resolves(accountIdsParameterValue);
+			sinon.stub(ParameterStore, 'getParameter').resolves(accountIdsParameterValue);
 		});
 
 		afterEach(() => {
@@ -507,6 +508,9 @@ describe('Hooks', () => {
 			});
 
 			assert.deepStrictEqual(serviceConfig, expectedConfig);
+
+			sinon.assert.calledOnceWithExactly(ParameterStore.getSharedParameter, 'accountsIdsByService');
+			sinon.assert.notCalled(ParameterStore.getParameter);
 		});
 
 		it('Should not override the original configuration', async () => {
@@ -664,6 +668,25 @@ describe('Hooks', () => {
 
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
+
+		it('Should use local ParameterStore accountsIdsByService when received custom.localAccountsIdsByService', async () => {
+
+			const serviceConfig = await base({
+				custom: { localAccountsIdsByService: true }
+			}, {
+				serviceCode: validServiceCode,
+				servicePort: validServicePort
+			});
+
+			const expectedConfigForLocalParameter = JSON.parse(JSON.stringify(expectedConfig));
+			expectedConfigForLocalParameter.custom.localAccountsIdsByService = true;
+
+			assert.deepStrictEqual(serviceConfig, expectedConfigForLocalParameter);
+
+			sinon.assert.notCalled(ParameterStore.getSharedParameter);
+			sinon.assert.calledOnceWithExactly(ParameterStore.getParameter, 'accountsIdsByService');
+		});
+
 	});
 
 });
