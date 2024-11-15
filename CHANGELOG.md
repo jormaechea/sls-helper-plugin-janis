@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.1.0] - 2024-11-15
+### Added
+- Suppor for `custom.localAccountsIdsByService` property to fetch SSM Parameter from the same AWS account
+
 ## [10.0.0] - 2024-11-08
 ### Added
 - Support for SNS to SQS cross-account subscription
