@@ -7,6 +7,12 @@ const { snsTopicScopes } = require('../../../lib/utils/sns-topic-scopes');
 
 describe('Hook Builder Helpers', () => {
 
+	const originalEnvs = { ...process.env };
+
+	afterEach(() => {
+		process.env = { ...originalEnvs };
+	});
+
 	describe('SQS', () => {
 
 		context('Get Permission\'s Hook', () => {
@@ -1166,7 +1172,7 @@ describe('Hook Builder Helpers', () => {
 
 			context('SNS Topics from the another account', () => {
 
-				it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue', () => {
+				it('Should add a Queue Policy and SNS Subscription to publish messages from the given topic to the main queue (non local env)', () => {
 
 					assert.deepStrictEqual(SQSHelper.buildHooks({
 						name: 'Test',
@@ -1182,6 +1188,26 @@ describe('Hook Builder Helpers', () => {
 						dlqQueueHook(),
 						queuePolicyHook,
 						snsSubscriptionCrossAccountHook
+					]);
+				});
+
+				it('Should add a Queue Policy and omit SNS subscription in local environment', () => {
+
+					process.env.JANIS_LOCAL = '1';
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'Test',
+						sourceSnsTopic: {
+							scope: snsTopicScopes.remote,
+							serviceCode: 'another-service',
+							name: 'TestTopic'
+						}
+					}), [
+						sqsUrlEnvVarsHook,
+						mainConsumerFunctionHook,
+						mainQueueHook,
+						dlqQueueHook(),
+						queuePolicyHook
 					]);
 				});
 			});
