@@ -52,7 +52,7 @@ describe('Hooks', () => {
 					functions: [{
 						'API-Get-ProductAttribute': {
 							name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-							handler: 'src/lambda/RestApi/index.handler',
+							handler: 'src/api/product-attribute/get.handler',
 							description: 'Product Attribute Get API',
 							events: [
 								{

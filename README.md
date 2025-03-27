@@ -102,7 +102,7 @@ Used to implement a custom API
 | layers | array[object] | An array of function-level layers. This will override any provider-level layers, except for the Trace Layer. Use together with `skipTraceLayer` to remove the Trace layer _(since 8.2.0)_ | | |
 | addLayers | array[object] | An array of function-level layers. This will be appended to any provider-level layers _(since 8.2.0)_ | | |
 | skipTraceLayer | boolean | Set to `true` if the API should not use the [Trace Lambda Layer](#trace-lambda-layer) | | `false` |
-| handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
+| handler | string | The lambda handler path and function | | `'src/api/{normalizedPath}/{methodName \|\| method}.handler'` |
 | caching | boolean | Set to `true` to enable cache | | `false` |
 | cors | boolean|object | Set to `true` to enable services default **CORS**, or configure as an object as explained in **CORS** to customize the API CORS | | `false` |
 | queryParameters | object | A key value to map query string parameters to a boolean indicating if it's required or not | | |
@@ -122,7 +122,6 @@ Used to implement JANIS CRUD APIs.
 |--------|------|-------------|------------|---------------|
 | functionName | string | The name of the lambda function. Will be used in `API-{serviceName}-{functionName}-{stage}`. Since _5.6.0_ | | |
 | entityName | string | The entity name | **Required** | |
-| handler | string | The lambda handler path and function | | `'src/lambda/RestApi/index.handler'` |
 | path | string | The API path | | `/[entity-name]` (for apiList and apiPost) or `/[entity-name]/{id}` (for apiGet and apiPut) |
 | layers | array[object] | An array of function-level layers. This will override any provider-level layers, except for the Trace Layer. Use together with `skipTraceLayer` to remove the Trace layer _(since 8.2.0)_ | | |
 | addLayers | array[object] | An array of function-level layers. This will be appended to any provider-level layers _(since 8.2.0)_ | | |

@@ -40,10 +40,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -76,10 +76,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -111,7 +111,7 @@ describe('Internal Hooks', () => {
 						{
 							'API-Get-ProductAttribute': {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+								handler: 'src/api/product-attribute/get.handler',
 								description: 'Product Attribute Get API',
 								events: [
 									{
@@ -172,10 +172,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -209,10 +209,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -255,10 +255,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -303,49 +303,16 @@ describe('Internal Hooks', () => {
 
 				const serviceConfig = apiBase.buildApi({}, {
 					entityName: 'product attribute',
-					methodName: 'custom'
+					methodName: 'list'
 				});
 
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Custom-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Custom-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Custom API',
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/product-attribute',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}'
-										}
-									}
-								]
-							}
-						}
-					]
-				});
-			});
-
-			it('Should use the handler param to override the default', () => {
-
-				const serviceConfig = apiBase.buildApi({}, {
-					entityName: 'product attribute',
-					handler: 'path/to/custom.handler'
-				});
-
-				assert.deepStrictEqual(serviceConfig, {
-					functions: [
-						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'path/to/custom.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -375,10 +342,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -411,10 +378,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -449,10 +416,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -503,10 +470,10 @@ describe('Internal Hooks', () => {
 					...previousServiceConfig,
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -544,10 +511,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								timeout: 10,
 								events: [
 									{
@@ -578,10 +545,10 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								package: {
 									include: [
 										'src/controllers/product.js'
@@ -622,9 +589,9 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								description: 'Override it',
 								foo: 'bar',
 								events: [
@@ -677,13 +644,13 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 								],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -734,11 +701,11 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -778,11 +745,11 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -836,11 +803,11 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -894,11 +861,11 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [getTraceLayerArn()],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -949,14 +916,14 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [
 									getTraceLayerArn(),
 									'CustomLayer'
 								],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -1005,13 +972,13 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [
 									'CustomLayer'
 								],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -1062,15 +1029,15 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [
 									getTraceLayerArn(),
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1',
 									'CustomLayer'
 								],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
@@ -1122,14 +1089,14 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
 								layers: [
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1',
 									'CustomLayer'
 								],
-								description: 'Product Attribute Get API',
+								description: 'Product Attribute List API',
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: '',
 									MY_CUSTOM_VAR: '1'
@@ -1185,10 +1152,10 @@ describe('Internal Hooks', () => {
 					},
 					functions: [
 						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								description: 'Product Attribute Get API',
+							'API-List-ProductAttribute': {
+								name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
+								handler: 'src/api/product-attribute/list.handler',
+								description: 'Product Attribute List API',
 								events: [
 									{
 										http: {
