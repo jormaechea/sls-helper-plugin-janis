@@ -55,11 +55,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [defaultHttpEvent]
 							}
 						}
@@ -81,11 +76,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-HelloWorld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [defaultHttpEvent]
 							}
 						}
@@ -106,11 +96,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [defaultHttpEvent]
 							}
 						}
@@ -156,11 +141,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -198,11 +178,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-PostHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/post.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -235,11 +210,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetCustomIdVarPathSecondIdVar-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/custom/path/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -286,11 +256,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -346,11 +311,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-ListHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/list.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -384,11 +344,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'path/to/custom.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -422,11 +377,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -463,11 +413,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -503,11 +448,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -549,11 +489,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: undefined,
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								timeout: 10,
 								events: [
 									{
@@ -590,7 +525,6 @@ describe('Hooks', () => {
 								description: undefined,
 								package: {
 									include: [
-										'src/api/hello-world/get.js',
 										'src/models/helloWorld.js'
 									]
 								},
@@ -633,11 +567,6 @@ describe('Hooks', () => {
 								name: 'API-${self:custom.serviceName}-GetHelloDashworld-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
-								package: {
-									include: [
-										'src/api/hello-world/get.js'
-									]
-								},
 								foo: 'bar',
 								events: [
 									{

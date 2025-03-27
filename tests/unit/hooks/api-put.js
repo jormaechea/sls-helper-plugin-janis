@@ -53,12 +53,6 @@ describe('Hooks', () => {
 							name: 'API-${self:custom.serviceName}-Update-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Attribute Put API',
-							package: {
-								include: [
-									'src/api/product-attribute/put.js',
-									'src/models/product-attribute.js'
-								]
-							},
 							events: [
 								{
 									http: {
@@ -100,12 +94,6 @@ describe('Hooks', () => {
 							name: 'API-${self:custom.serviceName}-UpdateProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Attribute Put API',
-							package: {
-								include: [
-									'src/api/product-attribute/put.js',
-									'src/models/product-attribute.js'
-								]
-							},
 							events: [
 								{
 									http: {

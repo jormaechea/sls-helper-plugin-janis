@@ -56,12 +56,6 @@ describe('Hooks', () => {
 							name: 'API-${self:custom.serviceName}-List-ProductAttribute-${self:custom.stage}',
 							handler: 'src/lambda/RestApi/index.handler',
 							description: 'Product Attribute List API',
-							package: {
-								include: [
-									'src/api/product-attribute/list.js',
-									'src/models/product-attribute.js'
-								]
-							},
 							events: [
 								{
 									http: {

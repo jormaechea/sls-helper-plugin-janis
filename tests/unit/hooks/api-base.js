@@ -44,12 +44,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -86,12 +80,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -125,12 +113,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -194,12 +176,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -237,12 +213,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -289,12 +259,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -349,12 +313,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Custom-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Custom API',
-								package: {
-									include: [
-										'src/api/product-attribute/custom.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -388,12 +346,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'path/to/custom.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -427,12 +379,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -469,12 +415,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -513,12 +453,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -573,12 +507,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -620,12 +548,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								timeout: 10,
 								events: [
 									{
@@ -662,8 +584,6 @@ describe('Internal Hooks', () => {
 								description: 'Product Attribute Get API',
 								package: {
 									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js',
 										'src/controllers/product.js'
 									]
 								},
@@ -706,12 +626,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Override it',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								foo: 'bar',
 								events: [
 									{
@@ -770,12 +684,6 @@ describe('Internal Hooks', () => {
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 								],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -831,12 +739,6 @@ describe('Internal Hooks', () => {
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -881,12 +783,6 @@ describe('Internal Hooks', () => {
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -945,12 +841,6 @@ describe('Internal Hooks', () => {
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: ''
 								},
@@ -1009,12 +899,6 @@ describe('Internal Hooks', () => {
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [getTraceLayerArn()],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -1073,12 +957,6 @@ describe('Internal Hooks', () => {
 									'CustomLayer'
 								],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -1134,12 +1012,6 @@ describe('Internal Hooks', () => {
 									'CustomLayer'
 								],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -1199,12 +1071,6 @@ describe('Internal Hooks', () => {
 									'CustomLayer'
 								],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
@@ -1264,12 +1130,6 @@ describe('Internal Hooks', () => {
 									'CustomLayer'
 								],
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								environment: {
 									JANIS_TRACE_EXTENSION_ENABLED: '',
 									MY_CUSTOM_VAR: '1'
@@ -1329,12 +1189,6 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
 								events: [
 									{
 										http: {
