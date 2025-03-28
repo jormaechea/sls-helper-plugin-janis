@@ -405,6 +405,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestDLQConsumerDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestDLQConsumerDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'DLQConsumerDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -494,6 +517,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestBeginDLQConsumerDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestBeginDLQConsumerDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('TestBegin'),
+									{
+										Key: 'SQSType',
+										Value: 'DLQConsumerDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -616,6 +662,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestDLQConsumerDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestDLQConsumerDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'DLQConsumerDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -932,6 +1001,31 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+
+					['resource', {
+						name: 'MyFifoDLQConsumerDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}MyFifoDLQConsumerDLQ.fifo',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								FifoQueue: true,
+								Tags: [
+									...queueTags('MyFifo'),
+									{
+										Key: 'SQSType',
+										Value: 'DLQConsumerDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 
