@@ -413,6 +413,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestDLQConsumerDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQConsumerDLQ'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								Tags: [
@@ -525,6 +529,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginDLQConsumerDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQConsumerDLQ'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								Tags: [
@@ -670,6 +678,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestDLQConsumerDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQConsumerDLQ'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								Tags: [
@@ -1010,6 +1022,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}MyFifoDLQConsumerDLQ.fifo',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoDLQConsumerDLQ.fifo'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								FifoQueue: true,
