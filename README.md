@@ -333,7 +333,7 @@ You can use `SQSHelper.buildHooks(configs)` method. This will create an _array_ 
 	- `delayQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, wont be created.
 	- `dlqQueueProperties`: **OPTIONAL** _Object_ | If it is not passed, it will use _default_ data.
 	- `dlqConsumerProperties`: **OPTIONAL** | _Object_ | By default the DLQ consumer **won't be created**, you must pass values to create it.
-	- `dlqConsumerDLQProperties`: **OPTIONAL** | _Object_ | When a DLQ consumer is configured, a DLQ for this consumer is automatically created. You can customize it with this property.
+	- `archiveDLQProperties`: **OPTIONAL** | _Object_ | When a DLQ consumer is configured, a DLQ for this consumer is automatically created (ArchiveDLQ). You can customize it with this property.
 	- `sourceSnsTopic`: **OPTIONAL** | _Object_ | _Array<Object>_ | The configuration of one or more SNS Topics to which the queue will be subscribed to. (See [SNSHelper](#sns-helper) to know how to create an SNS Topic)
 
 > Only with a name can create everything except for the Delay hooks (queue and consumer) and DLQ Consumer function
@@ -556,16 +556,16 @@ Creates the following Hooks
 	
 	// DLQ for the DLQ consumer - automatically created when a DLQ consumer is configured
 	['resource', {
-		name: 'SessionEndedDLQConsumerDLQ',
+		name: 'SessionEndedArchiveDLQ',
 		resource: {
 			Type: 'AWS::SQS::Queue',
 			Properties: {
-				QueueName: '${self:custom.serviceName}SessionEndedDLQConsumerDLQ',
+				QueueName: '${self:custom.serviceName}SessionEndedArchiveDLQ',
 				ReceiveMessageWaitTimeSeconds: 20,
 				VisibilityTimeout: 90,
 				MessageRetentionPeriod: 864000,
 				Tags: [
-					// Various tags including ResourceSet, SQSType (DLQConsumerDLQ), etc.
+					// Various tags including ResourceSet, SQSType (ArchiveDLQ), etc.
 				]
 			}
 		}
@@ -697,16 +697,16 @@ Creates the following Hooks
 	
 	// DLQ for the DLQ consumer - automatically created when a DLQ consumer is configured
 	['resource', {
-		name: 'SessionEndedDLQConsumerDLQ',
+		name: 'SessionEndedArchiveDLQ',
 		resource: {
 			Type: 'AWS::SQS::Queue',
 			Properties: {
-				QueueName: '${self:custom.serviceName}SessionEndedDLQConsumerDLQ',
+				QueueName: '${self:custom.serviceName}SessionEndedArchiveDLQ',
 				ReceiveMessageWaitTimeSeconds: 20,
 				VisibilityTimeout: 90,
 				MessageRetentionPeriod: 864000,
 				Tags: [
-					// Various tags including ResourceSet, SQSType (DLQConsumerDLQ), etc.
+					// Various tags including ResourceSet, SQSType (ArchiveDLQ), etc.
 				]
 			}
 		}
