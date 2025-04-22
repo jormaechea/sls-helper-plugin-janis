@@ -267,7 +267,10 @@ describe('Hooks', () => {
 									}
 								]
 							},
-							ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'],
+							ManagedPolicyArns: [
+								'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole',
+								'arn:aws:iam::554267491908:policy/JanisBasePolicyBeta'
+							],
 							Policies: [
 								{
 									PolicyName: 'janis-${self:custom.serviceCode}-logs-policy',
