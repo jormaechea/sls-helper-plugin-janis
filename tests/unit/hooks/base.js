@@ -8,6 +8,8 @@ const sinon = require('sinon');
 const ParameterStore = require('../../../lib/utils/parameter-store');
 
 const { base } = require('../../..');
+const defaultEnvVars = require('../../../lib/utils/default-env-vars');
+const { titleCase } = require('../../../lib/utils/string');
 
 describe('Hooks', () => {
 
@@ -269,7 +271,7 @@ describe('Hooks', () => {
 							},
 							ManagedPolicyArns: [
 								'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole',
-								'arn:aws:iam::${aws:accountId}:policy/JanisLambdaBasePolicyBeta'
+								`arn:aws:iam::\${aws:accountId}:policy/JanisLambdaBasePolicy${titleCase(defaultEnvVars.JANIS_ENV)}`
 							],
 							Policies: [
 								{
