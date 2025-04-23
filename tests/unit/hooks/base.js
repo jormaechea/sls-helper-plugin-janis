@@ -269,7 +269,7 @@ describe('Hooks', () => {
 							},
 							ManagedPolicyArns: [
 								'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole',
-								'arn:aws:iam::554267491908:policy/JanisBasePolicyBeta'
+								'arn:aws:iam::${aws:accountId}:policy/JanisLambdaBasePolicy${self:custom.stage}'
 							],
 							Policies: [
 								{
