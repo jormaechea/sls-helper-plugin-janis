@@ -8,7 +8,6 @@ const sinon = require('sinon');
 const ParameterStore = require('../../../lib/utils/parameter-store');
 
 const { base } = require('../../..');
-const { titleCase } = require('../../../lib/utils/string');
 
 describe('Hooks', () => {
 
@@ -270,7 +269,7 @@ describe('Hooks', () => {
 							},
 							ManagedPolicyArns: [
 								'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole',
-								`arn:aws:iam::\${aws:accountId}:policy/JanisLambdaBasePolicy${titleCase(/${self:custom.stage}/)}`
+								'arn:aws:iam::${aws:accountId}:policy/JanisLambdaBasePolicy${param:humanReadableStage}'
 							],
 							Policies: [
 								{
