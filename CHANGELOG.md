@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.2.0] - 2025-04-29
+### Added
+- New custom managed policy `JanisBasePolicy{Env}` as base service config (#69)
+
+### Fixed
+- Avoid cross-account SNS subscriptions in local environment (#67)
+
 ## [10.1.0] - 2024-11-15
 ### Added
 - Suppor for `custom.localAccountsIdsByService` property to fetch SSM Parameter from the same AWS account
