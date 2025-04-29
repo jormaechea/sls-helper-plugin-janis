@@ -258,6 +258,10 @@ describe('Hook Builder Helpers', () => {
 				Properties: {
 					QueueName: '${self:custom.serviceName}TestDLQ',
 					ReceiveMessageWaitTimeSeconds: 20,
+					RedrivePolicy: JSON.stringify({
+						maxReceiveCount: 5,
+						deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestArchiveDLQ'
+					}),
 					VisibilityTimeout: 90,
 					MessageRetentionPeriod: 864000,
 					Tags: dlqTags('Test', hasConsumer)
@@ -405,6 +409,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestArchiveDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -471,6 +498,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginArchiveDLQ'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								Tags: dlqTags('TestBegin', true)
@@ -494,6 +525,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestBeginArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestBeginArchiveDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('TestBegin'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -616,6 +670,29 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+					['resource', {
+						name: 'TestArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestArchiveDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 			});
@@ -796,6 +873,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestDLQ',
 								ReceiveMessageWaitTimeSeconds: 10,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestArchiveDLQ'
+								}),
 								VisibilityTimeout: 50,
 								MessageRetentionPeriod: 432000,
 								Tags: dlqTags('Test')
@@ -908,6 +989,10 @@ describe('Hook Builder Helpers', () => {
 							Properties: {
 								QueueName: '${self:custom.serviceName}MyFifoDLQ.fifo',
 								ReceiveMessageWaitTimeSeconds: 20,
+								RedrivePolicy: JSON.stringify({
+									maxReceiveCount: 5,
+									deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoArchiveDLQ.fifo'
+								}),
 								VisibilityTimeout: 90,
 								MessageRetentionPeriod: 864000,
 								FifoQueue: true,
@@ -932,6 +1017,31 @@ describe('Hook Builder Helpers', () => {
 								}
 							}
 						]
+					}],
+
+					['resource', {
+						name: 'MyFifoArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}MyFifoArchiveDLQ.fifo',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								FifoQueue: true,
+								Tags: [
+									...queueTags('MyFifo'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
 					}]
 				]);
 
