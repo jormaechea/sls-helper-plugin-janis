@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.3.0] - 2025-06-23
+### Added
+- Support for SQS Archive DLQ
+
 ## [10.2.0] - 2025-04-29
 ### Added
 - New custom managed policy `JanisBasePolicy{Env}` as base service config (#69)
