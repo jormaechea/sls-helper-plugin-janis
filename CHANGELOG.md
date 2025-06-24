@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.3.1] - 2025-06-24
+### Fixed
+- Fixed DLQ setup to avoid setting `RedrivePolicy` when there is no consumer (and no Archive DLQ)
+
 ## [10.3.0] - 2025-06-23
 ### Added
 - Support for SQS Archive DLQ
