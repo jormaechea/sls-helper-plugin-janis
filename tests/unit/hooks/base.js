@@ -75,6 +75,7 @@ describe('Hooks', () => {
 				},
 				logs: {
 					restApi: {
+						role: { 'Fn::GetAtt': ['serverlessApiGatewayCloudWatchRole', 'Arn'] },
 						accessLogging: true,
 						executionLogging: false,
 						level: 'INFO',
@@ -423,6 +424,23 @@ describe('Hooks', () => {
 								Ref: 'ApiGatewayRestApi'
 							},
 							StatusCode: '504'
+						}
+					},
+
+					ServerlessApiGatewayCloudWatchRole: {
+						Type: 'AWS::IAM::Role',
+						Properties: {
+							AssumeRolePolicyDocument: {
+								Version: '2012-10-17',
+								Statement: [{
+									Effect: 'Allow',
+									Principal: {
+										Service: ['apigateway.amazonaws.com']
+									},
+									Action: 'sts:AssumeRole'
+								}]
+							},
+							ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs']
 						}
 					}
 
