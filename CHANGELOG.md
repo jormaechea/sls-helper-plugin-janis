@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.3.2] - 2025-08-06
+### Fixed
+- Fixed DLQ queue consumer dependency on archive DLQ
+
 ## [10.3.1] - 2025-06-24
 ### Fixed
 - Fixed DLQ setup to avoid setting `RedrivePolicy` when there is no consumer (and no Archive DLQ)
