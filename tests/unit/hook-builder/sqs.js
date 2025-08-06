@@ -255,6 +255,7 @@ describe('Hook Builder Helpers', () => {
 			name: 'TestDLQ',
 			resource: {
 				Type: 'AWS::SQS::Queue',
+				...hasConsumer && { DependsOn: ['TestArchiveDLQ'] },
 				Properties: {
 					QueueName: '${self:custom.serviceName}TestDLQ',
 					ReceiveMessageWaitTimeSeconds: 20,
@@ -497,6 +498,7 @@ describe('Hook Builder Helpers', () => {
 						name: 'TestBeginDLQ',
 						resource: {
 							Type: 'AWS::SQS::Queue',
+							DependsOn: ['TestBeginArchiveDLQ'],
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
@@ -984,6 +986,7 @@ describe('Hook Builder Helpers', () => {
 						name: 'MyFifoDLQ',
 						resource: {
 							Type: 'AWS::SQS::Queue',
+							DependsOn: ['MyFifoArchiveDLQ'],
 							Properties: {
 								QueueName: '${self:custom.serviceName}MyFifoDLQ.fifo',
 								ReceiveMessageWaitTimeSeconds: 20,
