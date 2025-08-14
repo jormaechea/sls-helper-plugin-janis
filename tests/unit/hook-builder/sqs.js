@@ -1394,8 +1394,7 @@ describe('Hook Builder Helpers', () => {
 						},
 						dlqQueueProperties: { generateEnvVars: true },
 						sourceSnsTopic: {
-							name: 'TestFifoTopic',
-							fifoTopic: true
+							name: 'TestFifoTopic'
 						}
 					}), [
 						['envVars', {
@@ -1470,8 +1469,7 @@ describe('Hook Builder Helpers', () => {
 						sourceSnsTopic: {
 							scope: snsTopicScopes.remote,
 							serviceCode: 'another-service',
-							name: 'TestFifoTopic',
-							fifoTopic: true
+							name: 'TestFifoTopic'
 						}
 					}), [
 						['envVars', {
