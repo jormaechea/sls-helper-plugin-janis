@@ -882,8 +882,8 @@ You can see `SNSConfig` and their properties in the [types definition](lib/sns-h
 
 **Available Properties:**
 - `topic.name`: **REQUIRED** | The name of the SNS topic
-- `topic.fifoTopic`: **OPTIONAL** | Set to `true` to create a FIFO topic (since _10.3.0_)
-- `topic.contentBasedDeduplication`: **OPTIONAL** | Enable content-based deduplication for FIFO topics (since _10.3.0_)
+- `topic.fifoTopic`: **OPTIONAL** | Set to `true` to create a FIFO topic (since _10.4.0_)
+- `topic.contentBasedDeduplication`: **OPTIONAL** | Enable content-based deduplication for FIFO topics (since _10.4.0_)
 
 > Only with a topic name you are ready to go
 
@@ -909,22 +909,7 @@ See [SQSHelper](#build-hook) (`sourceSnsTopic` property) to know how to link a t
 
 **Important:** The SQS Helper automatically detects the queue type and configures the SNS subscription accordingly. When `fifoQueue: true` is set, the SNS topic is automatically treated as FIFO. When `fifoQueue: false` or not set, the SNS topic is treated as standard.
 
-**FIFO Integration:**
-When using SNS FIFO Topics with SQS FIFO Queues, the `fifoTopic` property is automatically determined based on the SQS configuration. You only need to set `fifoQueue: true` in the SQS configuration:
-
-```js
-...SQSHelper.buildHooks({
-	name: 'OrderProcessor',
-	mainQueueProperties: {
-		fifoQueue: true  // This automatically makes the SNS topic FIFO
-	},
-	sourceSnsTopic: {
-		name: 'orderProcessed'  // No need to specify fifoTopic
-	}
-})
-```
-
-This ensures proper integration between FIFO topics and FIFO queues, maintaining message ordering and deduplication. The SQS Helper automatically detects the queue type and configures the SNS subscription accordingly.
+**Note:** For FIFO integration, simply set `fifoQueue: true` in your SQS configuration - the `.fifo` suffix and topic type are automatically handled.
 
 #### Quick hook example
 
@@ -958,7 +943,7 @@ module.exports = helper({
 
 #### SNS FIFO Topics
 
-Since _10.3.0_, SNS Helper supports FIFO (First-In-First-Out) topics. FIFO topics provide exactly-once processing, ordered message delivery, and deduplication capabilities.
+Since _10.4.0_, SNS Helper supports FIFO (First-In-First-Out) topics. FIFO topics provide exactly-once processing, ordered message delivery, and deduplication capabilities.
 
 **FIFO Properties**
 
@@ -968,9 +953,9 @@ Since _10.3.0_, SNS Helper supports FIFO (First-In-First-Out) topics. FIFO topic
 | `contentBasedDeduplication` | boolean | Enable content-based deduplication for the topic | `false` |
 
 **Important Notes:**
-- When `fifoTopic: true` is set, the topic name automatically receives the `.fifo` suffix
 - FIFO topics require unique names within an AWS account and region
 - Content-based deduplication helps prevent duplicate messages based on message content
+- When `fifoTopic: true` is set, the topic name automatically receives the `.fifo` suffix
 
 #### FIFO Topic Examples
 
@@ -1059,8 +1044,7 @@ module.exports = helper({
 				fifoQueue: true
 			},
 			sourceSnsTopic: {
-				name: 'inventoryUpdate',
-				fifoTopic: true
+				name: 'inventoryUpdate'
 			}
 		}),
 	]
