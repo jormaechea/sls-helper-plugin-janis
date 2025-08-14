@@ -366,6 +366,66 @@ describe('Hook Builder Helpers', () => {
 			}
 		}];
 
+		// FIFO SQS with SNS FIFO Topic constants
+		const fifoQueuePolicyHook = ['resource', {
+			name: 'TestFifoQueuePolicy',
+			resource: {
+				Type: 'AWS::SQS::QueuePolicy',
+				Properties: {
+					Queues: [
+						'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo'
+					],
+					PolicyDocument: {
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Action: 'sqs:SendMessage',
+								Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+								Principal: {
+									Service: 'sns.amazonaws.com'
+								},
+								Condition: {
+									'ForAnyValue:StringLike': {
+										'aws:SourceOrgPaths': '${env:AWS_ORGANIZATIONAL_UNIT_PATH}'
+									}
+								}
+							}
+						]
+					}
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
+		const snsFifoTopicSubscriptionHook = ['resource', {
+			name: 'SubSNSTestFifoTopicSQSTestFifo',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestFifoTopic.fifo'
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
+		const snsFifoTopicCrossAccountSubscriptionHook = ['resource', {
+			name: 'SubSNSTestFifoTopicSQSTestFifo',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${self:custom.awsAccountsByService.another-service}:TestFifoTopic.fifo'
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
 		context('Create basic SQS Hooks', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name', () => {
@@ -1323,6 +1383,158 @@ describe('Hook Builder Helpers', () => {
 				});
 			});
 
+			context('SNS FIFO Topics', () => {
+
+				it('Should add a Queue Policy and SNS Subscription for FIFO Topic from the same account to FIFO SQS', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'TestFifo',
+						mainQueueProperties: {
+							fifoQueue: true
+						},
+						dlqQueueProperties: { generateEnvVars: true },
+						sourceSnsTopic: {
+							name: 'TestFifoTopic',
+							fifoTopic: true
+						}
+					}), [
+						['envVars', {
+							TEST_FIFO_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo',
+							TEST_FIFO_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoDLQ.fifo'
+						}],
+						['function', {
+							functionName: 'TestFifoQueueConsumer',
+							handler: 'src/sqs-consumer/test-fifo-consumer.handler',
+							description: 'TestFifo SQS Queue Consumer',
+							timeout: 15,
+							rawProperties: {
+								dependsOn: ['TestFifoQueue']
+							},
+							events: [
+								{
+									sqs: {
+										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+										functionResponseType: 'ReportBatchItemFailures',
+										batchSize: 10,
+										maximumBatchingWindow: 20
+									}
+								}
+							]
+						}],
+						['resource', {
+							name: 'TestFifoQueue',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoQueue.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									// eslint-disable-next-line max-len
+									RedrivePolicy: JSON.stringify({
+										maxReceiveCount: 5,
+										deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoDLQ.fifo'
+									}),
+									FifoQueue: true,
+									Tags: mainQueueTags('TestFifo')
+								},
+								DependsOn: ['TestFifoDLQ']
+							}
+						}],
+						['resource', {
+							name: 'TestFifoDLQ',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoDLQ.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									MessageRetentionPeriod: 864000,
+									FifoQueue: true,
+									Tags: dlqTags('TestFifo')
+								}
+							}
+						}],
+						fifoQueuePolicyHook,
+						snsFifoTopicSubscriptionHook
+					]);
+				});
+
+				it('Should add a Queue Policy and SNS Subscription for FIFO Topic from another account to FIFO SQS (non local env)', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'TestFifo',
+						mainQueueProperties: {
+							fifoQueue: true
+						},
+						dlqQueueProperties: { generateEnvVars: true },
+						sourceSnsTopic: {
+							scope: snsTopicScopes.remote,
+							serviceCode: 'another-service',
+							name: 'TestFifoTopic',
+							fifoTopic: true
+						}
+					}), [
+						['envVars', {
+							TEST_FIFO_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo',
+							TEST_FIFO_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoDLQ.fifo'
+						}],
+						['function', {
+							functionName: 'TestFifoQueueConsumer',
+							handler: 'src/sqs-consumer/test-fifo-consumer.handler',
+							description: 'TestFifo SQS Queue Consumer',
+							timeout: 15,
+							rawProperties: {
+								dependsOn: ['TestFifoQueue']
+							},
+							events: [
+								{
+									sqs: {
+										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+										functionResponseType: 'ReportBatchItemFailures',
+										batchSize: 10,
+										maximumBatchingWindow: 20
+									}
+								}
+							]
+						}],
+						['resource', {
+							name: 'TestFifoQueue',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoQueue.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									// eslint-disable-next-line max-len
+									RedrivePolicy: JSON.stringify({
+										maxReceiveCount: 5,
+										deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoDLQ.fifo'
+									}),
+									FifoQueue: true,
+									Tags: mainQueueTags('TestFifo')
+								},
+								DependsOn: ['TestFifoDLQ']
+							}
+						}],
+						['resource', {
+							name: 'TestFifoDLQ',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoDLQ.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									MessageRetentionPeriod: 864000,
+									FifoQueue: true,
+									Tags: dlqTags('TestFifo')
+								}
+							}
+						}],
+						fifoQueuePolicyHook,
+						snsFifoTopicCrossAccountSubscriptionHook
+					]);
+				});
+			});
 		});
 	});
 });
