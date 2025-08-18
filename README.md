@@ -553,7 +553,7 @@ Creates the following Hooks
 			}
 		}
 	}],
-	
+
 	// DLQ for the DLQ consumer - automatically created when a DLQ consumer is configured
 	['resource', {
 		name: 'SessionEndedArchiveDLQ',
@@ -694,7 +694,7 @@ Creates the following Hooks
 			}
 		}
 	}],
-	
+
 	// DLQ for the DLQ consumer - automatically created when a DLQ consumer is configured
 	['resource', {
 		name: 'SessionEndedArchiveDLQ',
@@ -880,21 +880,36 @@ To create a new SNS Topic, you just have to call the `SNS.buildHooks(config: SNS
 
 You can see `SNSConfig` and their properties in the [types definition](lib/sns-helper/types/config.ts)
 
+**Available Properties:**
+- `topic.name`: **REQUIRED** | The name of the SNS topic
+- `topic.fifoTopic`: **OPTIONAL** | Set to `true` to create a FIFO topic (since _10.4.0_)
+- `topic.contentBasedDeduplication`: **OPTIONAL** | Enable content-based deduplication for FIFO topics (since _10.4.0_)
+
 > Only with a topic name you are ready to go
 
 #### SNS ARN Env Vars
 
-Environment Variables can be generated using the `SNSHelper.getEnvVar(topicName)` method, that will return the following env var:
+Environment Variables can be generated using the `SNSHelper.getEnvVar(topicName, fifoTopic?)` method, that will return the following env var:
 
 * `[TOPIC_NAME_IN_UPPERCASE_SNAKE_CASE]_SNS_TOPIC_ARN` for the topic ARN
 
-For example, for a topic with the name `userCreated`, the `USER_CREATED_SNS_TOPIC_ARN` env var will be returned.
+**Parameters:**
+- `topicName`: **REQUIRED** | The name of the SNS topic
+- `fifoTopic`: **OPTIONAL** | Set to `true` if the topic is FIFO (defaults to `false`)
+
+**Examples:**
+- For a standard topic with name `userCreated`: `SNSHelper.getEnvVar('userCreated')` → `USER_CREATED_SNS_TOPIC_ARN`
+- For a FIFO topic with name `orderProcessed`: `SNSHelper.getEnvVar('orderProcessed', true)` → `ORDER_PROCESSED_SNS_TOPIC_ARN`
 
 You MUST add it to the lambda function that uses it.
 
 #### SQS Connection
 
 See [SQSHelper](#build-hook) (`sourceSnsTopic` property) to know how to link a topic to an SQS Queue.
+
+**Important:** The SQS Helper automatically detects the queue type and configures the SNS subscription accordingly. When `fifoQueue: true` is set, the SNS topic is automatically treated as FIFO. When `fifoQueue: false` or not set, the SNS topic is treated as standard.
+
+**Note:** For FIFO integration, simply set `fifoQueue: true` in your SQS configuration - the `.fifo` suffix and topic type are automatically handled.
 
 #### Quick hook example
 
@@ -925,6 +940,122 @@ module.exports = helper({
 	]
 });
 ```
+
+#### SNS FIFO Topics
+
+Since _10.4.0_, SNS Helper supports FIFO (First-In-First-Out) topics. FIFO topics provide exactly-once processing, ordered message delivery, and deduplication capabilities.
+
+**FIFO Properties**
+
+| Option | Type | Description | Default value |
+|--------|------|-------------|---------------|
+| `fifoTopic` | boolean | Set to `true` to create a FIFO topic | `false` |
+| `contentBasedDeduplication` | boolean | Enable content-based deduplication for the topic | `false` |
+
+**Important Notes:**
+- FIFO topics require unique names within an AWS account and region
+- Content-based deduplication helps prevent duplicate messages based on message content
+- When `fifoTopic: true` is set, the topic name automatically receives the `.fifo` suffix
+
+#### FIFO Topic Examples
+
+**Basic FIFO Topic**
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SNSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'orderProcessed',
+				fifoTopic: true
+			}
+		}),
+
+		['function', {
+			functionName: 'ProcessOrder',
+			handler: 'src/lambda/Order/Process.handler',
+			rawProperties: {
+				environment: {
+					...SNSHelper.getEnvVar('orderProcessed', true) // true for FIFO topic
+				}
+			}
+		}],
+	]
+});
+```
+
+**FIFO Topic with Content-Based Deduplication**
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SNSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'paymentConfirmed',
+				fifoTopic: true,
+				contentBasedDeduplication: true
+			}
+		}),
+
+		['function', {
+			functionName: 'ConfirmPayment',
+			handler: 'src/lambda/Payment/Confirm.handler',
+			rawProperties: {
+				environment: {
+					...SNSHelper.getEnvVar('paymentConfirmed', true)
+				}
+			}
+		}],
+	]
+});
+```
+
+**Integration with SQS FIFO**
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SNSHelper, SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		// Create FIFO SNS Topic
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'inventoryUpdate',
+				fifoTopic: true,
+				contentBasedDeduplication: true
+			}
+		}),
+
+		// Create FIFO SQS Queue subscribed to FIFO SNS Topic
+		SQSHelper.sqsPermissions,
+		...SQSHelper.buildHooks({
+			name: 'InventoryProcessor',
+			mainQueueProperties: {
+				fifoQueue: true
+			},
+			sourceSnsTopic: {
+				name: 'inventoryUpdate'
+			}
+		}),
+	]
+});
+```
+
+**Generated Resources for FIFO Topics:**
+- **Topic Name**: `${serviceName}inventoryUpdate.fifo` (automatically adds `.fifo` suffix)
+- **Topic ARN**: `arn:aws:sns:${region}:${accountId}:${serviceName}inventoryUpdate.fifo`
+- **Environment Variable**: `INVENTORY_UPDATE_SNS_TOPIC_ARN` pointing to the FIFO topic ARN
+- **Topic Policy**: Allows publishing and subscription with proper permissions
 
 ## Full example
 
@@ -1045,6 +1176,15 @@ module.exports = helper({
 			}
 		}),
 
+		// FIFO SNS Topic example
+		...SNSHelper.buildHooks({
+			topic: {
+				name: 'orderProcessed',
+				fifoTopic: true,
+				contentBasedDeduplication: true
+			}
+		}),
+
 		SQSHelper.sqsPermissions,
 
 		...SQSHelper.buildHooks({
@@ -1055,6 +1195,17 @@ module.exports = helper({
 				filterPolicy: {
 					'platform': ['fullcommerce']
 				}
+			}
+		}),
+
+		// FIFO SQS Queue with FIFO SNS Topic subscription
+		...SQSHelper.buildHooks({
+			name: 'OrderProcessor',
+			mainQueueProperties: {
+				fifoQueue: true
+			},
+			sourceSnsTopic: {
+				name: 'orderProcessed'
 			}
 		})
 	]
