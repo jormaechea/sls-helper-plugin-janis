@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [10.4.0] - 2025-08-18
+### Added
+- Support for FIFO SNS Topics and subscriptions to FIFO SQS Queues
+
 ## [10.3.2] - 2025-08-06
 ### Fixed
 - Fixed DLQ queue consumer dependency on archive DLQ
