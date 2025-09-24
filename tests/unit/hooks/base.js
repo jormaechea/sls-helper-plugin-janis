@@ -426,6 +426,14 @@ describe('Hooks', () => {
 						}
 					}
 
+				},
+
+				extensions: {
+					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+						Properties: {
+							Runtime: 'nodejs22.x'
+						}
+					}
 				}
 			}
 		};
