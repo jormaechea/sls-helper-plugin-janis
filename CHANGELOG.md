@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+- Updated default Node.js runtime from 18.x to 22.x **BREAKING CHANGE**
+
 ## [10.4.0] - 2025-08-18
 ### Added
 - Support for FIFO SNS Topics and subscriptions to FIFO SQS Queues

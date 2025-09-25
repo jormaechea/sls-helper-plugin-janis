@@ -36,7 +36,7 @@ describe('Hooks', () => {
 			service: 'Janis${self:custom.serviceName}Service',
 			provider: {
 				name: 'aws',
-				runtime: 'nodejs18.x',
+				runtime: 'nodejs22.x',
 				memorySize: 1024,
 				stage: '${opt:stage, \'local\'}',
 				region: '${opt:region, \'us-east-1\'}',
@@ -426,6 +426,14 @@ describe('Hooks', () => {
 						}
 					}
 
+				},
+
+				extensions: {
+					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+						Properties: {
+							Runtime: 'nodejs22.x'
+						}
+					}
 				}
 			}
 		};
