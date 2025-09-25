@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.0.0] - 2025-09-25
 ### Changed
 - Updated default Node.js runtime from 18.x to 22.x **BREAKING CHANGE**
 
