@@ -36,7 +36,7 @@ describe('Hooks', () => {
 			service: 'Janis${self:custom.serviceName}Service',
 			provider: {
 				name: 'aws',
-				runtime: 'nodejs18.x',
+				runtime: 'nodejs22.x',
 				memorySize: 1024,
 				stage: '${opt:stage, \'local\'}',
 				region: '${opt:region, \'us-east-1\'}',
@@ -267,7 +267,10 @@ describe('Hooks', () => {
 									}
 								]
 							},
-							ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole'],
+							ManagedPolicyArns: [
+								'arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole',
+								'arn:aws:iam::${aws:accountId}:policy/JanisLambdaBasePolicy${param:humanReadableStage}'
+							],
 							Policies: [
 								{
 									PolicyName: 'janis-${self:custom.serviceCode}-logs-policy',
@@ -423,6 +426,14 @@ describe('Hooks', () => {
 						}
 					}
 
+				},
+
+				extensions: {
+					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+						Properties: {
+							Runtime: 'nodejs22.x'
+						}
+					}
 				}
 			}
 		};

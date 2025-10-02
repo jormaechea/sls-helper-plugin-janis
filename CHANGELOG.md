@@ -6,6 +6,33 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.0.0] - 2025-09-25
+### Changed
+- Updated default Node.js runtime from 18.x to 22.x **BREAKING CHANGE**
+
+## [10.4.0] - 2025-08-18
+### Added
+- Support for FIFO SNS Topics and subscriptions to FIFO SQS Queues
+
+## [10.3.2] - 2025-08-06
+### Fixed
+- Fixed DLQ queue consumer dependency on archive DLQ
+
+## [10.3.1] - 2025-06-24
+### Fixed
+- Fixed DLQ setup to avoid setting `RedrivePolicy` when there is no consumer (and no Archive DLQ)
+
+## [10.3.0] - 2025-06-23
+### Added
+- Support for SQS Archive DLQ
+
+## [10.2.0] - 2025-04-29
+### Added
+- New custom managed policy `JanisBasePolicy{Env}` as base service config (#69)
+
+### Fixed
+- Avoid cross-account SNS subscriptions in local environment (#67)
+
 ## [10.1.0] - 2024-11-15
 ### Added
 - Suppor for `custom.localAccountsIdsByService` property to fetch SSM Parameter from the same AWS account

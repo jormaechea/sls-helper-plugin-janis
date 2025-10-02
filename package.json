@@ -1,6 +1,6 @@
 {
   "name": "sls-helper-plugin-janis",
-  "version": "10.1.0",
+  "version": "11.0.0",
   "description": "A Serverless Helper plugin to add custom helpers for Janis Commerce",
   "main": "lib/plugin.js",
   "scripts": {
@@ -51,14 +51,14 @@
     "sinon": "^15.2.0"
   },
   "dependencies": {
-    "@aws-sdk/client-ram": "^3.677.0",
-    "@aws-sdk/client-ssm": "^3.677.0",
+    "@aws-sdk/client-ram": "^3.777.0",
+    "@aws-sdk/client-ssm": "^3.777.0",
     "fastest-validator": "^1.19.0",
     "lllog": "^1.1.2",
     "lodash.camelcase": "^4.3.0",
     "lodash.snakecase": "^4.1.1",
     "lodash.startcase": "^4.4.0",
-    "semver": "^7.5.4"
+    "semver": "^7.7.1"
   },
   "peerDependencies": {
     "serverless": "^3.30.1",
