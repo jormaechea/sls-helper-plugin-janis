@@ -716,6 +716,37 @@ Creates the following Hooks
 
 ```
 
+#### Fast Processing Environments example
+
+This example shows how to use the `fastProcessingEnvironments` property to disable the batching window in specific environments.
+
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		SQSHelper.sqsPermissions,
+
+		// must be spread
+		...SQSHelper.buildHooks({
+			name: 'MyQueue',
+			consumerProperties: {
+				fastProcessingEnvironments: ['beta', 'dev']
+			}
+		})
+	]
+});
+
+/*
+If the ENV environment variable is 'beta' or 'dev', the 'MyQueue' consumer will have its `maximumBatchingWindow` set to 0.
+*/
+```
+
 #### Delay Queue using main consumer example
 
 ```js
