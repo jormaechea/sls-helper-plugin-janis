@@ -1429,7 +1429,8 @@ describe('Hook Builder Helpers', () => {
 										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
 										functionResponseType: 'ReportBatchItemFailures',
 										batchSize: 10,
-										maximumBatchingWindow: 20
+										maximumBatchingWindow: 20,
+										maximumConcurrency: 10
 									}
 								}
 							]
@@ -1503,6 +1504,7 @@ describe('Hook Builder Helpers', () => {
 									sqs: {
 										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
 										functionResponseType: 'ReportBatchItemFailures',
+										maximumConcurrency: 10,
 										batchSize: 10,
 										maximumBatchingWindow: 20
 									}
