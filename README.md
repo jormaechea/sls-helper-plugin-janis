@@ -346,6 +346,7 @@ All `consumerProperties`, `delayConsumerProperties` and `dlqConsumerProperties` 
 - `description`: _default_: `[name] SQS Queue Consumer` | Change the function description.
 - `batchSize`: _default_: 1 (only for main consumer) | Change the SQS consumer batch Size.
 - `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
+- `fastProcessingEnvironments`: _default_: [] | An array of environment names (e.g., `['beta', 'dev']`). If the current `ENV` matches one of these, the `maximumBatchingWindow` for the consumer will be set to `0` for faster message processing.
 - `prefixPath`: _String_: To add optional prefix path after `src/sqs-consumer`. e.g. `src/sqs-consumer/[prefixPath]/[name in lowerCase]-consumer.handler`
 
 Some other properties

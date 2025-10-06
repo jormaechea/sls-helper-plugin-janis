@@ -170,6 +170,28 @@ describe('Hook Builder Helpers', () => {
 				});
 			});
 
+			it('Should throw if fastProcessingEnvironments is not an array', () => {
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					consumerProperties: {
+						fastProcessingEnvironments: 'not-an-array'
+					}
+				}), {
+					message: 'consumerProperties.fastProcessingEnvironments must be an array in SQS helper'
+				});
+			});
+
+			it('Should throw if fastProcessingEnvironments is not an array of strings', () => {
+				assert.throws(() => SQSHelper.buildHooks({
+					name: 'test',
+					consumerProperties: {
+						fastProcessingEnvironments: ['a', 1]
+					}
+				}), {
+					message: 'consumerProperties.fastProcessingEnvironments must be an array of strings in SQS helper. Received [ \'a\', 1 ]'
+				});
+			});
+
 		});
 
 		const mainConsumerFunctionHook = ['function', {
@@ -666,6 +688,102 @@ describe('Hook Builder Helpers', () => {
 		});
 
 		context('Create SQS Hooks with Custom Consumer configuration', () => {
+
+			context('When using fastProcessingEnvironments', () => {
+
+				it('Should set maximumBatchingWindow to 0 if ENV is in fastProcessingEnvironments', () => {
+
+					process.env.ENV = 'beta';
+
+					const hooks = SQSHelper.buildHooks({
+						name: 'Test',
+						consumerProperties: {
+							fastProcessingEnvironments: ['beta', 'dev']
+						}
+					});
+
+					const consumer = hooks.find(h => h[0] === 'function');
+					assert.deepStrictEqual(consumer[1].events[0].sqs.maximumBatchingWindow, 0);
+				});
+
+				it('Should not change maximumBatchingWindow if ENV is not in fastProcessingEnvironments', () => {
+
+					process.env.ENV = 'prod';
+
+					const hooks = SQSHelper.buildHooks({
+						name: 'Test',
+						consumerProperties: {
+							fastProcessingEnvironments: ['beta', 'dev']
+						}
+					});
+
+					const consumer = hooks.find(h => h[0] === 'function');
+					assert.deepStrictEqual(consumer[1].events[0].sqs.maximumBatchingWindow, 20);
+				});
+
+				it('Should not change maximumBatchingWindow if fastProcessingEnvironments is empty', () => {
+
+					process.env.ENV = 'beta';
+
+					const hooks = SQSHelper.buildHooks({
+						name: 'Test',
+						consumerProperties: {
+							fastProcessingEnvironments: []
+						}
+					});
+
+					const consumer = hooks.find(h => h[0] === 'function');
+					assert.deepStrictEqual(consumer[1].events[0].sqs.maximumBatchingWindow, 20);
+				});
+
+				it('Should set maximumBatchingWindow to 0 for delay queues using the main handler', () => {
+					process.env.ENV = 'beta';
+
+					const hooks = SQSHelper.buildHooks({
+						name: 'Test',
+						delayQueueProperties: {
+							generateEnvVars: true
+						},
+						delayConsumerProperties: {
+							useMainHandler: true,
+							fastProcessingEnvironments: ['beta']
+						}
+					});
+
+					const consumer = hooks.find(h => h[0] === 'function');
+					// The delay queue is the second event source
+					assert.deepStrictEqual(consumer[1].events[1].sqs.maximumBatchingWindow, 0);
+				});
+
+				it('Should handle mixed fast processing configurations for separate consumers', () => {
+					process.env.ENV = 'beta';
+
+					const hooks = SQSHelper.buildHooks({
+						name: 'Test',
+						consumerProperties: {
+							fastProcessingEnvironments: ['beta']
+						},
+						delayQueueProperties: {
+							generateEnvVars: true
+						},
+						delayConsumerProperties: {
+							// No fast processing for delay queue
+							fastProcessingEnvironments: []
+						},
+						dlqConsumerProperties: {
+							fastProcessingEnvironments: ['beta']
+						}
+					});
+
+					const mainConsumer = hooks.find(h => h[1].functionName === 'TestQueueConsumer');
+					const delayConsumer = hooks.find(h => h[1].functionName === 'TestDelayQueueConsumer');
+					const dlqConsumer = hooks.find(h => h[1].functionName === 'TestDLQQueueConsumer');
+
+					assert.strictEqual(mainConsumer[1].events[0].sqs.maximumBatchingWindow, 0, 'Main consumer should have fast processing');
+					assert.strictEqual(delayConsumer[1].events[0].sqs.maximumBatchingWindow, 20, 'Delay consumer should not have fast processing');
+					assert.strictEqual(dlqConsumer[1].events[0].sqs.maximumBatchingWindow, 0, 'DLQ consumer should have fast processing');
+				});
+			});
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using custom main consumer properties', () => {
 
