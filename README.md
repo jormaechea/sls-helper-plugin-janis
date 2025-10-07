@@ -352,9 +352,13 @@ Some other properties
 - `functionProperties`: _Object_ | To add other properties to the function (the same one in `function` hook).
 - `rawProperties`: _Object_ | To add rawProperties to the function for example changed a `DependsOn`.
 - `eventProperties`: _Object_ | To add extra Properties to the sqs event configuration, for example `functionResponseType`
+- `eventProperties.maximumConcurrency`: _default_: 10 | Controls max concurrent Lambda invocations for SQS message processing.
+
 
 Delay Consumer and DLQ Consumer properties
 - `useMainHandler`: _boolean_ | To use the main consumer and not creating other function.
+- `eventProperties.maximumConcurrency`: _default_: 10 | Controls max concurrent Lambda invocations for SQS message processing.
+
 
 **Queue Properties**:
 All `mainQueueProperties`, `delayQueueProperties` and `dlqQueueProperties` fields can be customized with the following properties:
