@@ -346,6 +346,7 @@ All `consumerProperties`, `delayConsumerProperties` and `dlqConsumerProperties` 
 - `description`: _default_: `[name] SQS Queue Consumer` | Change the function description.
 - `batchSize`: _default_: 1 (only for main consumer) | Change the SQS consumer batch Size.
 - `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
+- `fastProcessingEnvironments`: _default_: [] | An array of environment names (e.g., `['beta', 'dev']`). If the current `ENV` matches one of these, the `maximumBatchingWindow` for the consumer will be set to `0` for faster message processing.
 - `prefixPath`: _String_: To add optional prefix path after `src/sqs-consumer`. e.g. `src/sqs-consumer/[prefixPath]/[name in lowerCase]-consumer.handler`
 
 Some other properties
@@ -713,6 +714,37 @@ Creates the following Hooks
 	}]
 */
 
+```
+
+#### Fast Processing Environments example
+
+This example shows how to use the `fastProcessingEnvironments` property to disable the batching window in specific environments.
+
+```js
+const { helper } = require('sls-helper'); // eslint-disable-line
+const { SQSHelper } = require('sls-helper-plugin-janis');  // eslint-disable-line
+
+// ...
+
+module.exports = helper({
+	hooks: [
+		// other hooks
+
+		SQSHelper.sqsPermissions,
+
+		// must be spread
+		...SQSHelper.buildHooks({
+			name: 'MyQueue',
+			consumerProperties: {
+				fastProcessingEnvironments: ['beta', 'dev']
+			}
+		})
+	]
+});
+
+/*
+If the ENV environment variable is 'beta' or 'dev', the 'MyQueue' consumer will have its `maximumBatchingWindow` set to 0.
+*/
 ```
 
 #### Delay Queue using main consumer example
