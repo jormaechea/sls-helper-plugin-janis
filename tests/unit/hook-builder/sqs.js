@@ -186,7 +186,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 10,
-						maximumBatchingWindow: 20
+						maximumBatchingWindow: 20,
+						maximumConcurrency: 10
 					}
 				}
 			]
@@ -468,7 +469,8 @@ describe('Hook Builder Helpers', () => {
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
-									batchSize: 10
+									batchSize: 10,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -534,6 +536,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
+									maximumConcurrency: 10,
 									maximumBatchingWindow: 20
 								}
 							}
@@ -585,7 +588,8 @@ describe('Hook Builder Helpers', () => {
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
-									batchSize: 10
+									batchSize: 10,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -625,7 +629,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 50,
-						maximumBatchingWindow: 30
+						maximumBatchingWindow: 30,
+						maximumConcurrency: 10
 					}
 				});
 
@@ -692,7 +697,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 20,
-									maximumBatchingWindow: 80
+									maximumBatchingWindow: 80,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -730,6 +736,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 20,
+									maximumConcurrency: 10,
 									maximumBatchingWindow: 80
 								}
 							}
@@ -785,7 +792,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -820,6 +828,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									batchSize: 10,
 									maximumBatchingWindow: 20,
+									maximumConcurrency: 10,
 									functionResponseType: null
 								}
 							}
@@ -859,7 +868,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -1013,7 +1023,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoQueue.fifo',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -1074,7 +1085,8 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoDLQ.fifo',
-									functionResponseType: 'ReportBatchItemFailures'
+									functionResponseType: 'ReportBatchItemFailures',
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -1176,7 +1188,8 @@ describe('Hook Builder Helpers', () => {
 							arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayQueue',
 							functionResponseType: 'ReportBatchItemFailures',
 							batchSize: 10,
-							maximumBatchingWindow: 20
+							maximumBatchingWindow: 20,
+							maximumConcurrency: 10
 						}
 					}]
 				}];
@@ -1214,7 +1227,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayQueue',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 50,
-						maximumBatchingWindow: 30
+						maximumBatchingWindow: 30,
+						maximumConcurrency: 10
 					}
 				});
 
@@ -1415,7 +1429,8 @@ describe('Hook Builder Helpers', () => {
 										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
 										functionResponseType: 'ReportBatchItemFailures',
 										batchSize: 10,
-										maximumBatchingWindow: 20
+										maximumBatchingWindow: 20,
+										maximumConcurrency: 10
 									}
 								}
 							]
@@ -1489,6 +1504,7 @@ describe('Hook Builder Helpers', () => {
 									sqs: {
 										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
 										functionResponseType: 'ReportBatchItemFailures',
+										maximumConcurrency: 10,
 										batchSize: 10,
 										maximumBatchingWindow: 20
 									}
