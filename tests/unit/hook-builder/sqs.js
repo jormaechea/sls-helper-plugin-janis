@@ -449,6 +449,28 @@ describe('Hook Builder Helpers', () => {
 				]);
 			});
 
+			it('Should honor a custom maximum concurrency if it is set for main consumer', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: {
+						maximumConcurrency: 100
+					}
+				}), [
+					sqsUrlEnvVarsHook,
+					['function', {
+						...mainConsumerFunctionHook[1],
+						events: [
+							{
+								sqs: { ...mainConsumerFunctionHook[1].events[0].sqs, maximumConcurrency: 100 }
+							}
+						]
+					}],
+					mainQueueHook,
+					dlqQueueHook()
+				]);
+			});
+
 			it('Should create an SQS Hook for Main Queue, DLQ, and both consumers for main queue using a name and some config for dlq consumer', () => {
 
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'Test', dlqConsumerProperties: { batchSize: 10 } }), [
@@ -471,6 +493,72 @@ describe('Hook Builder Helpers', () => {
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
 									maximumConcurrency: 10
+								}
+							}
+						]
+					}],
+					['resource', {
+						name: 'TestArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestArchiveDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
+					}]
+				]);
+			});
+
+			it('Should honor a custom maximum concurrency if it is set for both main and dlq consumer', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'test',
+					consumerProperties: {
+						maximumConcurrency: 100
+					},
+					dlqConsumerProperties: {
+						maximumConcurrency: 200
+					}
+				}), [
+					sqsUrlEnvVarsHook,
+					['function', {
+						...mainConsumerFunctionHook[1],
+						events: [
+							{
+								sqs: { ...mainConsumerFunctionHook[1].events[0].sqs, maximumConcurrency: 100 }
+							}
+						]
+					}],
+					mainQueueHook,
+					dlqQueueHook(true),
+					['function', {
+						functionName: 'TestDLQQueueConsumer',
+						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
+						description: 'TestDLQ SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['TestDLQ']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
+									functionResponseType: 'ReportBatchItemFailures',
+									maximumConcurrency: 200
 								}
 							}
 						]
