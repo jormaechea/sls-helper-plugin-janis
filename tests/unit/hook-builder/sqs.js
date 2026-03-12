@@ -1468,6 +1468,16 @@ describe('Hook Builder Helpers', () => {
 
 					process.env.JANIS_LOCAL = '1';
 
+					const localMainConsumerFunctionHook = ['function', {
+						...mainConsumerFunctionHook[1],
+						events: [{
+							sqs: {
+								...mainConsumerFunctionHook[1].events[0].sqs,
+								maximumBatchingWindow: 0
+							}
+						}]
+					}];
+
 					assert.deepStrictEqual(SQSHelper.buildHooks({
 						name: 'Test',
 						sourceSnsTopic: {
@@ -1477,7 +1487,7 @@ describe('Hook Builder Helpers', () => {
 						}
 					}), [
 						sqsUrlEnvVarsHook,
-						mainConsumerFunctionHook,
+						localMainConsumerFunctionHook,
 						mainQueueHook,
 						dlqQueueHook(),
 						queuePolicyHook
@@ -1636,6 +1646,260 @@ describe('Hook Builder Helpers', () => {
 						snsFifoTopicCrossAccountSubscriptionHook
 					]);
 				});
+			});
+		});
+
+		context('Low environment batching window override', () => {
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in qa env', () => {
+
+				process.env.ENV = 'qa';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should cap batchSize to 10 when it exceeds 10 and maximumBatchingWindow is overridden in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { batchSize: 50 }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should not modify maximumBatchingWindow in prod env', () => {
+
+				process.env.ENV = 'prod';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in local env', () => {
+
+				process.env.JANIS_LOCAL = '1';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should not modify maximumBatchingWindow when ENV is not set', () => {
+
+				delete process.env.ENV;
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should keep maximumBatchingWindow when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { keepBatchingWindow: true }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should keep custom maximumBatchingWindow and batchSize when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { batchSize: 50, maximumBatchingWindow: 30, keepBatchingWindow: true }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 50,
+					maximumBatchingWindow: 30,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 for delay consumer in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					delayQueueProperties: {}
+				});
+
+				const [, mainConsumerHook, , delayConsumerHook] = hooks;
+
+				// Main consumer
+				const [, { events: mainEvents }] = mainConsumerHook;
+				assert.strictEqual(mainEvents[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(mainEvents[0].sqs.batchSize, 10);
+
+				// Delay consumer
+				const [, { events: delayEvents }] = delayConsumerHook;
+				assert.strictEqual(delayEvents[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(delayEvents[0].sqs.batchSize, 10);
+			});
+
+			it('Should keep maximumBatchingWindow for delay consumer when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					delayQueueProperties: {},
+					delayConsumerProperties: { keepBatchingWindow: true }
+				});
+
+				const [, , , delayConsumerHook] = hooks;
+				const [, { events: delayEvents }] = delayConsumerHook;
+
+				assert.strictEqual(delayEvents[0].sqs.maximumBatchingWindow, 20);
+				assert.strictEqual(delayEvents[0].sqs.batchSize, 10);
+			});
+
+			it('Should not affect DLQ consumer without maximumBatchingWindow in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 10 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, undefined);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should set maximumBatchingWindow to 0 for DLQ consumer with explicit maximumBatchingWindow in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 10, maximumBatchingWindow: 15 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should cap DLQ consumer batchSize to 10 when maximumBatchingWindow is overridden in qa env', () => {
+
+				process.env.ENV = 'qa';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 25, maximumBatchingWindow: 15 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should keep DLQ consumer maximumBatchingWindow when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 25, maximumBatchingWindow: 15, keepBatchingWindow: true }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 15);
+				assert.strictEqual(events[0].sqs.batchSize, 25);
 			});
 		});
 	});
