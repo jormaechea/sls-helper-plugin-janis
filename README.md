@@ -347,6 +347,9 @@ All `consumerProperties`, `delayConsumerProperties` and `dlqConsumerProperties` 
 - `batchSize`: _default_: 1 (only for main consumer) | Change the SQS consumer batch Size.
 - `maximumBatchingWindow`: _default_: 10 (only for main consumer) | Change the SQS consumer maximum batching window.
 - `prefixPath`: _String_: To add optional prefix path after `src/sqs-consumer`. e.g. `src/sqs-consumer/[prefixPath]/[name in lowerCase]-consumer.handler`
+- `keepBatchingWindow`: _boolean_ | Opt-out of the automatic batching window override in low environments (see below).
+
+> **Low environment batching window override**: In low-traffic environments (`beta`, `qa`, and `local`), the `maximumBatchingWindow` is automatically set to `0` to avoid delays in message processing. When `maximumBatchingWindow` is set to `0`, the `batchSize` is also capped at `10` (AWS restriction). If a specific queue needs to keep its batching window even in low environments, set `keepBatchingWindow: true` in the consumer properties for that queue.
 
 Some other properties
 - `functionProperties`: _Object_ | To add other properties to the function (the same one in `function` hook).
