@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.2.0] - 2026-03-18
+### Added
+- SQS Queues now have a batching window of zero and their batch size is capped to 10 in low environments (local, beta and QA)
+- New `keepBatchingWindow` property to avoid batching window and size cap
+
 ## [11.1.0] - 2025-11-17
 ### Added
 - Default maximum concurrency for SQS consumers is now 10 (#74)
