@@ -3,7 +3,7 @@ name: NPM Publish
 on:
   push:
     tags:
-      - '**'
+      - 'v*'
 
 permissions:
   id-token: write  # Required for OIDC
@@ -28,5 +28,10 @@ jobs:
         run: npm run test
       - name: Lint code
         run: npm run lint
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          registry-url: 'https://registry.npmjs.org'
       - name: Publish package
         run: npm publish --access public
