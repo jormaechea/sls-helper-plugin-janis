@@ -28,6 +28,5 @@ jobs:
         run: npm run test
       - name: Lint code
         run: npm run lint
-      - run: |
-          TAG=$(echo $GITHUB_REF_NAME | grep -oP '^v\d+\.\d+\.\d+-?\K(\w+)?')
-          npm publish --tag ${TAG:-latest} --access public
+      - name: Publish package
+        run: npm publish --access public
