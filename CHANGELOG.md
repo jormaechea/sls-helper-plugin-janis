@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.2.1] - 2026-06-05
+### Added
+- `docs/**` is now excluded from the service package by default
+
 ## [11.2.0] - 2026-03-31
 ### Added
 - Enriched API Gateway access log with additional properties: authorizer details, integration status/latency, X-Ray trace ID, WAF response code, account ID and stage

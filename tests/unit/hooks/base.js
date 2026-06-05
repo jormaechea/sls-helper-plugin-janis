@@ -146,6 +146,7 @@ describe('Hooks', () => {
 					'view-schemas-built-local/**',
 					'tests/**',
 					'test-reports/**',
+					'docs/**',
 					'hooks/**',
 					'events/**',
 					'permissions/**',
