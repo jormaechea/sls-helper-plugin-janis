@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Low environment SQS batch size cap now also applies when `batchSize` is defined inside `eventProperties`, preventing the invalid `maximumBatchingWindow: 0` + `batchSize > 10` combination that AWS rejects
 
 ## [11.2.1] - 2026-06-05
 ### Added

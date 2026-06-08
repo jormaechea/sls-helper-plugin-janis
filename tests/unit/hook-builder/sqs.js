@@ -1757,6 +1757,48 @@ describe('Hook Builder Helpers', () => {
 				});
 			});
 
+			it('Should cap batchSize to 10 when it is defined inside eventProperties and the batching window is overridden', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { eventProperties: { batchSize: 20, maximumConcurrency: 2 } }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 2
+				});
+			});
+
+			it('Should keep batchSize from eventProperties when keepBatchingWindow is true', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { keepBatchingWindow: true, maximumBatchingWindow: 5, eventProperties: { batchSize: 20, maximumConcurrency: 2 } }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 20,
+					maximumBatchingWindow: 5,
+					maximumConcurrency: 2
+				});
+			});
+
 			it('Should keep maximumBatchingWindow when keepBatchingWindow is true in beta env', () => {
 
 				process.env.ENV = 'beta';
