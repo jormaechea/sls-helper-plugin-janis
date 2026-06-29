@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- `DEVOPS_ACCOUNT_ID` environment variable is now injected into services by default
+
+### Changed
+- The shared `accountsIdsByService` parameter is now resolved via a constructed ARN using `DEVOPS_ACCOUNT_ID` instead of RAM resource discovery
 
 ## [11.2.1] - 2026-06-05
 ### Added

@@ -4,33 +4,21 @@ const assert = require('assert');
 const sinon = require('sinon');
 
 const { mockClient } = require('aws-sdk-client-mock');
-const { RAMClient, ListResourcesCommand } = require('@aws-sdk/client-ram');
 const { SSMClient, GetParameterCommand } = require('@aws-sdk/client-ssm');
 
 const ParameterStore = require('../../../lib/utils/parameter-store');
+
+const FAKE_DEVOPS_ACCOUNT_ID = '000000000000';
+const FAKE_REGION = 'us-east-1';
 
 describe('Parameter Store', () => {
 
 	describe('getSharedParameter()', () => {
 
-		let ramMock;
 		let ssmMock;
 
 		beforeEach(() => {
-			ramMock = mockClient(RAMClient);
 			ssmMock = mockClient(SSMClient);
-
-			ramMock.on(ListResourcesCommand).resolves({
-				resources: [{
-					arn: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam',
-					type: 'ssm:Parameter',
-					resourceShareArn: 'arn:aws:ram:us-east-1:000000000000:resource-share/8aa109bd-254c-4c58-86a9-a0e82cad4cb8',
-					status: 'AVAILABLE',
-					creationTime: '2024-10-22T16:59:19.275000-03:00',
-					lastUpdatedTime: '2024-10-22T16:59:21.802000-03:00',
-					resourceRegionScope: 'REGIONAL'
-				}]
-			});
 
 			ssmMock.on(GetParameterCommand).resolves({
 				Parameter: {
@@ -39,13 +27,16 @@ describe('Parameter Store', () => {
 					Value: '{"foo":"bar"}',
 					Version: 1,
 					LastModifiedDate: '2024-10-22T16:57:48.292000-03:00',
-					ARN: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam',
+					ARN: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParam`,
 					DataType: 'text'
 				}
 			});
 		});
 
-		afterEach(() => sinon.restore());
+		afterEach(() => {
+			sinon.restore();
+			ParameterStore.clearCache();
+		});
 
 		it('Should resolve an empty object in local env', async () => {
 
@@ -59,140 +50,121 @@ describe('Parameter Store', () => {
 			assert.deepStrictEqual(result, {});
 		});
 
-		it('Should reject if the shared parameter does not exist', async () => {
+		it('Should reject if DEVOPS_ACCOUNT_ID env var is missing', async () => {
 
-			ramMock.on(ListResourcesCommand).resolves({
-				resources: []
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: undefined,
+				JANIS_LOCAL: undefined
 			});
 
-			await assert.rejects(() => ParameterStore.getSharedParameter('SomeParam'), {
-				message: 'Could not find shared parameter SomeParam'
-			});
-
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand).length, 1);
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand, {
-				resourceOwner: 'OTHER-ACCOUNTS',
-				resourceType: 'ssm:Parameter'
-			}).length, 1);
+			await assert.rejects(
+				() => ParameterStore.getSharedParameter('SomeParam'),
+				{ message: 'Missing DEVOPS_ACCOUNT_ID env var to resolve shared parameter SomeParam' }
+			);
 
 			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 0);
 		});
 
-		it('Should reject if the SSM parameter does not exist', async () => {
+		it('Should resolve the JSON-parsed parameter value using the constructed ARN', async () => {
 
-			ssmMock.on(GetParameterCommand).rejects(new Error('Parameter does not exist'));
-
-			await assert.rejects(() => ParameterStore.getSharedParameter('SomeParam'));
-
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand).length, 1);
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand, {
-				resourceOwner: 'OTHER-ACCOUNTS',
-				resourceType: 'ssm:Parameter'
-			}).length, 1);
-
-			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 1);
-			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
-				Name: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam'
-			}).length, 1);
-		});
-
-		it('Should resolve the JSON-parsed parameter value if no errors occur', async () => {
-
-			ramMock.on(ListResourcesCommand).resolves({
-				resources: [{
-					arn: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam',
-					type: 'ssm:Parameter',
-					resourceShareArn: 'arn:aws:ram:us-east-1:000000000000:resource-share/8aa109bd-254c-4c58-86a9-a0e82cad4cb8',
-					status: 'AVAILABLE',
-					creationTime: '2024-10-22T16:59:19.275000-03:00',
-					lastUpdatedTime: '2024-10-22T16:59:21.802000-03:00',
-					resourceRegionScope: 'REGIONAL'
-				}]
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: FAKE_DEVOPS_ACCOUNT_ID,
+				AWS_REGION: FAKE_REGION,
+				JANIS_LOCAL: undefined
 			});
 
 			const parameterValue = await ParameterStore.getSharedParameter('SomeParam');
 
-			assert.deepStrictEqual(parameterValue, {
-				foo: 'bar'
-			});
-
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand).length, 1);
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand, {
-				resourceOwner: 'OTHER-ACCOUNTS',
-				resourceType: 'ssm:Parameter'
-			}).length, 1);
+			assert.deepStrictEqual(parameterValue, { foo: 'bar' });
 
 			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 1);
 			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
-				Name: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam'
+				Name: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParam`
 			}).length, 1);
 		});
 
-		it('Should store the parameter in cache for consecutive calls', async () => {
+		it('Should strip a leading slash from the parameter name when building the ARN', async () => {
 
-			ramMock.on(ListResourcesCommand)
-				.resolvesOnce({
-					resources: [{
-						arn: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam2',
-						type: 'ssm:Parameter',
-						resourceShareArn: 'arn:aws:ram:us-east-1:000000000000:resource-share/8aa109bd-254c-4c58-86a9-a0e82cad4cb8',
-						status: 'AVAILABLE',
-						creationTime: '2024-10-22T16:59:19.275000-03:00',
-						lastUpdatedTime: '2024-10-22T16:59:21.802000-03:00',
-						resourceRegionScope: 'REGIONAL'
-					}]
-				})
-				.resolvesOnce({
-					resources: [{
-						arn: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam3',
-						type: 'ssm:Parameter',
-						resourceShareArn: 'arn:aws:ram:us-east-1:000000000000:resource-share/8aa109bd-254c-4c58-86a9-a0e82cad4cb8',
-						status: 'AVAILABLE',
-						creationTime: '2024-10-22T16:59:19.275000-03:00',
-						lastUpdatedTime: '2024-10-22T16:59:21.802000-03:00',
-						resourceRegionScope: 'REGIONAL'
-					}]
-				});
-			ssmMock.on(GetParameterCommand)
-				.resolves({
-					Parameter: {
-						Name: 'SomeParam2',
-						Type: 'String',
-						Value: '{"foo":"bar"}',
-						Version: 1,
-						LastModifiedDate: '2024-10-22T16:57:48.292000-03:00',
-						ARN: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam2',
-						DataType: 'text'
-					}
-				})
-				.resolves({
-					Parameter: {
-						Name: 'SomeParam3',
-						Type: 'String',
-						Value: '{"foo":"bar"}',
-						Version: 1,
-						LastModifiedDate: '2024-10-22T16:57:48.292000-03:00',
-						ARN: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam3',
-						DataType: 'text'
-					}
-				});
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: FAKE_DEVOPS_ACCOUNT_ID,
+				AWS_REGION: FAKE_REGION,
+				JANIS_LOCAL: undefined
+			});
 
-			await ParameterStore.getSharedParameter('SomeParam2');
-			await ParameterStore.getSharedParameter('SomeParam3');
-			await ParameterStore.getSharedParameter('SomeParam3');
+			await ParameterStore.getSharedParameter('/SomeLeadingSlashParam');
 
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand).length, 2);
-			assert.deepStrictEqual(ramMock.commandCalls(ListResourcesCommand, {
-				resourceOwner: 'OTHER-ACCOUNTS',
-				resourceType: 'ssm:Parameter'
-			}).length, 2);
-
-			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 2);
 			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
-				Name: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam2'
+				Name: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeLeadingSlashParam`
 			}).length, 1);
+		});
+
+		it('Should use us-east-1 as default region when AWS_REGION is not set', async () => {
+
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: FAKE_DEVOPS_ACCOUNT_ID,
+				AWS_REGION: undefined,
+				JANIS_LOCAL: undefined
+			});
+
+			await ParameterStore.getSharedParameter('SomeParamDefaultRegion');
+
+			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 1);
 			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
-				Name: 'arn:aws:ssm:us-east-1:000000000000:parameter/SomeParam3'
+				Name: `arn:aws:ssm:us-east-1:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParamDefaultRegion`
+			}).length, 1);
+		});
+
+		it('Should store the parameter in cache and not call SSM on consecutive calls', async () => {
+
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: FAKE_DEVOPS_ACCOUNT_ID,
+				AWS_REGION: FAKE_REGION,
+				JANIS_LOCAL: undefined
+			});
+
+			ssmMock.on(GetParameterCommand).resolves({
+				Parameter: {
+					Name: 'SomeParam4',
+					Type: 'String',
+					Value: '{"foo":"bar"}',
+					Version: 1,
+					LastModifiedDate: '2024-10-22T16:57:48.292000-03:00',
+					ARN: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParam4`,
+					DataType: 'text'
+				}
+			});
+
+			await ParameterStore.getSharedParameter('SomeParam4');
+			await ParameterStore.getSharedParameter('SomeParam4');
+			await ParameterStore.getSharedParameter('SomeParam4');
+
+			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 1);
+			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
+				Name: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParam4`
+			}).length, 1);
+		});
+
+		it('Should reject if the SSM GetParameter call fails', async () => {
+
+			sinon.stub(process, 'env').value({
+				...process.env,
+				DEVOPS_ACCOUNT_ID: FAKE_DEVOPS_ACCOUNT_ID,
+				AWS_REGION: FAKE_REGION,
+				JANIS_LOCAL: undefined
+			});
+
+			ssmMock.on(GetParameterCommand).rejects(new Error('Parameter does not exist'));
+
+			await assert.rejects(() => ParameterStore.getSharedParameter('SomeParamFailing'));
+
+			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand).length, 1);
+			assert.deepStrictEqual(ssmMock.commandCalls(GetParameterCommand, {
+				Name: `arn:aws:ssm:${FAKE_REGION}:${FAKE_DEVOPS_ACCOUNT_ID}:parameter/SomeParamFailing`
 			}).length, 1);
 		});
 

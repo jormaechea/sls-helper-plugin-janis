@@ -47,7 +47,8 @@ describe('Hooks', () => {
 				environment: {
 					JANIS_SERVICE_NAME: '${self:custom.serviceCode}',
 					JANIS_ENV: '${self:custom.stage}',
-					MS_PATH: 'src'
+					MS_PATH: 'src',
+					DEVOPS_ACCOUNT_ID: '${env:DEVOPS_ACCOUNT_ID}'
 				},
 				tags: {
 					Owner: 'Janis',
