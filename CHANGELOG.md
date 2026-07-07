@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [11.3.0] - 2026-07-07
 ### Changed
 - The `serviceCode → awsAccountId` mapping used to resolve cross-service account IDs is now read through `@janiscommerce/accounts-ids-by-service`, which discovers the RAM-shared SSM parameter and falls back to a same-account lookup automatically
 
