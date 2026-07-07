@@ -5,7 +5,7 @@
 const assert = require('assert').strict;
 const sinon = require('sinon');
 
-const ParameterStore = require('../../../lib/utils/parameter-store');
+const { AccountsIdsByService } = require('@janiscommerce/accounts-ids-by-service');
 
 const { base } = require('../../..');
 
@@ -20,8 +20,7 @@ describe('Hooks', () => {
 		};
 
 		beforeEach(() => {
-			sinon.stub(ParameterStore, 'getSharedParameter').resolves(accountIdsParameterValue);
-			sinon.stub(ParameterStore, 'getLocalParameter').resolves(accountIdsParameterValue);
+			sinon.stub(AccountsIdsByService, 'getMapping').resolves(accountIdsParameterValue);
 		});
 
 		afterEach(() => {
@@ -534,8 +533,7 @@ describe('Hooks', () => {
 
 			assert.deepStrictEqual(serviceConfig, expectedConfig);
 
-			sinon.assert.calledOnceWithExactly(ParameterStore.getSharedParameter, 'accountsIdsByService');
-			sinon.assert.notCalled(ParameterStore.getLocalParameter);
+			sinon.assert.calledOnceWithExactly(AccountsIdsByService.getMapping);
 		});
 
 		it('Should not override the original configuration', async () => {
@@ -692,24 +690,6 @@ describe('Hooks', () => {
 			};
 
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
-		});
-
-		it('Should use local ParameterStore accountsIdsByService when received custom.localAccountsIdsByService', async () => {
-
-			const serviceConfig = await base({
-				custom: { localAccountsIdsByService: true }
-			}, {
-				serviceCode: validServiceCode,
-				servicePort: validServicePort
-			});
-
-			const expectedConfigForLocalParameter = JSON.parse(JSON.stringify(expectedConfig));
-			expectedConfigForLocalParameter.custom.localAccountsIdsByService = true;
-
-			assert.deepStrictEqual(serviceConfig, expectedConfigForLocalParameter);
-
-			sinon.assert.notCalled(ParameterStore.getSharedParameter);
-			sinon.assert.calledOnceWithExactly(ParameterStore.getLocalParameter, 'accountsIdsByService');
 		});
 
 	});
