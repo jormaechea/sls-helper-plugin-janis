@@ -287,6 +287,46 @@ It will automatically create (or update) a Cloudfront Distribution and a Route 5
 
 > Expected URL to access CustomUrlLambda2: `https://subSubdomain.subdomain.{HostedZoneName}/customUrl2`
 
+### Function URL Permissions
+
+> **:warning: Required for every function declared with `url: true`.**
+>
+> From **November 1st 2026** AWS requires the permission policy of a function URL to grant both `lambda:InvokeFunctionUrl` and `lambda:InvokeFunction`. Serverless only emits the first one ([serverless/serverless#13147](https://github.com/serverless/serverless/issues/13147)), so a public function URL deployed without this hook answers `403 Forbidden` after that date.
+
+Adds the missing `lambda:InvokeFunction` permission for every function that exposes a public URL.
+
+**Important:**
+- It must be placed **after** every `function` hook, since it reads the functions already present in the service configuration.
+- It takes no options.
+- Functions declared with `url: { authorizer: 'aws_iam' }` are skipped, since serverless does not create a permission for them either.
+- Safe to deploy on a service that already has the statement applied by hand: the new resource gets its own statement id, so it neither conflicts with nor removes the existing one.
+
+```js
+module.exports = helper({
+	hooks: [
+
+		['janis.base', { serviceCode: 'ifood', servicePort: 3072 }],
+
+		...functions, // every function hook, including the ones with `url: true`
+
+		'janis.functionUrlPermissions'
+	]
+});
+```
+
+For a function named `OrderWebhook` it creates:
+
+```yaml
+OrderWebhookLambdaPermissionFnUrlInvokeFunction:
+  Type: AWS::Lambda::Permission
+  Properties:
+    FunctionName:
+      Fn::GetAtt: [OrderWebhookLambdaFunction, Arn]
+    Action: lambda:InvokeFunction
+    Principal: '*'
+    InvokedViaFunctionUrl: true
+```
+
 ## :new: Hook Builders Helpers
 
 This kind of Helpers aren't hooks, this helpers builds hooks (normally many of them) that together make available some kind of resource.
