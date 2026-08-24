@@ -3,7 +3,11 @@ name: NPM Publish
 on:
   push:
     tags:
-      - '**'
+      - 'v*'
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
 jobs:
   publish-npm:
@@ -12,20 +16,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v6
         with:
-          node-version: 18.x
-          registry-url: https://registry.npmjs.org/
+          node-version: 22.x
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies
         run: npm install
       - name: Run tests
         run: npm run test
       - name: Lint code
         run: npm run lint
-      - run: |
-          TAG=$(echo $GITHUB_REF_NAME | grep -oP '^v\d+\.\d+\.\d+-?\K(\w+)?')
-          npm publish --tag ${TAG:-latest} --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+      - name: Use Node.js 24.x
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24.x
+          registry-url: 'https://registry.npmjs.org'
+      - name: Publish package
+        run: npm publish --access public

@@ -5,7 +5,7 @@
 const assert = require('assert').strict;
 const sinon = require('sinon');
 
-const ParameterStore = require('../../../lib/utils/parameter-store');
+const { AccountsIdsByService } = require('@janiscommerce/accounts-ids-by-service');
 
 const { base } = require('../../..');
 
@@ -20,8 +20,7 @@ describe('Hooks', () => {
 		};
 
 		beforeEach(() => {
-			sinon.stub(ParameterStore, 'getSharedParameter').resolves(accountIdsParameterValue);
-			sinon.stub(ParameterStore, 'getLocalParameter').resolves(accountIdsParameterValue);
+			sinon.stub(AccountsIdsByService, 'getMapping').resolves(accountIdsParameterValue);
 		});
 
 		afterEach(() => {
@@ -36,7 +35,7 @@ describe('Hooks', () => {
 			service: 'Janis${self:custom.serviceName}Service',
 			provider: {
 				name: 'aws',
-				runtime: 'nodejs18.x',
+				runtime: 'nodejs22.x',
 				memorySize: 1024,
 				stage: '${opt:stage, \'local\'}',
 				region: '${opt:region, \'us-east-1\'}',
@@ -83,18 +82,31 @@ describe('Hooks', () => {
 							date: '$context.requestTime',
 							reqId: '$context.requestId',
 							integReqId: '$context.integration.requestId',
+							accountId: '$context.accountId',
+							stage: '$context.stage',
 							ip: '$context.identity.sourceIp',
 							ua: '$context.identity.userAgent',
-							clientCode: '$context.authorizer.clientCode',
-							principalId: '$context.authorizer.principalId',
 							reqMethod: '$context.httpMethod',
 							path: '$context.resourcePath',
 							realPath: '$context.path',
 							status: '$context.status',
 							authTime: '$context.authorizer.latency',
+							authStatus: '$context.authorizer.status',
+							authReqId: '$context.authorizer.requestId',
+							clientCode: '$context.authorizer.clientCode',
+							principalId: '$context.authorizer.principalId',
+							sessionId: '$context.authorizer.sessionId',
+							appClientId: '$context.authorizer.appClientId',
+							authName: '$context.authorizer.authName',
+							authMethod: '$context.authorizer.authMethod',
+							apiKey: '$context.authorizer.janisApiKey',
 							resTime: '$context.responseLatency',
 							gwError: '$context.error.message',
-							integError: '$context.integration.error'
+							integError: '$context.integration.error',
+							integStatus: '$context.integrationStatus',
+							integLatency: '$context.integrationLatency',
+							traceId: '$context.xrayTraceId',
+							wafCode: '$context.wafResponseCode'
 						})
 					}
 				}
@@ -133,6 +145,7 @@ describe('Hooks', () => {
 					'view-schemas-built-local/**',
 					'tests/**',
 					'test-reports/**',
+					'docs/**',
 					'hooks/**',
 					'events/**',
 					'permissions/**',
@@ -426,6 +439,14 @@ describe('Hooks', () => {
 						}
 					}
 
+				},
+
+				extensions: {
+					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+						Properties: {
+							Runtime: 'nodejs22.x'
+						}
+					}
 				}
 			}
 		};
@@ -512,8 +533,7 @@ describe('Hooks', () => {
 
 			assert.deepStrictEqual(serviceConfig, expectedConfig);
 
-			sinon.assert.calledOnceWithExactly(ParameterStore.getSharedParameter, 'accountsIdsByService');
-			sinon.assert.notCalled(ParameterStore.getLocalParameter);
+			sinon.assert.calledOnceWithExactly(AccountsIdsByService.getMapping);
 		});
 
 		it('Should not override the original configuration', async () => {
@@ -670,24 +690,6 @@ describe('Hooks', () => {
 			};
 
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
-		});
-
-		it('Should use local ParameterStore accountsIdsByService when received custom.localAccountsIdsByService', async () => {
-
-			const serviceConfig = await base({
-				custom: { localAccountsIdsByService: true }
-			}, {
-				serviceCode: validServiceCode,
-				servicePort: validServicePort
-			});
-
-			const expectedConfigForLocalParameter = JSON.parse(JSON.stringify(expectedConfig));
-			expectedConfigForLocalParameter.custom.localAccountsIdsByService = true;
-
-			assert.deepStrictEqual(serviceConfig, expectedConfigForLocalParameter);
-
-			sinon.assert.notCalled(ParameterStore.getSharedParameter);
-			sinon.assert.calledOnceWithExactly(ParameterStore.getLocalParameter, 'accountsIdsByService');
 		});
 
 	});

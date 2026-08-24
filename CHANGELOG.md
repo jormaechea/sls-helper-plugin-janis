@@ -6,6 +6,36 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.3.0] - 2026-07-07
+### Changed
+- The `serviceCode → awsAccountId` mapping used to resolve cross-service account IDs is now read through `@janiscommerce/accounts-ids-by-service`, which discovers the RAM-shared SSM parameter and falls back to a same-account lookup automatically
+
+## [11.2.1] - 2026-06-05
+### Added
+- `docs/**` is now excluded from the service package by default
+
+## [11.2.0] - 2026-03-31
+### Added
+- Enriched API Gateway access log with additional properties: authorizer details, integration status/latency, X-Ray trace ID, WAF response code, account ID and stage
+- SQS Queues now have a batching window of zero and their batch size is capped to 10 in low environments (local, beta and QA)
+- New `keepBatchingWindow` property to avoid batching window and size cap
+
+## [11.1.0] - 2025-11-17
+### Added
+- Default maximum concurrency for SQS consumers is now 10 (#74)
+
+## [11.0.0] - 2025-09-25
+### Changed
+- Updated default Node.js runtime from 18.x to 22.x **BREAKING CHANGE**
+
+## [10.4.0] - 2025-08-18
+### Added
+- Support for FIFO SNS Topics and subscriptions to FIFO SQS Queues
+
+## [10.3.2] - 2025-08-06
+### Fixed
+- Fixed DLQ queue consumer dependency on archive DLQ
+
 ## [10.3.1] - 2025-06-24
 ### Fixed
 - Fixed DLQ setup to avoid setting `RedrivePolicy` when there is no consumer (and no Archive DLQ)

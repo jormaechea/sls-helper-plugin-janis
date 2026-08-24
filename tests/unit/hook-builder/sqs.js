@@ -186,7 +186,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 10,
-						maximumBatchingWindow: 20
+						maximumBatchingWindow: 20,
+						maximumConcurrency: 10
 					}
 				}
 			]
@@ -255,6 +256,7 @@ describe('Hook Builder Helpers', () => {
 			name: 'TestDLQ',
 			resource: {
 				Type: 'AWS::SQS::Queue',
+				...hasConsumer && { DependsOn: ['TestArchiveDLQ'] },
 				Properties: {
 					QueueName: '${self:custom.serviceName}TestDLQ',
 					ReceiveMessageWaitTimeSeconds: 20,
@@ -365,6 +367,66 @@ describe('Hook Builder Helpers', () => {
 			}
 		}];
 
+		// FIFO SQS with SNS FIFO Topic constants
+		const fifoQueuePolicyHook = ['resource', {
+			name: 'TestFifoQueuePolicy',
+			resource: {
+				Type: 'AWS::SQS::QueuePolicy',
+				Properties: {
+					Queues: [
+						'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo'
+					],
+					PolicyDocument: {
+						Version: '2012-10-17',
+						Statement: [
+							{
+								Effect: 'Allow',
+								Action: 'sqs:SendMessage',
+								Resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+								Principal: {
+									Service: 'sns.amazonaws.com'
+								},
+								Condition: {
+									'ForAnyValue:StringLike': {
+										'aws:SourceOrgPaths': '${env:AWS_ORGANIZATIONAL_UNIT_PATH}'
+									}
+								}
+							}
+						]
+					}
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
+		const snsFifoTopicSubscriptionHook = ['resource', {
+			name: 'SubSNSTestFifoTopicSQSTestFifo',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${aws:accountId}:TestFifoTopic.fifo'
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
+		const snsFifoTopicCrossAccountSubscriptionHook = ['resource', {
+			name: 'SubSNSTestFifoTopicSQSTestFifo',
+			resource: {
+				Type: 'AWS::SNS::Subscription',
+				Properties: {
+					Protocol: 'sqs',
+					Endpoint: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+					RawMessageDelivery: true,
+					TopicArn: 'arn:aws:sns:${aws:region}:${self:custom.awsAccountsByService.another-service}:TestFifoTopic.fifo'
+				},
+				DependsOn: ['TestFifoQueue']
+			}
+		}];
+
 		context('Create basic SQS Hooks', () => {
 
 			it('Should create an SQS Hook for Main Queue, DLQ, and consumer for main queue using only a name', () => {
@@ -382,6 +444,28 @@ describe('Hook Builder Helpers', () => {
 				assert.deepStrictEqual(SQSHelper.buildHooks({ name: 'test' }), [
 					sqsUrlEnvVarsHook,
 					mainConsumerFunctionHook,
+					mainQueueHook,
+					dlqQueueHook()
+				]);
+			});
+
+			it('Should honor a custom maximum concurrency if it is set for main consumer', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: {
+						maximumConcurrency: 100
+					}
+				}), [
+					sqsUrlEnvVarsHook,
+					['function', {
+						...mainConsumerFunctionHook[1],
+						events: [
+							{
+								sqs: { ...mainConsumerFunctionHook[1].events[0].sqs, maximumConcurrency: 100 }
+							}
+						]
+					}],
 					mainQueueHook,
 					dlqQueueHook()
 				]);
@@ -407,7 +491,74 @@ describe('Hook Builder Helpers', () => {
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
-									batchSize: 10
+									batchSize: 10,
+									maximumConcurrency: 10
+								}
+							}
+						]
+					}],
+					['resource', {
+						name: 'TestArchiveDLQ',
+						resource: {
+							Type: 'AWS::SQS::Queue',
+							Properties: {
+								QueueName: '${self:custom.serviceName}TestArchiveDLQ',
+								ReceiveMessageWaitTimeSeconds: 20,
+								VisibilityTimeout: 90,
+								MessageRetentionPeriod: 864000,
+								Tags: [
+									...queueTags('Test'),
+									{
+										Key: 'SQSType',
+										Value: 'ArchiveDLQ'
+									},
+									{
+										Key: 'HasConsumer',
+										Value: 'false'
+									}
+								]
+							}
+						}
+					}]
+				]);
+			});
+
+			it('Should honor a custom maximum concurrency if it is set for both main and dlq consumer', () => {
+
+				assert.deepStrictEqual(SQSHelper.buildHooks({
+					name: 'test',
+					consumerProperties: {
+						maximumConcurrency: 100
+					},
+					dlqConsumerProperties: {
+						maximumConcurrency: 200
+					}
+				}), [
+					sqsUrlEnvVarsHook,
+					['function', {
+						...mainConsumerFunctionHook[1],
+						events: [
+							{
+								sqs: { ...mainConsumerFunctionHook[1].events[0].sqs, maximumConcurrency: 100 }
+							}
+						]
+					}],
+					mainQueueHook,
+					dlqQueueHook(true),
+					['function', {
+						functionName: 'TestDLQQueueConsumer',
+						handler: 'src/sqs-consumer/test-dlq-consumer.handler',
+						description: 'TestDLQ SQS Queue Consumer',
+						timeout: 15,
+						rawProperties: {
+							dependsOn: ['TestDLQ']
+						},
+						events: [
+							{
+								sqs: {
+									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
+									functionResponseType: 'ReportBatchItemFailures',
+									maximumConcurrency: 200
 								}
 							}
 						]
@@ -473,6 +624,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
+									maximumConcurrency: 10,
 									maximumBatchingWindow: 20
 								}
 							}
@@ -497,6 +649,7 @@ describe('Hook Builder Helpers', () => {
 						name: 'TestBeginDLQ',
 						resource: {
 							Type: 'AWS::SQS::Queue',
+							DependsOn: ['TestBeginArchiveDLQ'],
 							Properties: {
 								QueueName: '${self:custom.serviceName}TestBeginDLQ',
 								ReceiveMessageWaitTimeSeconds: 20,
@@ -523,7 +676,8 @@ describe('Hook Builder Helpers', () => {
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestBeginDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
-									batchSize: 10
+									batchSize: 10,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -563,7 +717,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 50,
-						maximumBatchingWindow: 30
+						maximumBatchingWindow: 30,
+						maximumConcurrency: 10
 					}
 				});
 
@@ -630,7 +785,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 20,
-									maximumBatchingWindow: 80
+									maximumBatchingWindow: 80,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -668,6 +824,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDLQ',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 20,
+									maximumConcurrency: 10,
 									maximumBatchingWindow: 80
 								}
 							}
@@ -723,7 +880,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -758,6 +916,7 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									batchSize: 10,
 									maximumBatchingWindow: 20,
+									maximumConcurrency: 10,
 									functionResponseType: null
 								}
 							}
@@ -797,7 +956,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -951,7 +1111,8 @@ describe('Hook Builder Helpers', () => {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoQueue.fifo',
 									functionResponseType: 'ReportBatchItemFailures',
 									batchSize: 10,
-									maximumBatchingWindow: 20
+									maximumBatchingWindow: 20,
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -984,6 +1145,7 @@ describe('Hook Builder Helpers', () => {
 						name: 'MyFifoDLQ',
 						resource: {
 							Type: 'AWS::SQS::Queue',
+							DependsOn: ['MyFifoArchiveDLQ'],
 							Properties: {
 								QueueName: '${self:custom.serviceName}MyFifoDLQ.fifo',
 								ReceiveMessageWaitTimeSeconds: 20,
@@ -1011,7 +1173,8 @@ describe('Hook Builder Helpers', () => {
 							{
 								sqs: {
 									arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}MyFifoDLQ.fifo',
-									functionResponseType: 'ReportBatchItemFailures'
+									functionResponseType: 'ReportBatchItemFailures',
+									maximumConcurrency: 10
 								}
 							}
 						]
@@ -1113,7 +1276,8 @@ describe('Hook Builder Helpers', () => {
 							arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayQueue',
 							functionResponseType: 'ReportBatchItemFailures',
 							batchSize: 10,
-							maximumBatchingWindow: 20
+							maximumBatchingWindow: 20,
+							maximumConcurrency: 10
 						}
 					}]
 				}];
@@ -1151,7 +1315,8 @@ describe('Hook Builder Helpers', () => {
 						arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestDelayQueue',
 						functionResponseType: 'ReportBatchItemFailures',
 						batchSize: 50,
-						maximumBatchingWindow: 30
+						maximumBatchingWindow: 30,
+						maximumConcurrency: 10
 					}
 				});
 
@@ -1303,6 +1468,16 @@ describe('Hook Builder Helpers', () => {
 
 					process.env.JANIS_LOCAL = '1';
 
+					const localMainConsumerFunctionHook = ['function', {
+						...mainConsumerFunctionHook[1],
+						events: [{
+							sqs: {
+								...mainConsumerFunctionHook[1].events[0].sqs,
+								maximumBatchingWindow: 0
+							}
+						}]
+					}];
+
 					assert.deepStrictEqual(SQSHelper.buildHooks({
 						name: 'Test',
 						sourceSnsTopic: {
@@ -1312,7 +1487,7 @@ describe('Hook Builder Helpers', () => {
 						}
 					}), [
 						sqsUrlEnvVarsHook,
-						mainConsumerFunctionHook,
+						localMainConsumerFunctionHook,
 						mainQueueHook,
 						dlqQueueHook(),
 						queuePolicyHook
@@ -1320,6 +1495,412 @@ describe('Hook Builder Helpers', () => {
 				});
 			});
 
+			context('SNS FIFO Topics', () => {
+
+				it('Should add a Queue Policy and SNS Subscription for FIFO Topic from the same account to FIFO SQS', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'TestFifo',
+						mainQueueProperties: {
+							fifoQueue: true
+						},
+						dlqQueueProperties: { generateEnvVars: true },
+						sourceSnsTopic: {
+							name: 'TestFifoTopic'
+						}
+					}), [
+						['envVars', {
+							TEST_FIFO_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo',
+							TEST_FIFO_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoDLQ.fifo'
+						}],
+						['function', {
+							functionName: 'TestFifoQueueConsumer',
+							handler: 'src/sqs-consumer/test-fifo-consumer.handler',
+							description: 'TestFifo SQS Queue Consumer',
+							timeout: 15,
+							rawProperties: {
+								dependsOn: ['TestFifoQueue']
+							},
+							events: [
+								{
+									sqs: {
+										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+										functionResponseType: 'ReportBatchItemFailures',
+										batchSize: 10,
+										maximumBatchingWindow: 20,
+										maximumConcurrency: 10
+									}
+								}
+							]
+						}],
+						['resource', {
+							name: 'TestFifoQueue',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoQueue.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									// eslint-disable-next-line max-len
+									RedrivePolicy: JSON.stringify({
+										maxReceiveCount: 5,
+										deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoDLQ.fifo'
+									}),
+									FifoQueue: true,
+									Tags: mainQueueTags('TestFifo')
+								},
+								DependsOn: ['TestFifoDLQ']
+							}
+						}],
+						['resource', {
+							name: 'TestFifoDLQ',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoDLQ.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									MessageRetentionPeriod: 864000,
+									FifoQueue: true,
+									Tags: dlqTags('TestFifo')
+								}
+							}
+						}],
+						fifoQueuePolicyHook,
+						snsFifoTopicSubscriptionHook
+					]);
+				});
+
+				it('Should add a Queue Policy and SNS Subscription for FIFO Topic from another account to FIFO SQS (non local env)', () => {
+
+					assert.deepStrictEqual(SQSHelper.buildHooks({
+						name: 'TestFifo',
+						mainQueueProperties: {
+							fifoQueue: true
+						},
+						dlqQueueProperties: { generateEnvVars: true },
+						sourceSnsTopic: {
+							scope: snsTopicScopes.remote,
+							serviceCode: 'another-service',
+							name: 'TestFifoTopic'
+						}
+					}), [
+						['envVars', {
+							TEST_FIFO_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoQueue.fifo',
+							TEST_FIFO_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestFifoDLQ.fifo'
+						}],
+						['function', {
+							functionName: 'TestFifoQueueConsumer',
+							handler: 'src/sqs-consumer/test-fifo-consumer.handler',
+							description: 'TestFifo SQS Queue Consumer',
+							timeout: 15,
+							rawProperties: {
+								dependsOn: ['TestFifoQueue']
+							},
+							events: [
+								{
+									sqs: {
+										arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoQueue.fifo',
+										functionResponseType: 'ReportBatchItemFailures',
+										maximumConcurrency: 10,
+										batchSize: 10,
+										maximumBatchingWindow: 20
+									}
+								}
+							]
+						}],
+						['resource', {
+							name: 'TestFifoQueue',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoQueue.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									// eslint-disable-next-line max-len
+									RedrivePolicy: JSON.stringify({
+										maxReceiveCount: 5,
+										deadLetterTargetArn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestFifoDLQ.fifo'
+									}),
+									FifoQueue: true,
+									Tags: mainQueueTags('TestFifo')
+								},
+								DependsOn: ['TestFifoDLQ']
+							}
+						}],
+						['resource', {
+							name: 'TestFifoDLQ',
+							resource: {
+								Type: 'AWS::SQS::Queue',
+								Properties: {
+									QueueName: '${self:custom.serviceName}TestFifoDLQ.fifo',
+									ReceiveMessageWaitTimeSeconds: 20,
+									VisibilityTimeout: 90,
+									MessageRetentionPeriod: 864000,
+									FifoQueue: true,
+									Tags: dlqTags('TestFifo')
+								}
+							}
+						}],
+						fifoQueuePolicyHook,
+						snsFifoTopicCrossAccountSubscriptionHook
+					]);
+				});
+			});
+		});
+
+		context('Low environment batching window override', () => {
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in qa env', () => {
+
+				process.env.ENV = 'qa';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should cap batchSize to 10 when it exceeds 10 and maximumBatchingWindow is overridden in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { batchSize: 50 }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should not modify maximumBatchingWindow in prod env', () => {
+
+				process.env.ENV = 'prod';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 and keep batchSize at 10 for main consumer in local env', () => {
+
+				process.env.JANIS_LOCAL = '1';
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 0,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should not modify maximumBatchingWindow when ENV is not set', () => {
+
+				delete process.env.ENV;
+
+				const hooks = SQSHelper.buildHooks({ name: 'Test' });
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should keep maximumBatchingWindow when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { keepBatchingWindow: true }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 10,
+					maximumBatchingWindow: 20,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should keep custom maximumBatchingWindow and batchSize when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					consumerProperties: { batchSize: 50, maximumBatchingWindow: 30, keepBatchingWindow: true }
+				});
+
+				const [, consumerHook] = hooks;
+				const [, { events }] = consumerHook;
+
+				assert.deepStrictEqual(events[0].sqs, {
+					arn: 'arn:aws:sqs:${aws:region}:${aws:accountId}:${self:custom.serviceName}TestQueue',
+					functionResponseType: 'ReportBatchItemFailures',
+					batchSize: 50,
+					maximumBatchingWindow: 30,
+					maximumConcurrency: 10
+				});
+			});
+
+			it('Should set maximumBatchingWindow to 0 for delay consumer in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					delayQueueProperties: {}
+				});
+
+				const [, mainConsumerHook, , delayConsumerHook] = hooks;
+
+				// Main consumer
+				const [, { events: mainEvents }] = mainConsumerHook;
+				assert.strictEqual(mainEvents[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(mainEvents[0].sqs.batchSize, 10);
+
+				// Delay consumer
+				const [, { events: delayEvents }] = delayConsumerHook;
+				assert.strictEqual(delayEvents[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(delayEvents[0].sqs.batchSize, 10);
+			});
+
+			it('Should keep maximumBatchingWindow for delay consumer when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					delayQueueProperties: {},
+					delayConsumerProperties: { keepBatchingWindow: true }
+				});
+
+				const [, , , delayConsumerHook] = hooks;
+				const [, { events: delayEvents }] = delayConsumerHook;
+
+				assert.strictEqual(delayEvents[0].sqs.maximumBatchingWindow, 20);
+				assert.strictEqual(delayEvents[0].sqs.batchSize, 10);
+			});
+
+			it('Should not affect DLQ consumer without maximumBatchingWindow in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 10 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, undefined);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should set maximumBatchingWindow to 0 for DLQ consumer with explicit maximumBatchingWindow in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 10, maximumBatchingWindow: 15 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should cap DLQ consumer batchSize to 10 when maximumBatchingWindow is overridden in qa env', () => {
+
+				process.env.ENV = 'qa';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 25, maximumBatchingWindow: 15 }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 0);
+				assert.strictEqual(events[0].sqs.batchSize, 10);
+			});
+
+			it('Should keep DLQ consumer maximumBatchingWindow when keepBatchingWindow is true in beta env', () => {
+
+				process.env.ENV = 'beta';
+
+				const hooks = SQSHelper.buildHooks({
+					name: 'Test',
+					dlqConsumerProperties: { batchSize: 25, maximumBatchingWindow: 15, keepBatchingWindow: true }
+				});
+
+				const dlqConsumerHook = hooks.find(([type, config]) => type === 'function' && config.functionName === 'TestDLQQueueConsumer');
+				const [, { events }] = dlqConsumerHook;
+
+				assert.strictEqual(events[0].sqs.maximumBatchingWindow, 15);
+				assert.strictEqual(events[0].sqs.batchSize, 25);
+			});
 		});
 	});
 });
