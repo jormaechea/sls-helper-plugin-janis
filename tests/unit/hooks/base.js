@@ -106,7 +106,9 @@ describe('Hooks', () => {
 							integStatus: '$context.integrationStatus',
 							integLatency: '$context.integrationLatency',
 							traceId: '$context.xrayTraceId',
-							wafCode: '$context.wafResponseCode'
+							wafCode: '$context.wafResponseCode',
+							page: '$context.requestOverride.querystring.page',
+							pageSize: '$context.requestOverride.querystring.pageSize'
 						})
 					}
 				}
