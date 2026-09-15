@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.5.0] - 2026-09-15
+### Added
+- `serverlessApiGatewayCloudWatchRole` IAM role is now created by default in the base service configuration and referenced from `provider.logs.restApi.role`, so services no longer need to declare it in their own `serverless.js`
+
 ## [11.4.0] - 2026-09-07
 ### Added
 - API Gateway access log now includes `page` and `pageSize` (from `x-janis-page` / `x-janis-page-size` headers)
