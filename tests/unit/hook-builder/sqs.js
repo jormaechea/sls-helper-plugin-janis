@@ -40,6 +40,47 @@ describe('Hook Builder Helpers', () => {
 					TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
 				});
 			});
+
+			it('Should return the env var with the main queue FIFO URL when isFifoQueue is true', () => {
+
+				assert.deepStrictEqual(SQSHelper.getEnvVar('Test', true), {
+					TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue.fifo'
+				});
+			});
+		});
+
+		context('Delay queue env var getter', () => {
+
+			it('Should return the env var with the delay queue URL based on the queue name', () => {
+
+				assert.deepStrictEqual(SQSHelper.getDelayEnvVar('Test'), {
+					TEST_DELAY_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayQueue'
+				});
+			});
+
+			it('Should return the env var with the delay queue FIFO URL when isFifoQueue is true', () => {
+
+				assert.deepStrictEqual(SQSHelper.getDelayEnvVar('Test', true), {
+					TEST_DELAY_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayQueue.fifo'
+				});
+			});
+		});
+
+		context('DLQ env var getter', () => {
+
+			it('Should return the env var with the DLQ URL based on the queue name', () => {
+
+				assert.deepStrictEqual(SQSHelper.getDLQEnvVar('Test'), {
+					TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ'
+				});
+			});
+
+			it('Should return the env var with the DLQ FIFO URL when isFifoQueue is true', () => {
+
+				assert.deepStrictEqual(SQSHelper.getDLQEnvVar('Test', true), {
+					TEST_DLQ_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ.fifo'
+				});
+			});
 		});
 
 		context('SQS properties validations', () => {
