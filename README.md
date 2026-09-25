@@ -415,7 +415,7 @@ Environment Variables will be created for SQS URL if the property `generateEnvVa
 
 > FIFO queues uses the same Environment Variables as Standard queues.
 
-> `generateEnvVars` has no effect when global env vars are disabled with `SQSHelper.shouldSetGlobalEnvVars(false)` (see below): in that case, use `getEnvVar` / `getDelayEnvVar` / `getDLQEnvVar` to set the URL env vars on a per-function basis.
+> `generateEnvVars` has no effect when global env vars are disabled with `SQSHelper.shouldSetGlobalEnvVars(false)` (see below): in that case, use `getEnvVar` to set the URL env vars on a per-function basis.
 
 **Disable Global env vars**
 
@@ -423,11 +423,14 @@ As service grows, the environment variable size quota is reached and breaks serv
 
 To do so, you can use `SQSHelper.shouldSetGlobalEnvVars(false)` method (by default, global env vars are enabled).
 
-Once disabled, you MUST set the variables to each Lambda function that needs them using `SQSHelper.getEnvVar(queueName)`, `SQSHelper.getDelayEnvVar(queueName)` and/or `SQSHelper.getDLQEnvVar(queueName)`, depending on which queue URL that function needs. The three methods accept an optional second `isFifoQueue` boolean parameter (same as `mainQueueProperties.fifoQueue`), for example:
+Once disabled, you MUST set the variables to each Lambda function that needs them using `SQSHelper.getEnvVar(queueName, options)`. It always returns the main queue URL, and `options` controls whether the delay queue and/or DLQ URLs are also included:
 
-* `SQSHelper.getEnvVar(queueName, isFifoQueue)`: returns `{ [NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL: '...' }`, the main queue URL.
-* `SQSHelper.getDelayEnvVar(queueName, isFifoQueue)`: returns `{ [NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL: '...' }`, the delay queue URL.
-* `SQSHelper.getDLQEnvVar(queueName, isFifoQueue)`: returns `{ [NAME_IN_SNAKE_CASE]_DLQ_QUEUE_URL: '...' }`, the DLQ URL.
+* `SQSHelper.getEnvVar(queueName)`: returns `{ [NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL: '...' }`, only the main queue URL.
+* `options` as a **boolean** (legacy signature, still fully supported): interpreted as `fifoQueue`, e.g. `SQSHelper.getEnvVar(queueName, true)`.
+* `options` as an **object** `{ fifoQueue?, delayQueue?, dlq? }` (all `boolean`, default `false`):
+	* `fifoQueue: true`: builds every returned URL as a FIFO queue URL (same effect as the boolean signature).
+	* `delayQueue: true`: also returns `[NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL`.
+	* `dlq: true`: also returns `[NAME_IN_SNAKE_CASE]_DLQ_QUEUE_URL`.
 
 ```js
 const { helper } = require('sls-helper'); // eslint-disable-line
@@ -462,8 +465,7 @@ module.exports = helper({
 			handler: 'src/lambda/Session/Retry.handler',
 			rawProperties: {
 				environment: {
-					...SQSHelper.getDelayEnvVar('SessionEnded'),
-					...SQSHelper.getDLQEnvVar('SessionEnded')
+					...SQSHelper.getEnvVar('SessionEnded', { delayQueue: true })
 				}
 			}
 		}],
