@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.5.1] - 2026-09-28
+### Fixed
+- Function URLs now actually get their `lambda:InvokeFunction` permission when `serverless-plugin-split-stacks` is enabled (it was never being added since 11.4.0)
+
 ## [11.5.0] - 2026-09-15
 ### Added
 - `serverlessApiGatewayCloudWatchRole` IAM role is now created by default in the base service configuration and referenced from `provider.logs.restApi.role`, so services no longer need to declare it in their own `serverless.js`
