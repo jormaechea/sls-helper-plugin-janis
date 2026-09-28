@@ -259,8 +259,8 @@ describe('Hooks', () => {
 				'serverless-api-gateway-caching',
 				'serverless-plugin-stage-variables',
 				'@janiscommerce/serverless-plugin-remove-authorizer-permissions',
-				'serverless-plugin-split-stacks',
-				'./node_modules/sls-helper-plugin-janis/lib/plugins/add-invoke-function-permissions'
+				'./node_modules/sls-helper-plugin-janis/lib/plugins/add-invoke-function-permissions',
+				'serverless-plugin-split-stacks'
 			],
 			resources: {
 				Resources: {
