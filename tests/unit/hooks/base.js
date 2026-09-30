@@ -109,7 +109,8 @@ describe('Hooks', () => {
 							traceId: '$context.xrayTraceId',
 							wafCode: '$context.wafResponseCode',
 							page: '$context.requestOverride.querystring.page',
-							pageSize: '$context.requestOverride.querystring.pageSize'
+							pageSize: '$context.requestOverride.querystring.pageSize',
+							filters: '$context.requestOverride.querystring.filters'
 						})
 					}
 				}
