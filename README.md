@@ -411,9 +411,11 @@ Environment Variables will be created for SQS URL if the property `generateEnvVa
 
 * `[NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL` for main queue
 * `[NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL` for delay queue (when `delayQueueProperties` received)
-* `[NAME_IN_SNAKE_CASE]_DLQ_SQS_QUEUE_URL` for dlq
+* `[NAME_IN_SNAKE_CASE]_DLQ_QUEUE_URL` for dlq
 
 > FIFO queues uses the same Environment Variables as Standard queues.
+
+> `generateEnvVars` has no effect when global env vars are disabled with `SQSHelper.shouldSetGlobalEnvVars(false)` (see below): in that case, use `getEnvVar` to set the URL env vars on a per-function basis.
 
 **Disable Global env vars**
 
@@ -421,7 +423,14 @@ As service grows, the environment variable size quota is reached and breaks serv
 
 To do so, you can use `SQSHelper.shouldSetGlobalEnvVars(false)` method (by default, global env vars are enabled).
 
-Once disabled, you MUST set the variables to each Lambda function that needs them using `SQSHelper.getEnvVar(queueName)`, for example:
+Once disabled, you MUST set the variables to each Lambda function that needs them using `SQSHelper.getEnvVar(queueName, options)`. It always returns the main queue URL, and `options` controls whether the delay queue and/or DLQ URLs are also included:
+
+* `SQSHelper.getEnvVar(queueName)`: returns `{ [NAME_IN_SNAKE_CASE]_SQS_QUEUE_URL: '...' }`, only the main queue URL.
+* `options` as a **boolean** (legacy signature, still fully supported): interpreted as `fifoQueue`, e.g. `SQSHelper.getEnvVar(queueName, true)`.
+* `options` as an **object** `{ fifoQueue?, delayQueue?, dlq? }` (all `boolean`, default `false`):
+	* `fifoQueue: true`: builds every returned URL as a FIFO queue URL (same effect as the boolean signature).
+	* `delayQueue: true`: also returns `[NAME_IN_SNAKE_CASE]_DELAY_QUEUE_URL`.
+	* `dlq: true`: also returns `[NAME_IN_SNAKE_CASE]_DLQ_QUEUE_URL`.
 
 ```js
 const { helper } = require('sls-helper'); // eslint-disable-line
@@ -439,7 +448,7 @@ module.exports = helper({
 		SQSHelper.sqsPermissions
 
 		// must spread it
-		...SQSHelper.buildHooks({ name: 'SessionEnded' }),
+		...SQSHelper.buildHooks({ name: 'SessionEnded', delayQueueProperties: {} }),
 
 		['function', {
 			functionName: 'EndSession',
@@ -447,6 +456,16 @@ module.exports = helper({
 			rawProperties: {
 				environment: {
 					...SQSHelper.getEnvVar('SessionEnded')
+				}
+			}
+		}],
+
+		['function', {
+			functionName: 'RetrySession',
+			handler: 'src/lambda/Session/Retry.handler',
+			rawProperties: {
+				environment: {
+					...SQSHelper.getEnvVar('SessionEnded', { delayQueue: true })
 				}
 			}
 		}],
