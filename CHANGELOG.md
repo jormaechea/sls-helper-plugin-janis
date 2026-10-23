@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.6.0] - 2026-10-23
+### Changed
+- CORS `allowCredentials` now defaults to `false`, so the `Access-Control-Allow-Credentials` header is no longer sent by default. Browser clients that send credentialed cross-origin requests (`withCredentials: true` or `credentials: 'include'`) will get a CORS error unless the service sets `allowCredentials: true` explicitly
+
 ## [11.5.1] - 2026-09-28
 ### Fixed
 - Function URLs now actually get their `lambda:InvokeFunction` permission when `serverless-plugin-split-stacks` is enabled (it was never being added since 11.4.0)
