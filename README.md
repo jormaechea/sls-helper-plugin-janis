@@ -68,8 +68,10 @@ You can also customize or override every property:
 | replace | boolean | Indicates whether it should replace the CORS properties or merge then with the default | false |
 | origins | array\<string\> | An array of allowed origins | ['*'] |
 | headers | array\<string\> | An array of allowed headers | [See below](#cors-default-headers) |
-| allowCredentials | boolean | Indicates whether the credentials header should be set | `true` |
+| allowCredentials | boolean | Indicates whether the credentials header should be set | `false` |
 | maxAge | number | The time in seconds thar CORS headers should be cached | 600 |
+
+> :warning: `allowCredentials` defaults to `false`, so the `Access-Control-Allow-Credentials` header is no longer sent by default. Browser clients that send credentialed cross-origin requests (`withCredentials: true` in XHR/axios or `credentials: 'include'` in fetch) will get a CORS error. If you really need credentialed requests, set `allowCredentials: true` explicitly together with a list of trusted `origins` instead of `'*'`.
 
 #### CORS Default headers:
 ```

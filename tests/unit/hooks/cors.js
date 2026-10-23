@@ -39,7 +39,7 @@ describe('Hooks', () => {
 				cors: {
 					origins: [...defaultOrigins],
 					headers: [...defaultHeaders],
-					allowCredentials: true,
+					allowCredentials: false,
 					maxAge: 600
 				}
 			},
@@ -122,7 +122,7 @@ describe('Hooks', () => {
 						cors: {
 							origins: [...defaultOrigins, ...customOrigins],
 							headers: [...defaultHeaders, ...customHeaders],
-							allowCredentials: true,
+							allowCredentials: false,
 							maxAge: 600
 
 						}
@@ -134,7 +134,7 @@ describe('Hooks', () => {
 			it('Should override allowCredentials and maxAge if they are defined', () => {
 
 				const serviceConfig = cors({ ...initialConfig }, {
-					allowCredentials: false,
+					allowCredentials: true,
 					maxAge: 60
 				});
 
@@ -144,7 +144,7 @@ describe('Hooks', () => {
 						cors: {
 							origins: [...defaultOrigins],
 							headers: [...defaultHeaders],
-							allowCredentials: false,
+							allowCredentials: true,
 							maxAge: 60
 						}
 					},
@@ -205,7 +205,7 @@ describe('Hooks', () => {
 						cors: {
 							origins: [...customOrigins],
 							headers: [...customHeaders],
-							allowCredentials: true,
+							allowCredentials: false,
 							maxAge: 600
 
 						}
@@ -218,7 +218,7 @@ describe('Hooks', () => {
 
 				const serviceConfig = cors({ ...initialConfig }, {
 					replace: true,
-					allowCredentials: false,
+					allowCredentials: true,
 					maxAge: 60
 				});
 
@@ -228,7 +228,7 @@ describe('Hooks', () => {
 						cors: {
 							origins: [...defaultOrigins],
 							headers: [...defaultHeaders],
-							allowCredentials: false,
+							allowCredentials: true,
 							maxAge: 60
 						}
 					},
