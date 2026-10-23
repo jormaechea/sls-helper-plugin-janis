@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.6.1] - 2026-10-23
+### Fixed
+- The default API response template no longer sends the `Access-Control-Allow-Credentials: true` header, so regular (non-preflight) responses now match the `allowCredentials: false` CORS default. Endpoints that set `allowCredentials: true` explicitly still get the header
+
 ## [11.6.0] - 2026-10-23
 ### Changed
 - CORS `allowCredentials` now defaults to `false`, so the `Access-Control-Allow-Credentials` header is no longer sent by default. Browser clients that send credentialed cross-origin requests (`withCredentials: true` or `credentials: 'include'`) will get a CORS error unless the service sets `allowCredentials: true` explicitly
