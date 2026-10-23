@@ -41,6 +41,10 @@ describe('Hooks', () => {
 				otherProp: true
 			});
 		});
+
+		it('Should not set the Access-Control-Allow-Credentials header in the response template', () => {
+			assert.ok(!('Access-Control-Allow-Credentials' in response.headers));
+		});
 	});
 
 });
