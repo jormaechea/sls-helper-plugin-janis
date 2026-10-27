@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.7.0] - 2026-10-27
+### Added
+- API Gateway access log now includes `filters` (List API filters received in the query string, capped to 256 characters)
+- `SQSHelper.getEnvVar()` now accepts an options object `{ fifoQueue, delayQueue, dlq }` to also set the delay queue and DLQ URL env vars per function. The boolean second parameter is still supported as `fifoQueue`
+- `SQSHelper.sqsPermissions` now includes `sqs:ChangeMessageVisibility`, required by the retry backoff of `@janiscommerce/sqs-consumer` 1.3.0+
+- Lambda functions now run on arm64 when the deploy runs on an arm64 machine. Deploys on x86 don't change, and `provider.architecture` in the service config still takes precedence
+
 ## [11.6.1] - 2026-10-23
 ### Fixed
 - The default API response template no longer sends the `Access-Control-Allow-Credentials: true` header, so regular (non-preflight) responses now match the `allowCredentials: false` CORS default. Endpoints that set `allowCredentials: true` explicitly still get the header
