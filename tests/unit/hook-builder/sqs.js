@@ -34,10 +34,94 @@ describe('Hook Builder Helpers', () => {
 
 		context('Queue env var getter', () => {
 
-			it('Should return the env var with the main queue URL based on the queue name', () => {
+			const mainQueueUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue';
+			const mainQueueFifoUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue.fifo';
+			const delayQueueUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayQueue';
+			const delayQueueFifoUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDelayQueue.fifo';
+			const dlqUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ';
+			const dlqFifoUrl = 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestDLQ.fifo';
 
-				assert.deepStrictEqual(SQSHelper.getEnvVar('Test'), {
-					TEST_SQS_QUEUE_URL: 'https://sqs.${aws:region}.amazonaws.com/${aws:accountId}/${self:custom.serviceName}TestQueue'
+			context('Legacy boolean signature', () => {
+
+				it('Should return only the main queue URL when options is omitted', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test'), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl
+					});
+				});
+
+				it('Should return the main queue FIFO URL when options is true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', true), {
+						TEST_SQS_QUEUE_URL: mainQueueFifoUrl
+					});
+				});
+
+				it('Should return the main queue Standard URL when options is false', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', false), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl
+					});
+				});
+			});
+
+			context('Options object signature', () => {
+
+				it('Should return only the main queue URL when options is an empty object', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', {}), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl
+					});
+				});
+
+				it('Should also return the delay queue URL when delayQueue is true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { delayQueue: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl,
+						TEST_DELAY_QUEUE_URL: delayQueueUrl
+					});
+				});
+
+				it('Should also return the delay queue FIFO URL when delayQueue and fifoQueue are true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { delayQueue: true, fifoQueue: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueFifoUrl,
+						TEST_DELAY_QUEUE_URL: delayQueueFifoUrl
+					});
+				});
+
+				it('Should also return the DLQ URL when dlq is true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { dlq: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl,
+						TEST_DLQ_QUEUE_URL: dlqUrl
+					});
+				});
+
+				it('Should also return the DLQ FIFO URL when dlq and fifoQueue are true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { dlq: true, fifoQueue: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueFifoUrl,
+						TEST_DLQ_QUEUE_URL: dlqFifoUrl
+					});
+				});
+
+				it('Should return the delay queue and DLQ URLs when both delayQueue and dlq are true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { delayQueue: true, dlq: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueUrl,
+						TEST_DELAY_QUEUE_URL: delayQueueUrl,
+						TEST_DLQ_QUEUE_URL: dlqUrl
+					});
+				});
+
+				it('Should return the delay queue and DLQ FIFO URLs when delayQueue, dlq and fifoQueue are true', () => {
+
+					assert.deepStrictEqual(SQSHelper.getEnvVar('Test', { delayQueue: true, dlq: true, fifoQueue: true }), {
+						TEST_SQS_QUEUE_URL: mainQueueFifoUrl,
+						TEST_DELAY_QUEUE_URL: delayQueueFifoUrl,
+						TEST_DLQ_QUEUE_URL: dlqFifoUrl
+					});
 				});
 			});
 		});
