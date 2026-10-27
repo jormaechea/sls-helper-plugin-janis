@@ -21,6 +21,7 @@ describe('Hooks', () => {
 
 		beforeEach(() => {
 			sinon.stub(AccountsIdsByService, 'getMapping').resolves(accountIdsParameterValue);
+			sinon.stub(process, 'arch').value('x64');
 		});
 
 		afterEach(() => {
@@ -708,6 +709,42 @@ describe('Hooks', () => {
 				securityGroupIds: ['sg-abcdef0001'],
 				subnetIds: ['subnet-111111111', 'subnet-222222222', 'subnet-333333333']
 			};
+
+			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+		});
+
+		it('Should set the arm64 architecture when the build runs on arm64', async () => {
+
+			process.arch = 'arm64';
+
+			const serviceConfig = await base({}, {
+				serviceCode: validServiceCode,
+				servicePort: validServicePort
+			});
+
+			const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+			clonedExpectedConfig.provider.architecture = 'arm64';
+
+			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+		});
+
+		it('Should use the architecture of the service over the one of the build', async () => {
+
+			process.arch = 'arm64';
+
+			const serviceConfig = await base({
+				provider: {
+					architecture: 'x86_64'
+				}
+			}, {
+				serviceCode: validServiceCode,
+				servicePort: validServicePort
+			});
+
+			const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+			clonedExpectedConfig.provider.architecture = 'x86_64';
 
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
