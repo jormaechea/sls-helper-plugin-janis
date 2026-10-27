@@ -245,6 +245,14 @@ process.env.LAMBDA_SECURITY_GROUP_ID = 'sg-abcdef0001';
 process.env.LAMBDA_SUBNET_IDS = 'subnet-111111111,subnet-222222222';
 ```
 
+### Lambda Architecture
+
+_(since 11.7.0)_
+
+The functions run on the architecture of the build: if the deploy runs on an arm64 machine, `architecture: arm64` is added in `provider`. Otherwise nothing is added and the functions keep the Serverless default (`x86_64`).
+
+This way the native modules installed by npm in the build match the architecture of the functions. To force an architecture, set `provider.architecture` in the service config.
+
 ### Function URL
 
 This plugin is used to create Lambda functions with customized domains. The domain structure follows the format `${customSubdomain}.${hostedZone}/{customPath}`.
