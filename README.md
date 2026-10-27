@@ -518,7 +518,8 @@ Creates the following Hooks
 			'sqs:SendMessage',
 			'sqs:DeleteMessage',
 			'sqs:ReceiveMessage',
-			'sqs:GetQueueAttributes'
+			'sqs:GetQueueAttributes',
+			'sqs:ChangeMessageVisibility'
 		],
 		// eslint-disable-next-line no-template-curly-in-string
 		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
@@ -640,7 +641,8 @@ Creates the following Hooks
 			'sqs:SendMessage',
 			'sqs:DeleteMessage',
 			'sqs:ReceiveMessage',
-			'sqs:GetQueueAttributes'
+			'sqs:GetQueueAttributes',
+			'sqs:ChangeMessageVisibility'
 		],
 		// eslint-disable-next-line no-template-curly-in-string
 		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
@@ -792,7 +794,8 @@ Creates the following Hooks
 			'sqs:SendMessage',
 			'sqs:DeleteMessage',
 			'sqs:ReceiveMessage',
-			'sqs:GetQueueAttributes'
+			'sqs:GetQueueAttributes',
+			'sqs:ChangeMessageVisibility'
 		],
 		// eslint-disable-next-line no-template-curly-in-string
 		resource: 'arn:aws:sqs:${aws:region}:${aws:accountId}:*'
