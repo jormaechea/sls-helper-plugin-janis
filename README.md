@@ -24,7 +24,26 @@ Used to implement a base service with minimal setup
 |--------|------|-------------|------------|---------------|
 | serviceCode | string | The service name in lowercase dash separated | **Required** | |
 | servicePort | number | The service port | **Required** | |
+| runtime | string | The Lambda runtime of the service. Valid values: `nodejs22.x`, `nodejs24.x`, `nodejs26.x` | | `nodejs22.x` |
 | params | { [env]: { [param]: value } } | A mapping of param name and value by environment. Well known environments are: `local`, `beta`, `qa` and `prod`, but any other env will be kept | | The params `humanReadableStage` and `janisDomain` are defined for each well-known env. |
+
+#### runtime
+
+If `runtime` is not set, `provider.runtime` is `nodejs22.x`. If it is set, `provider.runtime` becomes `${param:runtime}` and the params are defined as follows:
+- `params.default.runtime`: the received `runtime`. A `runtime` defined in the service `params.default` takes precedence.
+- `params.local.runtime`: `nodejs22.x`, because `serverless-offline` does not support Node 26. A `runtime` defined in the service `params.local` takes precedence.
+
+The `provider` of the service still overrides any of this.
+
+The custom resource `CustomDashresourceDashapigwDashcwDashroleLambdaFunction` (API Gateway CloudWatch role) always stays in `nodejs22.x`: its Serverless v3 handler uses a callback signature that Node 24+ rejects with `Runtime.CallbackHandlerDeprecated`.
+
+```js
+['janis.base', {
+	serviceCode: 'oms',
+	servicePort: 3000,
+	runtime: 'nodejs26.x'
+}]
+```
 
 Some properties of the initial configuration have a new special meaning:
 

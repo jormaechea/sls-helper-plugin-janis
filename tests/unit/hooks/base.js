@@ -518,6 +518,84 @@ describe('Hooks', () => {
 			});
 		});
 
+		context('When runtime is received', () => {
+
+			['nodejs20.x', 'node', '', 22, ['nodejs22.x'], null].forEach(invalidRuntime => {
+				it(`Should throw if runtime hook config is invalid: ${JSON.stringify(invalidRuntime)}`, async () => {
+					await assert.rejects(() => base({}, {
+						serviceCode: validServiceCode,
+						servicePort: validServicePort,
+						runtime: invalidRuntime
+					}));
+				});
+			});
+
+			['nodejs22.x', 'nodejs24.x', 'nodejs26.x'].forEach(runtime => {
+				it(`Should use the runtime param when runtime is ${runtime}`, async () => {
+
+					const serviceConfig = await base({}, {
+						serviceCode: validServiceCode,
+						servicePort: validServicePort,
+						runtime
+					});
+
+					const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+					clonedExpectedConfig.provider.runtime = '${param:runtime}';
+					clonedExpectedConfig.params.default = { runtime };
+					clonedExpectedConfig.params.local.runtime = 'nodejs22.x';
+
+					assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+					assert.strictEqual(
+						serviceConfig.resources.extensions.CustomDashresourceDashapigwDashcwDashroleLambdaFunction.Properties.Runtime,
+						'nodejs22.x'
+					);
+				});
+			});
+
+			it('Should use the service params.local.runtime and params.default.runtime over the hook ones', async () => {
+
+				const serviceConfig = await base({
+					params: {
+						default: {
+							runtime: 'nodejs24.x',
+							defaultParam: true
+						},
+						local: {
+							runtime: 'nodejs24.x'
+						}
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				});
+
+				const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+				clonedExpectedConfig.provider.runtime = '${param:runtime}';
+				clonedExpectedConfig.params.default = { runtime: 'nodejs24.x', defaultParam: true };
+				clonedExpectedConfig.params.local.runtime = 'nodejs24.x';
+
+				assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+			});
+
+			it('Should use the service provider.runtime over the runtime param', async () => {
+
+				const serviceConfig = await base({
+					provider: {
+						runtime: 'nodejs24.x'
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				});
+
+				assert.strictEqual(serviceConfig.provider.runtime, 'nodejs24.x');
+			});
+		});
+
 		it('Should not throw if a valid serviceCode and servicePort is received', async () => {
 
 			await assert.doesNotReject(() => base({}, {
