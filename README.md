@@ -31,7 +31,7 @@ Used to implement a base service with minimal setup
 
 If `runtime` is not set, `provider.runtime` is `nodejs22.x`. If it is set, `provider.runtime` becomes `${param:runtime}` and the params are defined as follows:
 - `params.default.runtime`: the received `runtime`. A `runtime` defined in the service `params.default` takes precedence.
-- `params.local.runtime`: `nodejs22.x`, because `serverless-offline` does not support Node 26. A `runtime` defined in the service `params.local` takes precedence.
+- `params.local.runtime`: `nodejs22.x` for every received `runtime`, because `serverless-offline` 13.x does not support Node 26. A `runtime` defined in the service `params.local` takes precedence.
 
 The `provider` of the service still overrides any of this.
 

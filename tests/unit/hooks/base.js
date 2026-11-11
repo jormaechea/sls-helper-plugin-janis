@@ -580,6 +580,36 @@ describe('Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 			});
 
+			it('Should merge the runtime with the service params that do not define it', async () => {
+
+				const serviceConfig = await base({
+					params: {
+						default: {
+							defaultParam: true
+						},
+						local: {
+							janisDomain: 'custom.localhost'
+						},
+						dev: {
+							humanReadableStage: 'Dev'
+						}
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs24.x'
+				});
+
+				assert.strictEqual(serviceConfig.provider.runtime, '${param:runtime}');
+				assert.deepStrictEqual(serviceConfig.params.default, { runtime: 'nodejs24.x', defaultParam: true });
+				assert.deepStrictEqual(serviceConfig.params.local, {
+					runtime: 'nodejs22.x',
+					humanReadableStage: 'Local',
+					janisDomain: 'custom.localhost'
+				});
+				assert.deepStrictEqual(serviceConfig.params.dev, { humanReadableStage: 'Dev' });
+			});
+
 			it('Should use the service provider.runtime over the runtime param', async () => {
 
 				const serviceConfig = await base({
@@ -593,6 +623,7 @@ describe('Hooks', () => {
 				});
 
 				assert.strictEqual(serviceConfig.provider.runtime, 'nodejs24.x');
+				assert.deepStrictEqual(serviceConfig.params.default, { runtime: 'nodejs26.x' });
 			});
 		});
 
