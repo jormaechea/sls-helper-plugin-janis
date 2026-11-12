@@ -65,23 +65,17 @@ If the env var `JANIS_TRACE_LAYERS` is set, the Trace Lambda Layer is added to `
 {"nodejs22.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7","nodejs26.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7"}
 ```
 
-The layer depends on the effective `provider.runtime`:
-- No `runtime` in the hook: the ARN of `nodejs22.x`.
-- `runtime` in the hook: `${self:custom.janisTraceLayers.${param:runtime}}`, so each stage takes the layer of its own runtime, including a `params.<stage>.runtime` override.
-- `provider.runtime` set in the service as a literal: the ARN of that runtime. Set as a variable: the same `${self:custom.janisTraceLayers...}` lookup with that variable.
-
-The map is set in `custom.janisTraceLayers`, nested by the dots of each runtime (`{ nodejs22: { x: 'arn:...' } }`), because Serverless splits `${self:...}` addresses by dots.
+The layer is the ARN of the `runtime` declared in the `janis.base` hook, or of `nodejs22.x` if it is not declared. A `runtime` override by stage (`params.<stage>.runtime`) does not change the layer.
 
 The deploy fails if:
-- `JANIS_TRACE_LAYERS` is not a valid JSON, or not a non-empty object with string values.
-- The runtime of the hook (or the `provider.runtime` of the service) is not in the map. The error lists the available runtimes.
-- The runtime of a stage set with `params.<stage>.runtime` is not in the map. In this case Serverless fails to resolve the variable.
+- `JANIS_TRACE_LAYERS` is not a valid JSON, or not a non-empty object with non-empty string values.
+- The runtime of the hook (or `nodejs22.x` by default) is not in the map. The error names the runtime and lists the available runtimes.
 
 The env vars `JANIS_TRACE_EXTENSION_VERSION` and `TRACE_ACCOUNT_ID` are not used: without `JANIS_TRACE_LAYERS`, the Trace Lambda Layer and `JANIS_TRACE_EXTENSION_ENABLED` are not set.
 
 > `apiGet` and `apiList` are the only functions that have this behaviour changed by default.
 
-To disable the layer, see the `skipTraceLayer` property in other helpers. It removes the same layer string set in `provider.layers` (the ARN or the variable).
+To disable the layer, see the `skipTraceLayer` property in other helpers. It removes the trace layer ARN set in `provider.layers`.
 
 ### templates
 

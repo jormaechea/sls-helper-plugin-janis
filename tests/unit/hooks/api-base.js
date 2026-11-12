@@ -862,7 +862,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should set the layers as an empty array if skipTraceLayer is true and there were no layers set', () => {
+			it('Should not set function layers if skipTraceLayer is true and there is no trace layer in the provider layers', () => {
 
 				sinon.stub(process, 'env')
 					.value({
@@ -881,7 +881,6 @@ describe('Internal Hooks', () => {
 							'API-Get-ProductAttribute': {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								layers: [],
 								description: 'Product Attribute Get API',
 								package: {
 									include: [
@@ -1292,6 +1291,22 @@ describe('Internal Hooks', () => {
 				});
 			});
 
+			it('Should set only the custom layers if addLayers is set and there are no provider layers', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
+					});
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product attribute',
+					addLayers: ['CustomLayer']
+				});
+
+				assert.deepStrictEqual(serviceConfig.functions[0]['API-Get-ProductAttribute'].layers, ['CustomLayer']);
+			});
+
 			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayer is false', () => {
 
 				sinon.stub(process, 'env')
@@ -1352,97 +1367,7 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should remove the trace layer variable if skipTraceLayer is true and the provider runtime is a variable', () => {
-
-				sinon.stub(process, 'env')
-					.value({
-						...process.env,
-						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn, 'nodejs26.x': 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:8' })
-					});
-
-				const serviceConfig = apiBase.buildApi({
-					provider: {
-						runtime: '${param:runtime}',
-						layers: [
-							'${self:custom.janisTraceLayers.${param:runtime}}',
-							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
-						]
-					}
-				}, {
-					entityName: 'product attribute',
-					skipTraceLayer: true
-				});
-
-				assert.deepStrictEqual(serviceConfig, {
-					provider: {
-						runtime: '${param:runtime}',
-						layers: [
-							'${self:custom.janisTraceLayers.${param:runtime}}',
-							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
-						]
-					},
-					functions: [
-						{
-							'API-Get-ProductAttribute': {
-								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
-								handler: 'src/lambda/RestApi/index.handler',
-								layers: [
-									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
-								],
-								description: 'Product Attribute Get API',
-								package: {
-									include: [
-										'src/api/product-attribute/get.js',
-										'src/models/product-attribute.js'
-									]
-								},
-								environment: {
-									JANIS_TRACE_EXTENSION_ENABLED: ''
-								},
-								events: [
-									{
-										http: {
-											integration: 'lambda',
-											path: '/product-attribute',
-											method: 'get',
-											request: {
-												template: '${self:custom.apiRequestTemplate}'
-											},
-											response: '${self:custom.apiResponseTemplate}'
-										}
-									}
-								]
-							}
-						}
-					]
-				});
-			});
-
-			it('Should prepend the trace layer variable to custom layers if the provider runtime is a variable', () => {
-
-				sinon.stub(process, 'env')
-					.value({
-						...process.env,
-						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
-					});
-
-				const serviceConfig = apiBase.buildApi({
-					provider: {
-						runtime: '${param:runtime}',
-						layers: ['${self:custom.janisTraceLayers.${param:runtime}}']
-					}
-				}, {
-					entityName: 'product attribute',
-					layers: ['CustomLayer']
-				});
-
-				assert.deepStrictEqual(serviceConfig.functions[0]['API-Get-ProductAttribute'].layers, [
-					'${self:custom.janisTraceLayers.${param:runtime}}',
-					'CustomLayer'
-				]);
-			});
-
-			it('Should remove the trace layer of the provider literal runtime if skipTraceLayer is true', () => {
+			it('Should remove the trace layer set in the provider layers, whatever its runtime, if skipTraceLayer is true', () => {
 
 				const nodejs24TraceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:8';
 
@@ -1454,7 +1379,6 @@ describe('Internal Hooks', () => {
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
-						runtime: 'nodejs24.x',
 						layers: [
 							nodejs24TraceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
@@ -1495,26 +1419,6 @@ describe('Internal Hooks', () => {
 
 				assert.strictEqual(functionConfig.layers, undefined);
 				assert.strictEqual(functionConfig.environment, undefined);
-			});
-
-			it('Should throw if the provider literal runtime is not in JANIS_TRACE_LAYERS env var', () => {
-
-				sinon.stub(process, 'env')
-					.value({
-						...process.env,
-						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
-					});
-
-				assert.throws(() => apiBase.buildApi({
-					provider: {
-						runtime: 'nodejs24.x'
-					}
-				}, {
-					entityName: 'product attribute',
-					skipTraceLayer: true
-				}), {
-					message: 'Missing trace layer for runtime nodejs24.x in JANIS_TRACE_LAYERS env var. Available runtimes: nodejs22.x'
-				});
 			});
 		});
 	});
