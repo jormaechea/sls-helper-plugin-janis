@@ -52,19 +52,19 @@ Un batch por repo, en serie. El orden sigue el orden de salida: primero lo que n
 ## 6. Ajustes del review
 
 **janis-devops-service**
-- [ ] API `POST /api/trace-layers-sync` y botón en el edit del service de `janis-trace-lambda-layer`.
-- [ ] Controller `TraceLayer` en lugar del helper.
-- [ ] `layers` guardadas en el service y bloque en el edit.
-- [ ] `POST /api/ci-cd-parameter`: 400 si cambia `JANIS_TRACE_LAYERS`.
-- [ ] Sacar `dependOnTopic`.
+- [x] API `POST /api/trace-layers-sync` y botón en el edit del service de `janis-trace-lambda-layer`.
+- [x] Controller `TraceLayer` en lugar del helper.
+- [x] `layers` guardadas en el service y bloque en el edit.
+- [x] `POST /api/ci-cd-parameter`: 400 si cambia `JANIS_TRACE_LAYERS`.
+- [x] Sacar `dependOnTopic`.
 
 **sls-helper-plugin-janis**
-- [ ] Volver a buscar el ARN con el runtime declarado: sin `custom.janisTraceLayers` ni variables.
+- [x] Volver a buscar el ARN con el runtime declarado: sin `custom.janisTraceLayers` ni variables.
 
 **janis-trace-lambda-layer**
-- [ ] Líneas declaradas en `lines/<línea>/package.json`; `serverless.js`, build y tests las recorren.
-- [ ] Sin step de pull-requests. README sin "Release Process".
-- [ ] `docs/internal/`.
+- [x] Líneas declaradas en `lines/<línea>/package.json`; `serverless.js`, build y tests las recorren.
+- [x] Sin step de pull-requests. README sin "Release Process".
+- [x] `docs/internal/`.
 
 ## Salida (después del desarrollo)
 
