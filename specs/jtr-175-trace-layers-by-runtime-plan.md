@@ -66,6 +66,13 @@ Un batch por repo, en serie. El orden sigue el orden de salida: primero lo que n
 - [x] Sin step de pull-requests. README sin "Release Process".
 - [x] `docs/internal/`.
 
+## 7. Versión de la línea Node 18 automática
+
+**janis-devops-service**
+- [ ] El sync escribe `JANIS_TRACE_EXTENSION_VERSION` con la última versión de `trace`, independiente del conflicto del mapa.
+- [ ] `POST /api/ci-cd-parameter`: 400 también si cambia `JANIS_TRACE_EXTENSION_VERSION`.
+- [ ] Tests y `docs/internal/trace-layers.md`.
+
 ## Salida (después del desarrollo)
 
 1. Release de oidc-deploy (1.1.0, hecho) y de ci-cd v3.

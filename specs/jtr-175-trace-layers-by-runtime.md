@@ -32,11 +32,13 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 
 **janis-devops-service**
 - Cola `syncTraceLayers` suscripta a `serviceDeployed` con `filterPolicy: { repository: ['janis-trace-lambda-layer'] }`.
-- Consumer que asume `JanisDevOpsServiceRemote` en la cuenta `Trace` del ambiente, lista las layers y mergea `JANIS_TRACE_LAYERS` en `/shared/<env>/ci-cd`.
+- Consumer que asume `JanisDevOpsServiceRemote` en la cuenta `Trace` del ambiente, lista las layers y mergea en `/shared/<env>/ci-cd`:
+  - `JANIS_TRACE_LAYERS`: el mapa por runtime de las layers `trace-node*`.
+  - `JANIS_TRACE_EXTENSION_VERSION`: la última versión numérica de la layer `trace` (línea Node 18), para ci-cd v2 y el plugin ≤10.
 - `POST /api/trace-layers-sync` de admin para resincronizar a mano, con la misma lógica que el consumer. Botón en el edit del service cuando `repository` es `janis-trace-lambda-layer`.
 - Al sincronizar, el service de `janis-trace-lambda-layer` guarda `layers`: todas las layers de la cuenta de trace (`trace` incluida) con `name`, `version` (número), `compatibleRuntimes` y `compatibleArchitectures`. El edit del service las muestra en un bloque nuevo, con los runtimes y arquitecturas como `MediumChip`.
 - La lógica vive en un controller `TraceLayer` (clase con métodos).
-- `POST /api/ci-cd-parameter` responde 400 si el payload cambia o borra `JANIS_TRACE_LAYERS`: solo el sync la escribe.
+- `POST /api/ci-cd-parameter` responde 400 si el payload cambia o borra `JANIS_TRACE_LAYERS` o `JANIS_TRACE_EXTENSION_VERSION`: solo el sync las escribe.
 - `lambda:ListLayers` en el rol `JanisDevOpsServiceRemote`.
 - Sacar `dependOnTopic` de los topics y las colas.
 
@@ -50,7 +52,7 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 - El plugin deja de leer `JANIS_TRACE_EXTENSION_VERSION` y `TRACE_ACCOUNT_ID`: el ARN del mapa ya trae cuenta y versión. Sin `JANIS_TRACE_LAYERS`, no se agrega la layer trace.
 
 ❌ NO incluye:
-- Repos en Node 18: siguen tomando `trace` con `JANIS_TRACE_EXTENSION_VERSION`, que devops bumpea a mano.
+- Escribir `JANIS_TRACE_EXTENSION_VERSION_NEW`: queda congelada en su valor actual. Solo la leen los services con plugin 11 anterior a este cambio, que arman `layer:trace:<versión>`, y `trace` ya no publica la línea Node 22. Se borra cuando ningún service dependa de ella.
 - Sumar `trace` al mapa `JANIS_TRACE_LAYERS`.
 - Runtime por función o por stage en el plugin: un override de `runtime` por stage toma la layer del runtime declarado en `janis.base`.
 - Borrar el override de `JANIS_TRACE_EXTENSION_VERSION_NEW` en ci-cd v3, ni dejar de exportar `JANIS_TRACE_EXTENSION_VERSION`.
@@ -76,13 +78,15 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 **devops**
 - [ ] Después del deploy de la layer, `JANIS_TRACE_LAYERS` en `/shared/beta/ci-cd` tiene una entrada por runtime con el ARN de la última versión de `trace-node20`.
 - [ ] `JANIS_TRACE_LAYERS` se guarda como string JSON. El resto de las claves del parámetro queda igual.
+- [ ] Después del deploy de la layer, `JANIS_TRACE_EXTENSION_VERSION` es la última versión de `trace`. `JANIS_TRACE_EXTENSION_VERSION_NEW` no cambia.
+- [ ] Un conflicto de runtimes entre layers `trace-node*` no frena la actualización de `JANIS_TRACE_EXTENSION_VERSION`.
 - [ ] Un `serviceDeployed` de otro repository no dispara la cola.
 - [ ] Si dos layers `trace-node*` declaran el mismo runtime, el parámetro no cambia, se loguea el conflicto y el mensaje no se reintenta.
 - [ ] Si falla `ListLayers` o la escritura del parámetro, el mensaje vuelve a la cola.
 - [ ] El endpoint de resincronización deja el mismo mapa que el consumer.
 - [ ] Después del sync, el service de `janis-trace-lambda-layer` tiene `layers` con nombre, versión, runtimes y arquitecturas de cada layer, y el edit del service las muestra.
 - [ ] El botón de resincronizar aparece solo en el edit del service de `janis-trace-lambda-layer`.
-- [ ] `POST /api/ci-cd-parameter` con `JANIS_TRACE_LAYERS` distinto del guardado, o sin esa clave cuando está guardada, responde 400 y no escribe.
+- [ ] `POST /api/ci-cd-parameter` con `JANIS_TRACE_LAYERS` o `JANIS_TRACE_EXTENSION_VERSION` distinto del guardado, o sin esa clave cuando está guardada, responde 400 y no escribe.
 - [ ] Ni el consumer ni el endpoint loguean el valor del parámetro.
 
 **Plugin**
@@ -155,7 +159,8 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 - **El plugin solo lee `JANIS_TRACE_LAYERS`.** ci-cd sigue exportando `JANIS_TRACE_EXTENSION_VERSION` y `TRACE_ACCOUNT_ID` para el plugin ≤10 y las versiones anteriores de 11. El release del plugin va después de ci-cd v3, devops y la layer en los tres ambientes, con el mapa en cada uno: antes, un service que actualice el plugin deployaría sin layer trace.
 - **El plugin busca el ARN con el runtime declarado en `janis.base`.** Sin mapa en `custom` ni variables de Serverless: un override de runtime por stage no es un caso de uso. Hoy las layers de 20 a 26 son la misma, así que no cambia nada.
 - **`dependOnTopic` se saca.** Solo cubría la creación de un stack desde cero, y el resto de Janis no lo usa.
-- **El parámetro de ci-cd rechaza la edición manual de `JANIS_TRACE_LAYERS` con 400**, para que la pantalla muestre por qué no se guardó.
+- **El parámetro de ci-cd rechaza la edición manual de `JANIS_TRACE_LAYERS` y `JANIS_TRACE_EXTENSION_VERSION` con 400**, para que la pantalla muestre por qué no se guardó. Rollback de cualquier línea: `DeleteLayerVersion` y resincronizar.
+- **Nadie bumpea versiones a mano.** El sync escribe `JANIS_TRACE_LAYERS` y `JANIS_TRACE_EXTENSION_VERSION`. `_NEW` no tiene versiones nuevas a las que subir.
 - **Branches de Node 18 archivadas** en el tag `archive/master-node18` y borradas de origin.
 
 ## Abiertas
