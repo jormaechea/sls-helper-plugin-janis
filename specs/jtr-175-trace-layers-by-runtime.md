@@ -20,7 +20,7 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 
 **janis-trace-lambda-layer**
 - `master` publica dos líneas en el stack actual, con el mismo código de `src/`:
-  - `trace`: línea Node 18 (`compatibleRuntimes` 14.x y 18.x), con `@janiscommerce/log` 5.1.x y `@aws-sdk` fijado por debajo de 3.968 con `overrides`.
+  - `trace`: línea Node 18 (`compatibleRuntimes` 18.x), con `@janiscommerce/log` 5.1.x y `@aws-sdk` fijado por debajo de 3.968 con `overrides`.
   - `trace-node20`: línea Node 20 a 26, con las dependencias de JTR-169.
 - Cada línea es una carpeta `lines/<línea>/` con `package.json` y lock. El `package.json` declara la layer: nombre, Node mínimo y `compatibleRuntimes`. Sumar una línea es sumar una carpeta.
 - `serverless.js` arma las layers leyendo `lines/`. El build arma `build/<layer>/` por línea (copia `src/`, instala las dependencias de producción y valida `engines.node` contra el Node mínimo). Los tests recorren las líneas.
@@ -60,7 +60,7 @@ Cada service con `sls-helper-plugin-janis` 11 toma, al deployar, la última vers
 
 **Layer**
 - [ ] Un deploy de `master` a beta publica una versión de `trace-node20` con `compatibleRuntimes` 20.x, 22.x, 24.x y 26.x.
-- [ ] El mismo deploy publica una versión de `trace` con `compatibleRuntimes` 14.x y 18.x.
+- [ ] El mismo deploy publica una versión de `trace` con `compatibleRuntimes` 18.x.
 - [ ] El zip de `trace` trae `@janiscommerce/log` 5.1.x y `@aws-sdk` por debajo de 3.968. El de `trace-node20` trae las versiones de JTR-169.
 - [ ] La descripción de cada layer dice su rango de Node y la versión de `@janiscommerce/log` que trae.
 - [ ] `npm test` corre la suite contra las dos líneas.
