@@ -35,7 +35,7 @@ If `runtime` is not set, `provider.runtime` is `nodejs22.x`. If it is set, `prov
 
 The `provider` of the service still overrides any of this.
 
-The custom resource `CustomDashresourceDashapigwDashcwDashroleLambdaFunction` (API Gateway CloudWatch role) always stays in `nodejs22.x`: its Serverless v3 handler uses a callback signature that Node 24+ rejects with `Runtime.CallbackHandlerDeprecated`.
+The API Gateway CloudWatch role of the account is set with an `AWS::ApiGateway::Account` resource (`serverlessApiGatewayAccount`) and `logs.restApi.roleManagedExternally: true`, instead of the Serverless v3 custom resource. That custom resource deploys a Lambda whose handler uses a callback signature that Node 24+ rejects with `Runtime.CallbackHandlerDeprecated`.
 
 ```js
 ['janis.base', {
