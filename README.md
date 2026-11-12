@@ -57,11 +57,31 @@ This properties (if present in the initial service configuration) have the follo
 
 #### Trace Lambda Layer
 
-If the env vars `TRACE_ACCOUNT_ID` and `JANIS_TRACE_EXTENSION_VERSION` are set, the Trace Lambda Layer will be set for every function by default.
+If the env var `JANIS_TRACE_LAYERS` is set, the Trace Lambda Layer is added to `provider.layers` and `provider.environment.JANIS_TRACE_EXTENSION_ENABLED` is set to `true`, so every function uses it by default.
+
+`JANIS_TRACE_LAYERS` is a JSON string with the layer ARN (account and version included) by runtime:
+
+```json
+{"nodejs22.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7","nodejs26.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7"}
+```
+
+The layer depends on the effective `provider.runtime`:
+- No `runtime` in the hook: the ARN of `nodejs22.x`.
+- `runtime` in the hook: `${self:custom.janisTraceLayers.${param:runtime}}`, so each stage takes the layer of its own runtime, including a `params.<stage>.runtime` override.
+- `provider.runtime` set in the service: the ARN of that runtime.
+
+The map is set in `custom.janisTraceLayers`, nested by the dots of each runtime (`{ nodejs22: { x: 'arn:...' } }`), because Serverless splits `${self:...}` addresses by dots.
+
+The deploy fails if:
+- `JANIS_TRACE_LAYERS` is not a valid JSON, or not a non-empty object with string values.
+- The runtime of the hook (or the `provider.runtime` of the service) is not in the map. The error lists the available runtimes.
+- The runtime of a stage set with `params.<stage>.runtime` is not in the map. In this case Serverless fails to resolve the variable.
+
+The env vars `JANIS_TRACE_EXTENSION_VERSION` and `TRACE_ACCOUNT_ID` are not used: without `JANIS_TRACE_LAYERS`, the Trace Lambda Layer and `JANIS_TRACE_EXTENSION_ENABLED` are not set.
 
 > `apiGet` and `apiList` are the only functions that have this behaviour changed by default.
 
-To disable the layer, see the `skipTraceLayer` property in other helpers.
+To disable the layer, see the `skipTraceLayer` property in other helpers. It removes the same layer string set in `provider.layers` (the ARN or the variable).
 
 ### templates
 
