@@ -75,7 +75,7 @@ describe('Hooks', () => {
 				},
 				logs: {
 					restApi: {
-						role: { 'Fn::GetAtt': ['serverlessApiGatewayCloudWatchRole', 'Arn'] },
+						roleManagedExternally: true,
 						accessLogging: true,
 						executionLogging: false,
 						level: 'INFO',
@@ -460,13 +460,12 @@ describe('Hooks', () => {
 							},
 							ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs']
 						}
-					}
-				},
+					},
 
-				extensions: {
-					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+					serverlessApiGatewayAccount: {
+						Type: 'AWS::ApiGateway::Account',
 						Properties: {
-							Runtime: 'nodejs22.x'
+							CloudWatchRoleArn: { 'Fn::GetAtt': ['serverlessApiGatewayCloudWatchRole', 'Arn'] }
 						}
 					}
 				}
@@ -546,10 +545,6 @@ describe('Hooks', () => {
 					clonedExpectedConfig.params.local.runtime = 'nodejs22.x';
 
 					assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
-					assert.strictEqual(
-						serviceConfig.resources.extensions.CustomDashresourceDashapigwDashcwDashroleLambdaFunction.Properties.Runtime,
-						'nodejs22.x'
-					);
 				});
 			});
 
