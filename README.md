@@ -68,7 +68,7 @@ If the env var `JANIS_TRACE_LAYERS` is set, the Trace Lambda Layer is added to `
 The layer depends on the effective `provider.runtime`:
 - No `runtime` in the hook: the ARN of `nodejs22.x`.
 - `runtime` in the hook: `${self:custom.janisTraceLayers.${param:runtime}}`, so each stage takes the layer of its own runtime, including a `params.<stage>.runtime` override.
-- `provider.runtime` set in the service: the ARN of that runtime.
+- `provider.runtime` set in the service as a literal: the ARN of that runtime. Set as a variable: the same `${self:custom.janisTraceLayers...}` lookup with that variable.
 
 The map is set in `custom.janisTraceLayers`, nested by the dots of each runtime (`{ nodejs22: { x: 'arn:...' } }`), because Serverless splits `${self:...}` addresses by dots.
 

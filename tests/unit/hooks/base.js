@@ -876,6 +876,21 @@ describe('Hooks', () => {
 				});
 			});
 
+			it('Should throw if the service params.default.runtime is not in JANIS_TRACE_LAYERS env var', async () => {
+
+				process.env.JANIS_TRACE_LAYERS = JSON.stringify({ 'nodejs26.x': nodejs26TraceLayerArn });
+
+				await assert.rejects(() => base({
+					params: { default: { runtime: 'nodejs24.x' } }
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				}), {
+					message: 'Missing trace layer for runtime nodejs24.x in JANIS_TRACE_LAYERS env var. Available runtimes: nodejs26.x'
+				});
+			});
+
 			it('Should throw if the default runtime is not in JANIS_TRACE_LAYERS env var', async () => {
 
 				process.env.JANIS_TRACE_LAYERS = JSON.stringify({ 'nodejs26.x': nodejs26TraceLayerArn });
