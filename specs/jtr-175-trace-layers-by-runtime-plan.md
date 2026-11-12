@@ -69,9 +69,9 @@ Un batch por repo, en serie. El orden sigue el orden de salida: primero lo que n
 ## 7. Versión de la línea Node 18 automática
 
 **janis-devops-service**
-- [ ] El sync escribe `JANIS_TRACE_EXTENSION_VERSION` con la última versión de `trace`, independiente del conflicto del mapa.
-- [ ] `POST /api/ci-cd-parameter`: 400 también si cambia `JANIS_TRACE_EXTENSION_VERSION`.
-- [ ] Tests y `docs/internal/trace-layers.md`.
+- [x] El sync escribe `JANIS_TRACE_EXTENSION_VERSION` con la última versión de `trace` compatible con `nodejs18.x`, independiente del conflicto del mapa.
+- [x] `POST /api/ci-cd-parameter`: 400 también si cambia `JANIS_TRACE_EXTENSION_VERSION`.
+- [x] Tests y `docs/internal/trace-layers.md`.
 
 ## Salida (después del desarrollo)
 
