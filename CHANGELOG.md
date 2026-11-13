@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [11.8.0] - 2026-11-13
+### Added
+- `janis.base` hook now accepts a `runtime` param (`nodejs22.x`, `nodejs24.x` or `nodejs26.x`). When set, `provider.runtime` is resolved from `${param:runtime}` and the `local` stage keeps `nodejs22.x`, since `serverless-offline` doesn't support newer runtimes. Defaults to `nodejs22.x`
+
+### Changed
+- The Trace Lambda Layer is now resolved by runtime from the `JANIS_TRACE_LAYERS` env var (a JSON with the layer ARN by runtime). The deploy fails if the env var is invalid or has no layer for the service runtime. `TRACE_ACCOUNT_ID` and `JANIS_TRACE_EXTENSION_VERSION` are no longer used
+- The API Gateway CloudWatch role of the account is now set with an `AWS::ApiGateway::Account` resource instead of the Serverless custom resource, whose Lambda is rejected by Node 24+
+
 ## [11.7.0] - 2026-10-27
 ### Added
 - API Gateway access log now includes `filters` (List API filters received in the query string, capped to 256 characters)
