@@ -24,7 +24,26 @@ Used to implement a base service with minimal setup
 |--------|------|-------------|------------|---------------|
 | serviceCode | string | The service name in lowercase dash separated | **Required** | |
 | servicePort | number | The service port | **Required** | |
+| runtime | string | The Lambda runtime of the service. Valid values: `nodejs22.x`, `nodejs24.x`, `nodejs26.x` | | `nodejs22.x` |
 | params | { [env]: { [param]: value } } | A mapping of param name and value by environment. Well known environments are: `local`, `beta`, `qa` and `prod`, but any other env will be kept | | The params `humanReadableStage` and `janisDomain` are defined for each well-known env. |
+
+#### runtime
+
+If `runtime` is not set, `provider.runtime` is `nodejs22.x`. If it is set, `provider.runtime` becomes `${param:runtime}` and the params are defined as follows:
+- `params.default.runtime`: the received `runtime`. A `runtime` defined in the service `params.default` takes precedence.
+- `params.local.runtime`: `nodejs22.x` for every received `runtime`, because `serverless-offline` 13.x does not support Node 26. A `runtime` defined in the service `params.local` takes precedence.
+
+The `provider` of the service still overrides any of this.
+
+The API Gateway CloudWatch role of the account is set with an `AWS::ApiGateway::Account` resource (`serverlessApiGatewayAccount`) and `logs.restApi.roleManagedExternally: true`, instead of the Serverless v3 custom resource. That custom resource deploys a Lambda whose handler uses a callback signature that Node 24+ rejects with `Runtime.CallbackHandlerDeprecated`.
+
+```js
+['janis.base', {
+	serviceCode: 'oms',
+	servicePort: 3000,
+	runtime: 'nodejs26.x'
+}]
+```
 
 Some properties of the initial configuration have a new special meaning:
 
@@ -38,11 +57,25 @@ This properties (if present in the initial service configuration) have the follo
 
 #### Trace Lambda Layer
 
-If the env vars `TRACE_ACCOUNT_ID` and `JANIS_TRACE_EXTENSION_VERSION` are set, the Trace Lambda Layer will be set for every function by default.
+If the env var `JANIS_TRACE_LAYERS` is set, the Trace Lambda Layer is added to `provider.layers` and `provider.environment.JANIS_TRACE_EXTENSION_ENABLED` is set to `true`, so every function uses it by default.
+
+`JANIS_TRACE_LAYERS` is a JSON string with the layer ARN (account and version included) by runtime:
+
+```json
+{"nodejs22.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7","nodejs26.x":"arn:aws:lambda:us-east-1:123456789012:layer:trace-node20:7"}
+```
+
+The layer is the ARN of the `runtime` declared in the `janis.base` hook, or of `nodejs22.x` if it is not declared. A `runtime` override by stage (`params.<stage>.runtime`) does not change the layer.
+
+The deploy fails if:
+- `JANIS_TRACE_LAYERS` is not a valid JSON, or not a non-empty object with non-empty string values.
+- The runtime of the hook (or `nodejs22.x` by default) is not in the map. The error names the runtime and lists the available runtimes.
+
+The env vars `JANIS_TRACE_EXTENSION_VERSION` and `TRACE_ACCOUNT_ID` are not used: without `JANIS_TRACE_LAYERS`, the Trace Lambda Layer and `JANIS_TRACE_EXTENSION_ENABLED` are not set.
 
 > `apiGet` and `apiList` are the only functions that have this behaviour changed by default.
 
-To disable the layer, see the `skipTraceLayer` property in other helpers.
+To disable the layer, see the `skipTraceLayer` property in other helpers. It removes the trace layer ARN set in `provider.layers`.
 
 ### templates
 

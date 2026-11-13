@@ -4,11 +4,16 @@ const assert = require('assert').strict;
 const sinon = require('sinon');
 
 const apiBase = require('../../../lib/api/base');
-const { getTraceLayerArn } = require('../../../lib/utils/trace-layer');
 
 describe('Internal Hooks', () => {
 
 	describe('API Base', () => {
+
+		const traceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:7';
+
+		afterEach(() => {
+			sinon.restore();
+		});
 
 		context('Config validation', () => {
 
@@ -738,14 +743,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -757,7 +761,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -803,14 +807,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn()
+							traceLayerArn
 						]
 					}
 				}, {
@@ -821,7 +824,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn()
+							traceLayerArn
 						]
 					},
 					functions: [
@@ -859,13 +862,12 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should set the layers as an empty array if skipTraceLayer is true and there were no layers set', () => {
+			it('Should not set function layers if skipTraceLayer is true and there is no trace layer in the provider layers', () => {
 
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({}, {
@@ -879,7 +881,6 @@ describe('Internal Hooks', () => {
 							'API-Get-ProductAttribute': {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								layers: [],
 								description: 'Product Attribute Get API',
 								package: {
 									include: [
@@ -914,14 +915,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -934,7 +934,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -978,14 +978,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -998,7 +997,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -1007,7 +1006,7 @@ describe('Internal Hooks', () => {
 							'API-Get-ProductAttribute': {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
-								layers: [getTraceLayerArn()],
+								layers: [traceLayerArn],
 								description: 'Product Attribute Get API',
 								package: {
 									include: [
@@ -1039,14 +1038,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -1059,7 +1057,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -1069,7 +1067,7 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [
-									getTraceLayerArn(),
+									traceLayerArn,
 									'CustomLayer'
 								],
 								description: 'Product Attribute Get API',
@@ -1098,13 +1096,15 @@ describe('Internal Hooks', () => {
 				});
 			});
 
-			it('Should not prepend the trace layer to custom layers if trace env vars are not set', () => {
+			it('Should not prepend the trace layer to custom layers if JANIS_TRACE_LAYERS env var is not set, even with the legacy trace env vars', () => {
+
+				const { JANIS_TRACE_LAYERS, ...envWithoutTraceLayers } = process.env;
 
 				sinon.stub(process, 'env')
 					.value({
-						...process.env,
-						TRACE_ACCOUNT_ID: '',
-						JANIS_TRACE_EXTENSION_VERSION: ''
+						...envWithoutTraceLayers,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
 					});
 
 				const serviceConfig = apiBase.buildApi({
@@ -1164,14 +1164,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -1184,7 +1183,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -1194,7 +1193,7 @@ describe('Internal Hooks', () => {
 								name: 'API-${self:custom.serviceName}-Get-ProductAttribute-${self:custom.stage}',
 								handler: 'src/lambda/RestApi/index.handler',
 								layers: [
-									getTraceLayerArn(),
+									traceLayerArn,
 									'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1',
 									'CustomLayer'
 								],
@@ -1229,14 +1228,13 @@ describe('Internal Hooks', () => {
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -1250,7 +1248,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -1293,19 +1291,34 @@ describe('Internal Hooks', () => {
 				});
 			});
 
+			it('Should set only the custom layers if addLayers is set and there are no provider layers', () => {
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
+					});
+
+				const serviceConfig = apiBase.buildApi({}, {
+					entityName: 'product attribute',
+					addLayers: ['CustomLayer']
+				});
+
+				assert.deepStrictEqual(serviceConfig.functions[0]['API-Get-ProductAttribute'].layers, ['CustomLayer']);
+			});
+
 			it('Should not set function layers if layers is not set, addLayers is not set or empty and skipTraceLayer is false', () => {
 
 				sinon.stub(process, 'env')
 					.value({
 						...process.env,
-						TRACE_ACCOUNT_ID: '012345678910',
-						JANIS_TRACE_EXTENSION_VERSION: '1'
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn })
 					});
 
 				const serviceConfig = apiBase.buildApi({
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					}
@@ -1319,7 +1332,7 @@ describe('Internal Hooks', () => {
 				assert.deepStrictEqual(serviceConfig, {
 					provider: {
 						layers: [
-							getTraceLayerArn(),
+							traceLayerArn,
 							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
 						]
 					},
@@ -1352,6 +1365,60 @@ describe('Internal Hooks', () => {
 						}
 					]
 				});
+			});
+
+			it('Should remove the trace layer set in the provider layers, whatever its runtime, if skipTraceLayer is true', () => {
+
+				const nodejs24TraceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:8';
+
+				sinon.stub(process, 'env')
+					.value({
+						...process.env,
+						JANIS_TRACE_LAYERS: JSON.stringify({ 'nodejs22.x': traceLayerArn, 'nodejs24.x': nodejs24TraceLayerArn })
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: [
+							nodejs24TraceLayerArn,
+							'arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1'
+						]
+					}
+				}, {
+					entityName: 'product attribute',
+					skipTraceLayer: true
+				});
+
+				const { layers, environment } = serviceConfig.functions[0]['API-Get-ProductAttribute'];
+
+				assert.deepStrictEqual(layers, ['arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1']);
+				assert.deepStrictEqual(environment, { JANIS_TRACE_EXTENSION_ENABLED: '' });
+			});
+
+			it('Should not set function layers nor environment if skipTraceLayer is true and JANIS_TRACE_LAYERS env var is not set', () => {
+
+				const { JANIS_TRACE_LAYERS, ...envWithoutTraceLayers } = process.env;
+
+				sinon.stub(process, 'env')
+					.value({
+						...envWithoutTraceLayers,
+						TRACE_ACCOUNT_ID: '012345678910',
+						JANIS_TRACE_EXTENSION_VERSION: '1'
+					});
+
+				const serviceConfig = apiBase.buildApi({
+					provider: {
+						layers: ['arn:aws:lambda:us-east-1:123456789123:layer:other-layer:1']
+					}
+				}, {
+					entityName: 'product attribute',
+					skipTraceLayer: true
+				});
+
+				const functionConfig = serviceConfig.functions[0]['API-Get-ProductAttribute'];
+
+				assert.strictEqual(functionConfig.layers, undefined);
+				assert.strictEqual(functionConfig.environment, undefined);
 			});
 		});
 	});

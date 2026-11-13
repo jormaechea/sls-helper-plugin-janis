@@ -75,7 +75,7 @@ describe('Hooks', () => {
 				},
 				logs: {
 					restApi: {
-						role: { 'Fn::GetAtt': ['serverlessApiGatewayCloudWatchRole', 'Arn'] },
+						roleManagedExternally: true,
 						accessLogging: true,
 						executionLogging: false,
 						level: 'INFO',
@@ -460,13 +460,12 @@ describe('Hooks', () => {
 							},
 							ManagedPolicyArns: ['arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs']
 						}
-					}
-				},
+					},
 
-				extensions: {
-					CustomDashresourceDashapigwDashcwDashroleLambdaFunction: {
+					serverlessApiGatewayAccount: {
+						Type: 'AWS::ApiGateway::Account',
 						Properties: {
-							Runtime: 'nodejs22.x'
+							CloudWatchRoleArn: { 'Fn::GetAtt': ['serverlessApiGatewayCloudWatchRole', 'Arn'] }
 						}
 					}
 				}
@@ -515,6 +514,111 @@ describe('Hooks', () => {
 					serviceCode: validServiceCode,
 					servicePort: ['invalid']
 				}));
+			});
+		});
+
+		context('When runtime is received', () => {
+
+			['nodejs20.x', 'node', '', 22, ['nodejs22.x'], null].forEach(invalidRuntime => {
+				it(`Should throw if runtime hook config is invalid: ${JSON.stringify(invalidRuntime)}`, async () => {
+					await assert.rejects(() => base({}, {
+						serviceCode: validServiceCode,
+						servicePort: validServicePort,
+						runtime: invalidRuntime
+					}));
+				});
+			});
+
+			['nodejs22.x', 'nodejs24.x', 'nodejs26.x'].forEach(runtime => {
+				it(`Should use the runtime param when runtime is ${runtime}`, async () => {
+
+					const serviceConfig = await base({}, {
+						serviceCode: validServiceCode,
+						servicePort: validServicePort,
+						runtime
+					});
+
+					const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+					clonedExpectedConfig.provider.runtime = '${param:runtime}';
+					clonedExpectedConfig.params.default = { runtime };
+					clonedExpectedConfig.params.local.runtime = 'nodejs22.x';
+
+					assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+				});
+			});
+
+			it('Should use the service params.local.runtime and params.default.runtime over the hook ones', async () => {
+
+				const serviceConfig = await base({
+					params: {
+						default: {
+							runtime: 'nodejs24.x',
+							defaultParam: true
+						},
+						local: {
+							runtime: 'nodejs24.x'
+						}
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				});
+
+				const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+				clonedExpectedConfig.provider.runtime = '${param:runtime}';
+				clonedExpectedConfig.params.default = { runtime: 'nodejs24.x', defaultParam: true };
+				clonedExpectedConfig.params.local.runtime = 'nodejs24.x';
+
+				assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+			});
+
+			it('Should merge the runtime with the service params that do not define it', async () => {
+
+				const serviceConfig = await base({
+					params: {
+						default: {
+							defaultParam: true
+						},
+						local: {
+							janisDomain: 'custom.localhost'
+						},
+						dev: {
+							humanReadableStage: 'Dev'
+						}
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs24.x'
+				});
+
+				assert.strictEqual(serviceConfig.provider.runtime, '${param:runtime}');
+				assert.deepStrictEqual(serviceConfig.params.default, { runtime: 'nodejs24.x', defaultParam: true });
+				assert.deepStrictEqual(serviceConfig.params.local, {
+					runtime: 'nodejs22.x',
+					humanReadableStage: 'Local',
+					janisDomain: 'custom.localhost'
+				});
+				assert.deepStrictEqual(serviceConfig.params.dev, { humanReadableStage: 'Dev' });
+			});
+
+			it('Should use the service provider.runtime over the runtime param', async () => {
+
+				const serviceConfig = await base({
+					provider: {
+						runtime: 'nodejs24.x'
+					}
+				}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				});
+
+				assert.strictEqual(serviceConfig.provider.runtime, 'nodejs24.x');
+				assert.deepStrictEqual(serviceConfig.params.default, { runtime: 'nodejs26.x' });
 			});
 		});
 
@@ -646,22 +750,125 @@ describe('Hooks', () => {
 			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 		});
 
-		it('Should setup the Trace Layer if env vars are set', async () => {
+		context('When setting up the Trace Layer', () => {
 
-			process.env.TRACE_ACCOUNT_ID = '012345678910';
-			process.env.JANIS_TRACE_EXTENSION_VERSION = '1';
+			const nodejs22TraceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:7';
+			const nodejs24TraceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:8';
+			const nodejs26TraceLayerArn = 'arn:aws:lambda:us-east-1:012345678910:layer:trace-node20:9';
 
-			const serviceConfig = await base({}, {
-				serviceCode: validServiceCode,
-				servicePort: validServicePort
+			it('Should set the trace layer ARN of the default runtime if no runtime param is received', async () => {
+
+				process.env.JANIS_TRACE_LAYERS = JSON.stringify({
+					'nodejs22.x': nodejs22TraceLayerArn,
+					'nodejs26.x': nodejs26TraceLayerArn
+				});
+
+				const serviceConfig = await base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort
+				});
+
+				const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+
+				clonedExpectedConfig.provider.layers = [nodejs22TraceLayerArn];
+				clonedExpectedConfig.provider.environment.JANIS_TRACE_EXTENSION_ENABLED = 'true';
+
+				assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
 			});
 
-			const clonedExpectedConfig = JSON.parse(JSON.stringify(expectedConfig));
+			it('Should set the trace layer ARN of the runtime param if runtime param is received', async () => {
 
-			clonedExpectedConfig.provider.layers = ['arn:aws:lambda:${aws:region}:012345678910:layer:trace:1'];
-			clonedExpectedConfig.provider.environment.JANIS_TRACE_EXTENSION_ENABLED = 'true';
+				process.env.JANIS_TRACE_LAYERS = JSON.stringify({
+					'nodejs22.x': nodejs22TraceLayerArn,
+					'nodejs26.x': nodejs26TraceLayerArn
+				});
 
-			assert.deepStrictEqual(serviceConfig, clonedExpectedConfig);
+				const serviceConfig = await base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				});
+
+				assert.strictEqual(serviceConfig.provider.runtime, '${param:runtime}');
+				assert.deepStrictEqual(serviceConfig.provider.layers, [nodejs26TraceLayerArn]);
+				assert.strictEqual(serviceConfig.provider.environment.JANIS_TRACE_EXTENSION_ENABLED, 'true');
+				assert.strictEqual(serviceConfig.custom.janisTraceLayers, undefined);
+			});
+
+			it('Should throw if the runtime param is not in JANIS_TRACE_LAYERS env var', async () => {
+
+				process.env.JANIS_TRACE_LAYERS = JSON.stringify({
+					'nodejs22.x': nodejs22TraceLayerArn,
+					'nodejs24.x': nodejs24TraceLayerArn
+				});
+
+				await assert.rejects(() => base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort,
+					runtime: 'nodejs26.x'
+				}), {
+					message: 'Missing trace layer for runtime nodejs26.x in JANIS_TRACE_LAYERS env var. Available runtimes: nodejs22.x, nodejs24.x'
+				});
+			});
+
+			it('Should throw if the default runtime is not in JANIS_TRACE_LAYERS env var', async () => {
+
+				process.env.JANIS_TRACE_LAYERS = JSON.stringify({ 'nodejs26.x': nodejs26TraceLayerArn });
+
+				await assert.rejects(() => base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort
+				}), {
+					message: 'Missing trace layer for runtime nodejs22.x in JANIS_TRACE_LAYERS env var. Available runtimes: nodejs26.x'
+				});
+			});
+
+			it('Should throw if JANIS_TRACE_LAYERS env var is not a valid JSON', async () => {
+
+				process.env.JANIS_TRACE_LAYERS = '{"nodejs22.x":';
+
+				await assert.rejects(() => base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort
+				}), {
+					message: /^Invalid JANIS_TRACE_LAYERS env var\. It must be a JSON string: /
+				});
+			});
+
+			[
+				['an array', [nodejs22TraceLayerArn]],
+				['a string', nodejs22TraceLayerArn],
+				['null', null],
+				['an empty object', {}],
+				['an object with a non string value', { 'nodejs22.x': 7 }],
+				['an object with an empty value', { 'nodejs22.x': '' }]
+			].forEach(([description, traceLayers]) => {
+				it(`Should throw if JANIS_TRACE_LAYERS env var is ${description}`, async () => {
+
+					process.env.JANIS_TRACE_LAYERS = JSON.stringify(traceLayers);
+
+					await assert.rejects(() => base({}, {
+						serviceCode: validServiceCode,
+						servicePort: validServicePort
+					}), {
+						message: /^Invalid JANIS_TRACE_LAYERS env var\. It must be a non-empty JSON object/
+					});
+				});
+			});
+
+			it('Should not set the trace layer nor the extension env var if JANIS_TRACE_LAYERS env var is not set, even with the legacy trace env vars', async () => {
+
+				delete process.env.JANIS_TRACE_LAYERS;
+				process.env.TRACE_ACCOUNT_ID = '012345678910';
+				process.env.JANIS_TRACE_EXTENSION_VERSION = '1';
+
+				const serviceConfig = await base({}, {
+					serviceCode: validServiceCode,
+					servicePort: validServicePort
+				});
+
+				assert.deepStrictEqual(serviceConfig, expectedConfig);
+			});
 		});
 
 		it('Should add and override sls params if they are passed', async () => {
